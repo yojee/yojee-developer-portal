@@ -6,6 +6,7 @@ meta:
 logo: ./images/logo.png
 enableToc: true
 oasDefinitions:
+  yojee: https://api.redoc.ly/registry/yojee/Yojee%20API/v3/bundle/main/openapi.yaml
   petstore: ./openapi/petstore.yaml
   # add links to definitions in our API registry by using a fully qualified URL.
 stylesheets:
