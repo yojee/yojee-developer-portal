@@ -279,10 +279,7 @@ Driver assignment is done by a background job. The first call is to send the par
 Call this API to assign a Driver to tasks
 
 
-
 ###### Sample Curl Command
-
-
 ```
 curl --location --request POST '[BASEURL]/api/v3/dispatcher/tasks/quick_assign_bg' \
 --header 'COMPANY_SLUG: [SLUG]' \
@@ -293,8 +290,6 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/tasks/quick_assign_b
 
 
 ###### Sample Curl Command
-
-
 ```
 curl --location --request POST '[BASEURL]/api/v3/dispatcher/tasks/bg_status' \
 --header 'COMPANY_SLUG: [SLUG]' \
@@ -437,7 +432,6 @@ curl --location --request POST '[BASEURL]/api/v3/worker/generate_batch_upload_pr
 }
 '
 ```
-
 
 
 ```
@@ -927,85 +921,6 @@ To send bulk actions for a **Dropoff Failed** task, we will need a payload with 
 This call is to check the status of the bulk action called in **Driver Bulk Actions**.
 
 
-<table>
-  <tr>
-   <td>GET
-   </td>
-   <td>[BASEURL]/api/v3/worker/tasks/bulk_actions/{batch_id}/status
-   </td>
-  </tr>
-</table>
-
-
-<!--H6 not demoted to H7. -->
-
-
-###### Request Headers
-
-
-<table>
-  <tr>
-   <td><strong>Parameter</strong>
-   </td>
-   <td><strong>Required?</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>company_slug
-   </td>
-   <td>Y
-   </td>
-   <td>Dispatcher company slug
-   </td>
-  </tr>
-  <tr>
-   <td>Authorization
-   </td>
-   <td>Y
-   </td>
-   <td>Bearer [jwt token]
-   </td>
-  </tr>
-  <tr>
-   <td>Content-Type
-   </td>
-   <td>Y
-   </td>
-   <td>Use ‘application/json’
-   </td>
-  </tr>
-</table>
-
-
-<!--H6 not demoted to H7. -->
-
-
-###### Request URL Parameters
-
-
-<table>
-  <tr>
-   <td><strong>Parameter</strong>
-   </td>
-   <td><strong>Required?</strong>
-   </td>
-   <td><strong>Description</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>batch_id
-   </td>
-   <td>Y
-   </td>
-   <td>The batch_id to query
-   </td>
-  </tr>
-</table>
-
-
-<!--H6 not demoted to H7. -->
 
 
 ###### Sample Curl Command
