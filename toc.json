@@ -1,0 +1,23 @@
+{
+  "items": [
+    {
+      "type": "item",
+      "title": "Intro",
+      "uri": "docs/introduction.md"
+    },
+    {
+      "type": "divider",
+      "title": "Guides"
+    },
+    {
+      "type": "item",
+      "title": "Common Use Cases",
+      "uri": "docs/guides/api-integration-guide.md"
+    },
+    {
+      "type": "item",
+      "title": "Downstream Partner Integration",
+      "uri": "docs/guides/dsp-integration-guide.md"
+    }
+  ]
+}
