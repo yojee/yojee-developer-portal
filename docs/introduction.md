@@ -1,7 +1,7 @@
 # Intro
 
 Studio is our next generation app for API design, modeling, and technical writing.
-
+Linking to [Dispatcher API](../../../docs/yojee-api/publish/yojee-dispatcher-api.yaml)
 > A primary goal of Studio is to enrich, not replace, your existing workflows. It works offline, with folders and files on your computer, just like your favorite IDEs.
 
 Read the full [Studio Docs](https://stoplight.io/p/docs/gh/stoplightio/studio).
