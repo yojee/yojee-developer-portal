@@ -409,12 +409,12 @@ curl --location --request POST '[BASEURL]/api/v3/worker/tasks/mark_arrival' \
 ```
 
 
-##### 2.3.5 Driver Generate Batch Upload Pre-signed URLs
+#### 2.3.5 Driver Generate Batch Upload Pre-signed URLs
 
 In some sub-tasks, there is a need to upload POD/signature images to a AWS S3 Bucket. To perform this securely, a pre-signed URL is generated first, and the image is uploaded to AWS S3 via the methods described at [https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html](https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html).
 
 
-###### **Generate Batch Upload Pre-signed URLs**
+##### **Generate Batch Upload Pre-signed URLs**
 
 Generate AWS S3 pre-signed URL for uploading
 
@@ -442,7 +442,7 @@ This URL of the image is used in the call to Driver Bulk Actions.
 
 
 
-### 2.3.6 Driver Bulk Actions
+#### 2.3.6 Driver Bulk Actions
 
 Driver Bulk Actions is where the main status updates take place. For each **pickup** task, there is a **pickup_completed** and a **pickup_failed** array of sub-tasks. For each dropoff task, there is a **dropoff_completed** and a **dropoff_failed** array of sub-tasks.
 
@@ -451,12 +451,12 @@ Each of these arrays of sub-tasks lists the sub-tasks that need to be completed 
 The Bulk Actions call combines the updates of the sub-tasks into one call with a number of action elements. Each Bulk Actions call will return a batch_id which will be used in **Get Driver Bulk Action Status** to check if the bulk action has completed.
 
 
-#### **Driver Bulk Actions**
+##### **Driver Bulk Actions**
 
 This call is to send multiple actions based on the sub-tasks to be completed.
 
 
-##### Sample Curl Command
+###### Sample Curl Command
 
 This sample Curl command is to illustrate a complete call to **Driver Bulk Actions**. The breakdown of the individual action elements will be described later in this document.
 
@@ -528,7 +528,7 @@ curl --location --request PUT '[BASEURL]/api/v3/worker/tasks/bulk_actions' \
 
 
 
-#### Bulk Actions Payload Format
+##### Bulk Actions Payload Format
 
 Each of the Bulk Action payloads includes a number of actions. Each action is either:
 
@@ -539,7 +539,7 @@ Each of the Bulk Action payloads includes a number of actions. Each action is ei
 The list of sub-task completion actions are listed when calling **Driver Get Ongoing Tasks**. The respective sub-task from the sample output above is reproduced here (note that the sub-tasks for different configurations might differ)
 
 
-##### Sub-tasks for Pickup
+###### Sub-tasks for Pickup
 
 
 ```
@@ -587,7 +587,7 @@ From the above, we can see that for **Pickup Completed**, we need to complete a 
 <!--H6 not demoted to H7. -->
 
 
-##### Sub-tasks for Dropoff
+###### Sub-tasks for Dropoff
 
 
 ```
@@ -913,10 +913,10 @@ To send bulk actions for a **Dropoff Failed** task, we will need a payload with 
 
 
 
-##### 2.3.7 Get Driver Bulk Action Status
+#### 2.3.7 Get Driver Bulk Action Status
 
 
-###### **Get Driver Bulk Action Status**
+##### **Get Driver Bulk Action Status**
 
 This call is to check the status of the bulk action called in **Driver Bulk Actions**.
 
@@ -963,4 +963,3 @@ curl --location --request POST '[BASEURL]/api/v3/public/verify_phone_otp' \
     "otp_code": "11223344"
 }'
 ```
-
