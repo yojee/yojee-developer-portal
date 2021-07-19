@@ -1,6 +1,5 @@
 
 **Downstream Partner Integration Solution Guide**
-
 ## Overview
 
 ---

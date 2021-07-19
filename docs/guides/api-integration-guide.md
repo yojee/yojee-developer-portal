@@ -1,17 +1,5 @@
 
 **API Integration Intro Guide**
-
-
-# **Table of Contents**
-
-
-[TOC]
-
-
-
-#
-
-
 # Overview
 
 
