@@ -18,7 +18,7 @@ In certain cases, the DSPs have their own Transport Management Systems, and woul
 
 The diagram below outlines the main components of current transfer order operations.
 
-
+![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-01.png)
 
 The components are:
 
