@@ -9,7 +9,7 @@ Yojee’s customers use our platform to track their transport orders. In some us
 In certain cases, the DSPs have their own Transport Management Systems, and would like to integrate with Yojee. To achieve this, there is a need to call specific Yojee APIs. **Section 2** in this document will first outline the integration flow, and describe the individual API calls needed. It is also important to understand the flow in Section 1 to be able to understand how the integration flow will work.
 
 
-## 1. Current Operations
+## Current Operations
 
 The diagram below outlines the main components of current transfer order operations.
 
@@ -30,7 +30,7 @@ In the diagram above:
 * **Driver** has access to the Mobile App
 
 
-### 1.1 Order Transfer
+### Order Transfer
 
 #### Process Description
 
@@ -42,7 +42,7 @@ In the diagram above:
 3. If Company B **accepts** the transfer, the order will show as **Transferred - Unassigned** in Co. A’s slug and **Accepted** in Co. B’s slug. The order would now be transferred from Company A to Company B.
 
 
-### 1.2 Driver Management and Assignment
+### Driver Management and Assignment
 
 #### Process Description
 
@@ -61,7 +61,7 @@ To assign the task(s) to a driver, in Co. B’s slug:
 4. If the driver **accepts** the incoming assignment, the task will show as **Assigned** in Co. B’s slug. At the same time, the order will show as Transferred-Assigned in Co. A’s slug.
 
 
-### 1.3 Task Status Tracking  + POD updates
+### Task Status Tracking  + POD updates
 #### Process Description
 
 1. When the driver arrives at the location, he has to first use the mobile app to **Mark as Arrived**. A message will be sent to mark the driver’s arrival and the driver’s arrival time can be viewed in the order’s item audit log in Co. B’s slug.
@@ -77,7 +77,7 @@ After that, depending on whether there is any task exception, meaning that wheth
 8. Driver will confirm reporting of the task, and
 9. Mark departure from the location. The task would then be marked as Reported. At this point, messages will be sent to the Yojee backend to update the task as reported. In Co. B’s slug the task will show as **Reported** along with the POD link. In Co. A’s slug the task will show as **Transferred-Reported** along with the POD link.
 
-## 2. Integration Solution
+## Integration Solution
 ### Integration Solution Overview
 
 With the understanding in Section 1 of how the Current Operations work, the solution to integrate Yojee with DSP’s TMS is designed as follows:
@@ -102,11 +102,11 @@ The Integration Solution can also be broken down into the following components.
     * to notify Yojee backend of uploaded photo and/or signature images.
 
 
-### 2.1 Order Transfer
+### Order Transfer
 
 The API calls under **Order Transfer** in this solution will need to be called using Co. B’s Dispatcher credentials.
 
-#### 2.1.1 Retrieve incoming order details
+#### Retrieve incoming order details
 
 Incoming transfer orders will be in Co. B’s slug as orders with **created** status. To retrieve the order information and the order item information for these orders, we will need to make 2 calls:
 * Dispatcher Get Orders with status **created**.
@@ -136,7 +136,7 @@ curl --location -g --request GET '[BASEURL]/api/v3/dispatcher/order_items?order_
 ```
 
 
-#### 2.1.2 Accept the transfer order
+#### Accept the transfer order
 ##### **Dispatcher Accept Partner Transfer Order**
 
 Call this API to **accept** the transfer order from upstream partner.
@@ -152,7 +152,7 @@ curl --location --request PUT '[BASEURL]/api/v3/dispatcher/partner_transfer/disp
 
 ```
 
-#### 2.1.3 Decline the transfer order
+#### Decline the transfer order
 
 ##### **Dispatcher Reject Partner Transfer Order**
 
@@ -166,7 +166,7 @@ curl --location --request PUT '[BASEURL]/api/v3/dispatcher/partner_transfer/disp
 
 ```
 
-### 2.2 Driver Management and Assignment
+### Driver Management and Assignment
 
 There are two sets of API calls in **Driver Management and Assignment**. The first set are to achieve the following:
 
@@ -189,7 +189,7 @@ For this second set of API calls, the Integration Layer needs to authenticate as
 > ### Note
 > See the section on Basic Information on APIs - Authentication at the end of this document for more information on authentication.
 
-#### 2.2.1 Driver Management - Create Driver
+#### Driver Management - Create Driver
 ##### **Dispatcher Create Worker**
 
 Call this API to **create** a new Driver the transfer order from upstream partner.
@@ -213,7 +213,7 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/workers/' \
 ```
 
 
-#### 2.2.2 Driver Management - Update Driver Information
+#### Driver Management - Update Driver Information
 
 ##### **Dispatcher Update Worker**
 
@@ -237,7 +237,7 @@ curl --location --request PUT '[BASEURL]/api/v3/dispatcher/workers/4232' \
 ```
 
 
-#### 2.2.3 Driver Management - Delete Driver Information
+#### Driver Management - Delete Driver Information
 ##### **Dispatcher Delete Worker**
 
 Call this API to **delete** a Driver’s details
@@ -250,7 +250,7 @@ curl --location --request DELETE '[BASEURL]/api/v3/dispatcher/workers/4231' \
 ```
 
 
-#### 2.2.4 Get Tasks
+#### Get Tasks
 ##### **Dispatcher Get Tasks**
 
 This API call will retrieve tasks under the slug.
@@ -269,7 +269,8 @@ curl --location -g --request GET '[BASEURL]/api/v3/dispatcher/tasks?from=2021-05
 ```
 
 
-#### 2.2.5 Assign Driver
+
+#### Assign Driver
 
 Driver assignment is done by a background job. The first call is to send the parameters to the background job for execution, and the second call is to get the status of the background job to see the outcome.
 
@@ -300,22 +301,22 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/tasks/bg_status' \
 ```
 
 
-#### 2.2.5 Driver Get Task Groups
+#### Driver Get Task Groups
 
 ##### **Driver Get TaskGroups**
 
 This call will retrieve the task groups that have been assigned to the Driver, but pending Driver’s acceptance / rejection.
 
 ###### Sample Curl Command
-
 ```
 curl --location -g --request GET '[BASEURL]/api/v3/worker/task_groups?status[]=assigned&status[]=broadcasted' \
 --header 'COMPANY_SLUG: [SLUG]' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NfdHlwZSI6Im1haW4iLCJwZXJtaXNzaWauc191cGRhdGVkX2F0IjpudWxsLCJhdWQiOiJKb2tlbiIsImNvbXBhbnlfaWQiOjk5NywiY29tcGFueV9zbHVnIjoia2N5LWRzIiwiZXhwIjoxNjIxMjM1MTk0LCJpYXQiOjE2MjEyMzQyOTQsImlzcyI6Ikpva2VuIiwianRpIjoiMnB2c2cwMnM5ODF1NWxiNHAwMDAwZzczIiwibmJmIjoxNjIxMjM0Mjk0LCJ1c2VyX3Byb2ZpbGVfaWQiOjk4NzZ9.n8xHAVHC86nloGSKAmC0SCJ2HsHBdv8Z7zEj5HIekL8' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' \
 --data-raw ''
 ```
 
-#### 2.2.6 Driver Accepts Task
+
+#### Driver Accepts Task
 
 ##### **Driver Accepts Task**
 
@@ -328,11 +329,11 @@ For the Driver to **accept** the task, call this API.
 ```
 curl --location --request PUT '[BASEURL]/api/v3/worker/task_groups/285642/accept' \
 --header 'COMPANY_SLUG: [SLUG]' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NfdHlwZSI6Im1haW4iLCJwZXJtaXNzaW9uc191cGRhdGVkX2F0IjpudWxsLCJhdWQiOiJKb2tlbiIsImNvbXBhbnlfaWQiOjk5NywiY29tcGFueV9zbHVnIjoia2N5LWRzIiwiZXhwIjoxNjIxMjM1MTk0LCJpYXQiOjE2MjEyMzQyOTQsImlzcyI6Ikpva2VuIiwianRpIjoiMnB2c2cwMnM5ODF1NWxiNHAwMDAwZzczIiwibmJmIjoxNjIxMjM0Mjk0LCJ1c2VyX3Byb2ZpbGVfaWQiOjk4NzZ9.n8xHAVHC86nloGSKAmC0SCJ2HsHBdv8Z7zEj5HIekL8'
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
 ```
 
 
-#### 2.2.7 Driver Rejects Task
+#### Driver Rejects Task
 ##### **Driver Rejects Task**
 
 For the Driver to **reject** the task, call this API.
@@ -342,13 +343,13 @@ For the Driver to **reject** the task, call this API.
 ```
 curl --location --request PUT '[BASEURL]/api/v3/worker/task_groups/285637/reject \
 --header 'COMPANY_SLUG: [SLUG]' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NfdHlwZSI6Im1haW4iLCJwZXJtaXNzaW9uc191cGRhdGVkX2F0IjpudWxsLCJhdWQiOiJKb2tlbiIsImNvbXBhbnlfaWQiOjk5NywiY29tcGFueV9zbHVnIjoia2N5LWRzIiwiZXhwIjoxNjIxMjM1MTk0LCJpYXQiOjE2MjEyMzQyOTQsImlzcyI6Ikpva2VuIiwianRpIjoiMnB2c2cwMnM5ODF1NWxiNHAwMDAwZzczIiwibmJmIjoxNjIxMjM0Mjk0LCJ1c2VyX3Byb2ZpbGVfaWQiOjk4NzZ9.n8xHAVHC86nloGSKAmC0SCJ2HsHBdv8Z7zEj5HIekL8'
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
 ```
 
 
-### 2.3 Task Status Tracking + POD updates
+### Task Status Tracking + POD updates
 
-#### 2.3.1 Driver Get Ongoing Tasks
+#### Driver Get Ongoing Tasks
 
 
 ##### **Driver Get Ongoing Tasks**
@@ -361,11 +362,11 @@ This call will list out the tasks that are currently on hand for the driver.
 ```
 curl --location --request GET '[BASEURL]/api/v3/worker/tasks/ongoing' \
 --header 'COMPANY_SLUG: [SLUG]' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NfdHlwZSI6Im1haW4iLCJwZXJtaXNzaW9uc191cGRhdGVkX2F0IjpudWxsLCJhdWQiOiJKb2tlbiIsImNvbXBhbnlfaWQiOjk5NywiY29tcGFueV9zbHVnIjoia2N5LWRzIiwiZXhwIjoxNjIxMjY0MDU3LCJpYXQiOjE2MjEyNjMxNTcsImlzcyI6Ikpva2VuIiwianRpIjoiMnB2dTRnM3NoY2JlYTRyMGlvMDAwNWgzIiwibmJmIjoxNjIxMjYzMTU3LCJ1c2VyX3Byb2ZpbGVfaWQiOjk4NzZ9.ET_-vvCgB6QzfJNd5D3fzX30knMzrM6WCGkJNJqk-u4'
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
 ```
 
 
-#### 2.3.2 Validate Completion
+#### Validate Completion
 
 ##### **Validate Completion**
 
@@ -376,7 +377,7 @@ Before updating status for a task, we need to call Validate Completion to ensure
 ```
 curl --location --request POST '[BASEURL]/api/v3/worker/tasks/validate_completion' \
 --header 'COMPANY_SLUG: [SLUG]' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NfdHlwZSI6Im1haW4iLCJwZXJtaXNzaW9uc191cGRhdGVkX2F0IjpudWxsLCJhdWQiOiJKb2tlbiIsImNvbXBhbnlfaWQiOjk5NywiY29tcGFueV9zbHVnIjoia2N5LWRzIiwiZXhwIjoxNjIxMjY0MDU3LCJpYXQiOjE2MjEyNjMxNTcsImlzcyI6Ikpva2VuIiwianRpIjoiMnB2dTRnM3NoY2JlYTRyMGlvMDAwNWgzIiwibmJmIjoxNjIxMjYzMTU3LCJ1c2VyX3Byb2ZpbGVfaWQiOjk4NzZ9.ET_-vvCgB6QzfJNd5D3fzX30knMzrM6WCGkJNJqk-u4' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "task_ids": [
@@ -386,7 +387,7 @@ curl --location --request POST '[BASEURL]/api/v3/worker/tasks/validate_completio
 ```
 
 
-#### 2.3.4 Driver Mark Arrival
+#### Driver Mark Arrival
 ##### **Driver Mark Arrival**
 
 This call is to mark the arrival of the Drive at the location for a task
@@ -398,7 +399,7 @@ This call is to mark the arrival of the Drive at the location for a task
 curl --location --request POST '[BASEURL]/api/v3/worker/tasks/mark_arrival' \
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: NAN3acMWpyzLpJ7f2yNqt238e3aDxzfx0OjikfF2ORc=' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NfdHlwZSI6Im1haW4iLCJwZXJtaXNzaW9uc191cGRhdGVkX2F0IjpudWxsLCJhdWQiOiJKb2tlbiIsImNvbXBhbnlfaWQiOjk5NywiY29tcGFueV9zbHVnIjoia2N5LWRzIiwiZXhwIjoxNjIxMjY0OTc0LCJpYXQiOjE2MjEyNjQwNzQsImlzcyI6Ikpva2VuIiwianRpIjoiMnB2dTY1Z252aDg3dnNnY3RvMDAwNXA2IiwibmJmIjoxNjIxMjY0MDc0LCJ1c2VyX3Byb2ZpbGVfaWQiOjk4NzZ9.hLX1S96n-e2h1WdS4S7DqZWEu0SJzXbQee_4BqgtXkY' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "task_ids": [
@@ -409,7 +410,7 @@ curl --location --request POST '[BASEURL]/api/v3/worker/tasks/mark_arrival' \
 ```
 
 
-#### 2.3.5 Driver Generate Batch Upload Pre-signed URLs
+#### Driver Generate Batch Upload Pre-signed URLs
 
 In some sub-tasks, there is a need to upload POD/signature images to a AWS S3 Bucket. To perform this securely, a pre-signed URL is generated first, and the image is uploaded to AWS S3 via the methods described at [https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html](https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html).
 
@@ -423,7 +424,7 @@ Generate AWS S3 pre-signed URL for uploading
 ```
 curl --location --request POST '[BASEURL]/api/v3/worker/generate_batch_upload_presigned_urls' \
 --header 'COMPANY_SLUG: [SLUG]' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NfdHlwZSI6Im1haW4iLCJwZXJtaXNzaW9uc191cGRhdGVkX2F0IjpudWxsLCJhdWQiOiJKb2tlbiIsImNvbXBhbnlfaWQiOjk5NywiY29tcGFueV9zbHVnIjoia2N5LWRzIiwiZXhwIjoxNjIxMjY1OTAzLCJpYXQiOjE2MjEyNjUwMDMsImlzcyI6Ikpva2VuIiwianRpIjoiMnB2dTdyaHY1NHZia2tsb25nMDAwN3AyIiwibmJmIjoxNjIxMjY1MDAzLCJ1c2VyX3Byb2ZpbGVfaWQiOjk4NzZ9.ss9hcbqBTWM-1a_QBmINRi4B7UYTbQmRMnAWGLlS6gg' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "filenames": [
@@ -442,7 +443,7 @@ This URL of the image is used in the call to Driver Bulk Actions.
 
 
 
-#### 2.3.6 Driver Bulk Actions
+#### Driver Bulk Actions
 
 Driver Bulk Actions is where the main status updates take place. For each **pickup** task, there is a **pickup_completed** and a **pickup_failed** array of sub-tasks. For each dropoff task, there is a **dropoff_completed** and a **dropoff_failed** array of sub-tasks.
 
@@ -464,7 +465,7 @@ This sample Curl command is to illustrate a complete call to **Driver Bulk Actio
 ```
 curl --location --request PUT '[BASEURL]/api/v3/worker/tasks/bulk_actions' \
 --header 'COMPANY_SLUG: [SLUG]' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NfdHlwZSI6Im1haW4iLCJwZXJtaXNzaW9uc191cGRhdGVkX2F0IjpudWxsLCJhdWQiOiJKb2tlbiIsImNvbXBhbnlfaWQiOjk5NywiY29tcGFueV9zbHVnIjoia2N5LWRzIiwiZXhwIjoxNjIxMjY3MTAyLCJpYXQiOjE2MjEyNjYyMDIsImlzcyI6Ikpva2VuIiwianRpIjoiMnB2dWExY2RlcTdwaHVqYjAwMDAwZWkxIiwibmJmIjoxNjIxMjY2MjAyLCJ1c2VyX3Byb2ZpbGVfaWQiOjk4NzZ9._Oafyj-9Te6ujPukwYbaToM8Xq9Za-Jw6YKCTO8HGUI' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' \
 --header 'Content-Type: application/json' \
 --data-raw '{
   "actions": [
@@ -913,7 +914,7 @@ To send bulk actions for a **Dropoff Failed** task, we will need a payload with 
 
 
 
-#### 2.3.7 Get Driver Bulk Action Status
+#### Get Driver Bulk Action Status
 
 
 ##### **Get Driver Bulk Action Status**
