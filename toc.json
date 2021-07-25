@@ -6,6 +6,20 @@
       "uri": "docs/introduction.md"
     },
     {
+      "type": "item",
+      "title": "Get Started",
+      "uri": "docs/tutorials/get-started.md"
+    },
+    {
+      "type": "divider",
+      "title": "Concepts"
+    },
+    {
+      "type": "item",
+      "title": "Concepts",
+      "uri": "docs/concepts/yojee-concepts.md"
+    },
+    {
       "type": "divider",
       "title": "Guides"
     },
