@@ -161,7 +161,8 @@ curl --request POST \
   --data '{
   "external_id": "TEST-ORDER-001",
   "external_sender_id": "KCYCorp",
-  "item_steps":
+  "item_steps": [
+    {
       "item_id": 0,
       "order_step_id": 0,
       "step_group": 1,
