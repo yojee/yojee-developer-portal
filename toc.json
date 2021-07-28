@@ -21,8 +21,8 @@
     },
     {
       "type": "item",
-      "title": "Terminology",
-      "uri": "docs/concepts/anatomy-of-an-order-request.md"
+      "title": "Anatomy of an Order Request",
+      "uri": "docs/concepts/anatomy-order-request.md"
     },
     {
       "type": "divider",
