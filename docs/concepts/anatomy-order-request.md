@@ -132,8 +132,6 @@ properties:
     items:
       type: object
       properties:
-        quantity:
-          type: number
         address:
           type: string
         address2:
@@ -195,21 +193,162 @@ properties:
 ```
 
 ### First Level parameters
-#### External Id
-Every `Order` will be assigned a Yojee `Order Number`(sometimes referred to as `Order ID`) that looks like `O-4W4TUNATPG9S`. To identify the order using your own order id, enter the value of your order id in this field.
+Parameters to provide more information in the `Orders`. These parameters are all non-mandatory:
+- **external_id** Every `Order` will be assigned a Yojee `Order Number`(sometimes referred to as `Order ID`) that looks like `O-4W4TUNATPG9S`. To identify the order using your own order id, enter the value of your order id in this field.
+- **price_currency**
+- **price_amount**
+- **container_no** Used to track the container no for this order. 
+- **Parameters for Sender** see next section
 
 #### Parameters for Sender
 ![Dispatcher Portal - Sender](../../assets/images/concepts/sender-n-external-id.png)
 
-The following parameters relate to telling Yojee who is the `Sender` for this order:
-- **sender_id** After creating a `Sender` in the `Dispatcher Portal`, you will see a numeric Sender ID in the table listing the `Senders`. Use this numeric ID to indicate that the `Order` is sent by this `Sender`. When both this field and the **external_sender_id** fields are present in the payload, this field takes precedence.
+The following parameters relate to telling Yojee who is the `Sender` for this order. These parameters are all non-mandatory:
+- **sender_id** After creating a `Sender` in the `Dispatcher Portal` (see above screenshot), you will see a numeric Sender ID in the table listing the `Senders`. Use this numeric ID to indicate that the `Order` is sent by this `Sender`. When both this field and the **external_sender_id** fields are present in the payload, this field takes precedence.
 - **external_sender_id** When creating a `Sender` in the `Dispatcher Portal`, there is an option to assign an External ID to the `Sender`. Use this External ID in this field to indicate that the `Order` is sent by this `Sender`. 
 - **sender_type** Either `organisation` or `individual`. Use `organisation` for integration purposes.
-- **placed_by_user_profile_id** This field indicates the `User` in Yojee system that created this order. It is not a mandatory field and can be left out
+- **placed_by_user_profile_id** This field indicates the `User` in Yojee system that created this order.
 
 ### Nested parameters
+The Create Order payload includes the following nested parameters that are **required**:
+- **items** information for the `Items` in the `Order`
+- **steps** information on location and time requirements for the respective `Task`
+- **item_steps** linking the `Items` to the `Steps`
 
----
+#### Items
+An array of `Items` in the `Order` that needs to be moved.
+
+#### Steps
+An array of `Steps` that contains
+- **address information** Address-related fields to indicate where this `Step` needs to take place. There are also the `lat` and `lng` fields to allow you to input the exact geo-coordinates of the location.
+- **contact information** Contact information of the person at the location. Email address and phone information may be used for notifications through SMS or Email.
+- **time slots** `from_time` and `to_time` to indicate the time slot within which the `Task` at this `Step` needs to be completed.
+
+#### Item Steps
+An array of JSON objects linking up the `Items` and `Steps` defined above.
+
+Each `Item` will be implicitly assigned an `item_id`, starting with 0 for the first item and incrementing by 1.
+
+Each `Step` will also be implicityly assigned an `order_step_id`, starting with 0 for the first step and incrementing by 1.
+
+The values in `ItemStep` will then link them up with a JSON like the following:
+```json
+    {
+      "item_id": 0,
+      "order_step_id": 0,
+      "type": "pickup"
+    },
+    {
+      "item_id": 0,
+      "order_step_id": 1,
+      "type": "dropoff"
+    }
+```
+
+This means, the first `Item` has a `Pickup Task` at the location indicated at the first `Step`, and there is also a `Dropoff Task` at the location indicated at the second `Step`.
+
+<!-- theme: warning -->
+> Note that for more than one `Item`, there will need to be more than one pair of `ItemSteps` defined.
+
+### Sample Payload
+
+```json
+ {
+  "item_steps": [
+    {
+      "item_id": 0,
+      "order_step_id": 0,
+      "type": "pickup"
+    },
+    {
+      "item_id": 0,
+      "order_step_id": 1,
+      "type": "dropoff"
+    },
+    {
+      "item_id": 1,
+      "order_step_id": 0,
+      "type": "pickup"
+    },
+    {
+      "item_id": 1,
+      "order_step_id": 1,
+      "type": "dropoff"
+    }
+
+  ],
+  "steps": [
+    {
+      "address": "20 Pasir Pajang Road",
+      "address2": "",
+      "country": "SG",
+      "state": "",
+      "postal_code": "117439",
+      "contact_company": "S Company",
+      "contact_name": "John Lim",
+      "contact_phone": 62010000,
+      "contact_email": "john@company1.example.com",
+      "from_time": "2021-08-01T08:59:22.813Z",
+      "to_time": "2021-08-02T07:59:59.813Z"
+    },
+    {
+      "address": "1 Changi Business Park",
+      "address2": "Avenue 1",
+      "country": "SG",
+      "state": "",
+      "postal_code": "486058",
+      "contact_company": "C Company",
+      "contact_name": "Peter Tan",
+      "contact_phone": 62010001,
+      "contact_email": "peter@company2.example.com",
+      "from_time": "2021-08-03T08:59:22.813Z",
+      "to_time": "2021-08-04T07:59:59.813Z"
+    }
+  ],
+  "items": [
+    {
+      "description": "Laptop Computer",
+      "width": 0.11,
+      "length": 0.12,
+      "height": 0.044,
+      "weight": 334,
+      "quantity": 4,
+      "info": "Item information",
+      "external_customer_id": "TN-001",
+      "external_customer_id2": "CUSTOMER-INFO-001",
+      "external_customer_id3": "",
+      "payload_type": "same_day",
+      "price_info": "",
+      "service_type": "express",
+      "volume": 1000,
+      "volumetric_weight": 1,
+      "price_amount": 100
+    },
+    {
+      "description": "Printer",
+      "width": 0.11,
+      "length": 0.12,
+      "height": 0.044,
+      "weight": 334,
+      "quantity": 1,
+      "info": "Item information",
+      "external_customer_id": "TN-001",
+      "external_customer_id2": "CUSTOMER-INFO-001",
+      "external_customer_id3": "",
+      "payload_type": "same_day",
+      "price_info": "",
+      "service_type": "express",
+      "volume": 1000,
+      "volumetric_weight": 1,
+      "price_amount": 100
+    }
+  ]
+}
+```
+
+The payload above has two `Items` - 4 Laptop computers and 1 Printer to be picked up at 20 Pasir Panjang Road and dropped off at 1 Changi Business Park. Note that there are 4 `ItemSteps`.
+
+<!-- ---
 
 ## Create a Multi-Leg Order
 To create a Multi-Leg `Order` via the Yojee API, we make a call to
@@ -305,8 +444,6 @@ properties:
     items:
       type: object
       properties:
-        quantity:
-          type: number
         address:
           type: string
         address2:
@@ -368,6 +505,6 @@ properties:
         - step_sequence
         - type
 ```
-
+ -->
 
 
