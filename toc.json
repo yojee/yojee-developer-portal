@@ -16,8 +16,13 @@
     },
     {
       "type": "item",
-      "title": "Concepts",
-      "uri": "docs/concepts/yojee-concepts.md"
+      "title": "Terminology",
+      "uri": "docs/concepts/yojee-terminology.md"
+    },
+    {
+      "type": "item",
+      "title": "Terminology",
+      "uri": "docs/concepts/anatomy-of-an-order-request.md"
     },
     {
       "type": "divider",
