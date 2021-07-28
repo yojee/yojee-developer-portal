@@ -148,8 +148,6 @@ properties:
       required:
         - item_id
         - order_step_id
-        - step_group
-        - step_sequence
         - type
   price_currency:
     type: string
