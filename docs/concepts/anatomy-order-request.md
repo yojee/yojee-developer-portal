@@ -28,6 +28,12 @@ properties:
   sender_id:
     type: integer
     description: Sender ID. Either this or `External Sender ID` should be provided
+  sender_type:
+    type: string
+    description: Sender Type. For most integration this is `organisation`
+    enum:
+      - organisation
+      - individual
   items:
     type: array
     description: List of items to be sent
@@ -145,9 +151,6 @@ properties:
         - step_group
         - step_sequence
         - type
-  sender_type:
-    type: string
-    description: Sender Type. For most integration this is `organisation`
   price_currency:
     type: string
     description: Order currency
@@ -160,58 +163,19 @@ properties:
   container_no:
     type: string
     description: Used when order is tied to a container
-description: POST body for dispatcher to create an order
-example:
-  steps:
-    - to_time: 2019-09-16T06:00:00.000Z
-      state: ''
-      quantity: 50
-      postal_code: ''
-      lng: 103.84979090000002
-      lat: 1.2804208
-      from_time: 2019-09-16T02:00:00.000Z
-      country: Singapore
-      address: '144 Robinson Road, Singapore'
-    - to_time: 2019-09-16T10:00:00.000Z
-      state: ''
-      quantity: 50
-      postal_code: 68898
-      lng: 103.84920669999997
-      lat: 1.2800304
-      from_time: 2019-09-16T06:00:00.000Z
-      country: Singapore
-      address: '80 Robinson Road, Singapore'
-  sender_type: organisation
-  sender_id: 4
-  price_currency: SGD
-  price_amount: 0
-  placed_by_user_profile_id: '3'
-  items:
-    - width: 1
-      weight: 1
-      volumetric_weight: 0.0002
-      volume: 1
-      service_type_id: 1
-      service_type: same_day
-      price_amount: 0
-      payload_type: document
-      length: 1
-      height: 1
-  item_steps:
-    - type: pickup
-      order_step_id: 0
-      item_id: 0
-    - type: dropoff
-      order_step_id: 1
-      item_id: 0
-  external_id: my-external-order-id
 ```
 
+## First Level Required parameters
+
+### 
+
+## First Level Optional parameters
 
 ## Single-Leg Order
 In the most simple case, an `Order` will have a single leg as follows:
 
 ```mermaid
   graph LR
-    A[Source] --> B[Destination]
+    A[Source] -->|Leg 1| B[Destination]
 ```
+
