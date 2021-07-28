@@ -51,9 +51,7 @@ Pass `Company Slug` and `Access Token` in the HTTP header of your API call, at t
 | Content-Type | string | application/json |
 
 
-## Call Create Order
----
-
+## Create an Order
 We will be making the call to [**Create Order**](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders/post) to create an order.
 
 ### Sample Payload
@@ -139,19 +137,20 @@ Use the following sample payload for your first `Create Order` call:
 > ### external_sender_id
 >
 > Note that the `external_sender_id` needs to be a valid ID in your Yojee instance
+
 ### Making the call
 There are a few ways you can make the call:
 
 #### On the API Reference
 
-1. Locate the `Try-it Console` on the right of the [**Create Order**](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders/post).
-1. Fill in your `company_slug` and `access_token`.
-1. Copy and paste the above sample payload in the **Body** section of the `Try-it Console`.
-1. Click `Send Request`.
+- Locate the `Try-it Console` on the right of the [**Create Order**](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders/post).
+- Fill in your `company_slug` and `access_token`.
+- Copy and paste the above sample payload in the **Body** section of the `Try-it Console`.
+- Click `Send Request`.
 
 #### On the command line
 
-1. Copy this command:
+- Copy this command:
 ```
 curl --request POST \
   --url https://umbrella-dev.yojee.com/api/v3/dispatcher/orders \
@@ -232,7 +231,7 @@ curl --request POST \
   "sender_type": "organisation",
 }'
 ```
-1. Remember to replace **[COMPANY_SLUG]** and **[ACCESS TOKEN]** with your `Company_Slug` and `Access_Token`
+- Remember to replace **[COMPANY_SLUG]** and **[ACCESS TOKEN]** with your `Company_Slug` and `Access_Token`
 ## Troubleshooting
 You may encounter the following messages when you make your first requests.
 
