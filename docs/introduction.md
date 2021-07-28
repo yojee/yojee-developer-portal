@@ -10,5 +10,5 @@ These documentation are organized into:
 - **Quick Start Guide:** A simple [Get Started](./tutorials/get-started.md) tutorial to quickly create a new order in Yojee
 - **How-to Guides:** [Guides](./guides/how-to-guides.md) focused on specific use cases
 - **API Reference Documents:** A series of [Yojee API reference](https://yojee.stoplight.io/docs/yojee-api) documents listing the details like endpoints, parameters and examples for the API calls.
-- **Concepts:** To better understand the Yojee API, check out this set of [Concepts and Explanation](./guides/yojee-concepts.md) documents
+- **Concepts:** To better understand the Yojee API, check out this set of [Yojee Terminology](./concepts/yojee-terminology.md) documents
 

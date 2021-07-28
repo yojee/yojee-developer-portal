@@ -21,3 +21,7 @@ Each `Task` has a specified address location and time window in which the `Task`
 A common setup for courier delivery for example, will require each item to have two `Tasks` (a pickup `Task` and a drop off `Task`). Because it is important that both of these tasks are executed by the same driver, the tasks are created as linked. Linked `Tasks` specifies a requirement that all tasks linked together has to be executed by a single `Driver`.
 
 Another example involving a cross dock is where a delivery requires four tasks (pickup - drop off - pickup - drop off). In this case, the driver of the first leg does not have to be the same driver as the second leg. Therefore a suitable linking configuration would have the first two tasks linked, and the last two tasks linked.
+
+<!-- theme:success -->
+> Read more about `Orders` in [Anatomy of an Order Request](./anatomy-order-request.md).
+

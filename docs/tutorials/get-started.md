@@ -59,27 +59,20 @@ Use the following sample payload for your first `Create Order` call:
 
 ``` json
  {
-  "external_id": "TEST-ORDER-001",
-  "external_sender_id": "Computer Corp",
   "item_steps": [
     {
       "item_id": 0,
       "order_step_id": 0,
-      "step_group": 1,
-      "step_sequence": 1,
       "type": "pickup"
     },
     {
       "item_id": 0,
       "order_step_id": 1,
-      "step_group": 1,
-      "step_sequence": 2,
       "type": "dropoff"
     }
   ],
   "steps": [
     {
-      "quantity": 4,
       "address": "20 Pasir Pajang Road",
       "address2": "",
       "country": "SG",
@@ -93,7 +86,6 @@ Use the following sample payload for your first `Create Order` call:
       "to_time": "2021-08-02T07:59:59.813Z"
     },
     {
-      "quantity": 4,
       "address": "1 Changi Business Park",
       "address2": "Avenue 1",
       "country": "SG",
@@ -126,10 +118,7 @@ Use the following sample payload for your first `Create Order` call:
       "volumetric_weight": 1,
       "price_amount": 100
     }
-  ],
-  "price_amount": "100",
-  "price_currency": "SGD",
-  "sender_type": "organisation",
+  ]
 }
 ```
 
@@ -158,27 +147,20 @@ curl --request POST \
   --header 'access_token: [ACCESS_TOKEN]' \
   --header 'company_slug: [COMPANY_SLUG]' \
   --data '{
-  "external_id": "TEST-ORDER-001",
-  "external_sender_id": "KCYCorp",
   "item_steps": [
     {
       "item_id": 0,
       "order_step_id": 0,
-      "step_group": 1,
-      "step_sequence": 1,
       "type": "pickup"
     },
     {
       "item_id": 0,
       "order_step_id": 1,
-      "step_group": 1,
-      "step_sequence": 2,
       "type": "dropoff"
     }
   ],
   "steps": [
     {
-      "quantity": 4,
       "address": "20 Pasir Pajang Road",
       "address2": "",
       "country": "SG",
@@ -192,7 +174,6 @@ curl --request POST \
       "to_time": "2021-08-02T07:59:59.813Z"
     },
     {
-      "quantity": 4,
       "address": "1 Changi Business Park",
       "address2": "Avenue 1",
       "country": "SG",
@@ -225,10 +206,7 @@ curl --request POST \
       "volumetric_weight": 1,
       "price_amount": 0
     }
-  ],
-  "price_amount": 0,
-  "price_currency": "SGD",
-  "sender_type": "organisation",
+  ]
 }'
 ```
 - Remember to replace **[COMPANY_SLUG]** and **[ACCESS TOKEN]** with your `Company_Slug` and `Access_Token`
@@ -242,8 +220,10 @@ You may encounter the following messages when you make your first requests.
 }
 ```
 This means either your `Company_Slug` or your `Access_Token` is wrong. Check them and resend again. If the problem persists, check with the Yojee team that is working with you.
+
+<!-- 
 ### External Sender Id
-```json
+json
 {
     "data": {
         "AC0014": [
@@ -251,9 +231,10 @@ This means either your `Company_Slug` or your `Access_Token` is wrong. Check the
         ]
     }
 }
-```
+
 The `external_sender_id` shown in the sample payload is just a sample. You will need to set up at least one sender in the Yojee `Dispatcher Portal` and create the `external_sender_id` for this sender.
-Alternatively, you may also use the numeric `sender_id` listed beside your sender in the `Dispatcher Portal` and pass the Id value in the `sender_id` field in your payload.
+Alternatively, you may also use the numeric `sender_id` listed beside your sender in the `Dispatcher Portal` and pass the Id value in the `sender_id` field in your payload. 
+-->
 
 ## Verify Order is created
 
