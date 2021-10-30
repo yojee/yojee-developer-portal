@@ -59,6 +59,7 @@ Use the following sample payload for your first `Create Order` call:
 
 ``` json
  {
+  "external_sender_id": "Sender 1",
   "item_steps": [
     {
       "item_id": 0,
@@ -221,7 +222,7 @@ You may encounter the following messages when you make your first requests.
 ```
 This means either your `Company_Slug` or your `Access_Token` is wrong. Check them and resend again. If the problem persists, check with the Yojee team that is working with you.
 
-<!-- 
+<!--
 ### External Sender Id
 json
 {
@@ -233,7 +234,7 @@ json
 }
 
 The `external_sender_id` shown in the sample payload is just a sample. You will need to set up at least one sender in the Yojee `Dispatcher Portal` and create the `external_sender_id` for this sender.
-Alternatively, you may also use the numeric `sender_id` listed beside your sender in the `Dispatcher Portal` and pass the Id value in the `sender_id` field in your payload. 
+Alternatively, you may also use the numeric `sender_id` listed beside your sender in the `Dispatcher Portal` and pass the Id value in the `sender_id` field in your payload.
 -->
 
 ## Verify Order is created
