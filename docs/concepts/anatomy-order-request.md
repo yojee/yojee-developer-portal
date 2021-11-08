@@ -20,7 +20,7 @@ However, in some cases, an `Order` can have more than one leg. Examples of multi
 **Export**
 - **Leg 1** Pickup empty container from Container Yard and send to Factory/Warehouse for loading
 - **Leg 2** Pickup filled container from Factory/Warehouse and send to Port
-```mermaid 
+```mermaid
   graph LR
     Y[Container Yard] -->|Leg 1| F1[Factory]
     F2[Factory] -->|Leg 2| P[Port]
@@ -29,7 +29,7 @@ However, in some cases, an `Order` can have more than one leg. Examples of multi
 **Import**
 - **Leg 1** Pickup container from Port and send to Warehouse/Customer location
 - **Leg 2** Pickup empty container from Warehouse/Customer and return to Container Yard
-```mermaid 
+```mermaid
   graph LR
     P[Port] -->|Leg 1| W1[Warehouse]
     W2[Warehouse] -->|Leg 2| Y[Container Yard]
@@ -197,7 +197,7 @@ Parameters to provide more information in the `Orders`. These parameters are all
 - **external_id** Every `Order` will be assigned a Yojee `Order Number`(sometimes referred to as `Order ID`) that looks like `O-4W4TUNATPG9S`. To identify the order using your own order id, enter the value of your order id in this field.
 - **price_currency**
 - **price_amount**
-- **container_no** Used to track the container no for this order. 
+- **container_no** Used to track the container no for this order.
 - **Parameters for Sender** see next section
 
 #### Parameters for Sender
@@ -205,7 +205,7 @@ Parameters to provide more information in the `Orders`. These parameters are all
 
 The following parameters relate to telling Yojee who is the `Sender` for this order. These parameters are all non-mandatory:
 - **sender_id** After creating a `Sender` in the `Dispatcher Portal` (see above screenshot), you will see a numeric Sender ID in the table listing the `Senders`. Use this numeric ID to indicate that the `Order` is sent by this `Sender`. When both this field and the **external_sender_id** fields are present in the payload, this field takes precedence.
-- **external_sender_id** When creating a `Sender` in the `Dispatcher Portal`, there is an option to assign an External ID to the `Sender`. Use this External ID in this field to indicate that the `Order` is sent by this `Sender`. 
+- **external_sender_id** When creating a `Sender` in the `Dispatcher Portal`, there is an option to assign an External ID to the `Sender`. Use this External ID in this field to indicate that the `Order` is sent by this `Sender`.
 - **sender_type** Either `organisation` or `individual`. Use `organisation` for integration purposes.
 - **placed_by_user_profile_id** This field indicates the `User` in Yojee system that created this order.
 
@@ -317,7 +317,7 @@ This means, the first `Item` has a `Pickup Task` at the location indicated at th
       "external_customer_id": "TN-001",
       "external_customer_id2": "CUSTOMER-INFO-001",
       "external_customer_id3": "",
-      "payload_type": "same_day",
+      "payload_type": "package",
       "price_info": "",
       "service_type": "express",
       "volume": 1000,
@@ -335,7 +335,7 @@ This means, the first `Item` has a `Pickup Task` at the location indicated at th
       "external_customer_id": "TN-001",
       "external_customer_id2": "CUSTOMER-INFO-001",
       "external_customer_id3": "",
-      "payload_type": "same_day",
+      "payload_type": "box",
       "price_info": "",
       "service_type": "express",
       "volume": 1000,
@@ -506,5 +506,3 @@ properties:
         - type
 ```
  -->
-
-
