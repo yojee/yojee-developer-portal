@@ -49,6 +49,12 @@ Most of the API calls will require the following parameters in the header:
 
 Obtain this information from the Yojee team working with you. In this document we will use [SLUG] and [TOKEN] to represent the company_slug and access_token respectively.
 
+# <<<<<<< HEAD
+
+##
+
+> > > > > > > 913f120 (test update file)
+
 ## <span style="text-decoration:underline;">Multi-leg Order Creation</span>
 
 This API call will create an order in Yojee.
