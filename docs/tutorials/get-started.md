@@ -1,5 +1,5 @@
-
 **Get Started with Yojee APIs**
+
 # Overview
 
 In most use cases, the first thing when integrating with Yojee APIs is to flow orders into Yojee. To do this we will need the following steps:
@@ -8,9 +8,11 @@ In most use cases, the first thing when integrating with Yojee APIs is to flow o
 1. Make a call to create an order in Yojee
 
 ## Authentication
+
 The Yojee API uses API Keys to authenticate requests in most cases. Most of these calls will require the credentials for a `Dispatcher` role. This is the same role as the user that logs into the `Dispatcher Portal` to perform most of the operations in Yojee through GUI.
 
 ### API Keys
+
 To authenticae using API Keys, include the following parameters in the HTTP header.
 
 ```json json_schema
@@ -36,29 +38,30 @@ The `Company Slug` is a string to uniquely identify each instance of a customerâ
 **Access Token** \
 A long-lived `Access Token` is generated for each `Dispatcher` account.
 
-
 <!-- theme: success -->
 
 > ðŸ’¡ Obtain your `Company Slug` and `Access Token` from the Yojee team working with you.
 
 #### Request Headers
+
 Pass `Company Slug` and `Access Token` in the HTTP header of your API call, at the same time specifying the `Content-Type` as `application/json`.
 
-|HTTP Header | Type | Description|
------|----- | -----
-| company_slug | string | Company Slug |
+| HTTP Header  | Type   | Description                                       |
+| ------------ | ------ | ------------------------------------------------- |
+| company_slug | string | Company Slug                                      |
 | access_token | string | Access Token for the user profile making the call |
-| Content-Type | string | application/json |
-
+| Content-Type | string | application/json                                  |
 
 ## Create an Order
+
 We will be making the call to [**Create Order**](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders/post) to create an order.
 
 ### Sample Payload
+
 Use the following sample payload for your first `Create Order` call:
 
-``` json
- {
+```json
+{
   "external_sender_id": "Sender 1",
   "item_steps": [
     {
@@ -124,11 +127,13 @@ Use the following sample payload for your first `Create Order` call:
 ```
 
 <!-- theme: info -->
+
 > ### external_sender_id
 >
 > Note that the `external_sender_id` needs to be a valid ID in your Yojee instance
 
 ### Making the call
+
 There are a few ways you can make the call:
 
 #### On the API Reference
@@ -141,7 +146,8 @@ There are a few ways you can make the call:
 #### On the command line
 
 - Copy this command:
-```
+
+```shell
 curl --request POST \
   --url https://umbrella-dev.yojee.com/api/v3/dispatcher/orders \
   --header 'Content-Type: application/json' \
@@ -210,16 +216,21 @@ curl --request POST \
   ]
 }'
 ```
+
 - Remember to replace **[COMPANY_SLUG]** and **[ACCESS TOKEN]** with your `Company_Slug` and `Access_Token`
+
 ## Troubleshooting
+
 You may encounter the following messages when you make your first requests.
 
 ### Unauthorized
+
 ```json
 {
-    "message": "Unauthorized"
+  "message": "Unauthorized"
 }
 ```
+
 This means either your `Company_Slug` or your `Access_Token` is wrong. Check them and resend again. If the problem persists, check with the Yojee team that is working with you.
 
 <!--
@@ -240,37 +251,40 @@ Alternatively, you may also use the numeric `sender_id` listed beside your sende
 ## Verify Order is created
 
 ### Success Response
+
 If the API call is successful, you should receive a HTTP 200 response with a payload that looks like the following sample:
+
 ```json
 {
-    "data": {
-        "cancelled_at": null,
-        "container_no": null,
-        "display_price": "SGD 0",
-        "external_id": "TEST-ORDER-001",
-        "id": 410013,
-        "inserted_at": "2021-07-25T11:13:01.524025Z",
-        "number": "O-QTROJOUMTNM8",
-        "order_items": [
-            {
-                "cod_price": null,
-                "id": 434791,
-                "tracking_number": "YOJ-4UABMDSOJ2VD"
-            }
-        ],
-        "paid": false,
-        "placed_by_user_profile_id": 5929,
-        "price": {
-            "amount": "0",
-            "currency": "SGD"
-        },
-        "sender_id": 1750,
-        "status": "created"
+  "data": {
+    "cancelled_at": null,
+    "container_no": null,
+    "display_price": "SGD 0",
+    "external_id": "TEST-ORDER-001",
+    "id": 410013,
+    "inserted_at": "2021-07-25T11:13:01.524025Z",
+    "number": "O-QTROJOUMTNM8",
+    "order_items": [
+      {
+        "cod_price": null,
+        "id": 434791,
+        "tracking_number": "YOJ-4UABMDSOJ2VD"
+      }
+    ],
+    "paid": false,
+    "placed_by_user_profile_id": 5929,
+    "price": {
+      "amount": "0",
+      "currency": "SGD"
     },
-    "message": "Created the order.",
-    "warning": false
+    "sender_id": 1750,
+    "status": "created"
+  },
+  "message": "Created the order.",
+  "warning": false
 }
 ```
 
 ### Checking in Portal
+
 You can also log in to the Yojee `Dispatcher Portal` with your `Dispatcher` credentials to check that the order has been created.

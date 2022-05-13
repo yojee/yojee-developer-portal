@@ -1,30 +1,21 @@
-
 **API Integration Intro Guide**
+
 # Overview
-
-
 
 ---
 
-
 The following diagram details the data flow between an external system and Yojee.
-
-
 
 The three primary RESTFul API calls related to this project are:
 
-
-
-* Multi-leg Order Creation \
-([https://umbrella.yojee.com/api/swagger/index.html#/[Dispatcher]%20Order/ApiWeb_V3_Dispatcher_OrderController_create_multi_leg](https://umbrella.yojee.com/api/swagger/index.html#/[Dispatcher]%20Order/ApiWeb_V3_Dispatcher_OrderController_create_multi_leg))
-* Cancel Order \
-([https://umbrella.yojee.com/api/swagger/index.html#/[Dispatcher]%20Order/ApiWeb_V3_Dispatcher_OrderController_cancel_order](https://umbrella.yojee.com/api/swagger/index.html#/[Dispatcher]%20Order/ApiWeb_V3_Dispatcher_OrderController_cancel_order))
-* Create Webhook \
-([https://umbrella.yojee.com/api/swagger/index.html#/[Dispatcher]%20Webhook/ApiWeb_V3_Dispatcher_WebhookController_create](https://umbrella.yojee.com/api/swagger/index.html#/[Dispatcher]%20Webhook/ApiWeb_V3_Dispatcher_WebhookController_create))
-
+- Multi-leg Order Creation \
+  ([https://umbrella.yojee.com/api/swagger/index.html#/[Dispatcher]%20Order/ApiWeb_V3_Dispatcher_OrderController_create_multi_leg](https://umbrella.yojee.com/api/swagger/index.html#/[Dispatcher]%20Order/ApiWeb_V3_Dispatcher_OrderController_create_multi_leg))
+- Cancel Order \
+  ([https://umbrella.yojee.com/api/swagger/index.html#/[Dispatcher]%20Order/ApiWeb_V3_Dispatcher_OrderController_cancel_order](https://umbrella.yojee.com/api/swagger/index.html#/[Dispatcher]%20Order/ApiWeb_V3_Dispatcher_OrderController_cancel_order))
+- Create Webhook \
+  ([https://umbrella.yojee.com/api/swagger/index.html#/[Dispatcher]%20Webhook/ApiWeb_V3_Dispatcher_WebhookController_create](https://umbrella.yojee.com/api/swagger/index.html#/[Dispatcher]%20Webhook/ApiWeb_V3_Dispatcher_WebhookController_create))
 
 ## <span style="text-decoration:underline;">Basic information on APIs</span>
-
 
 ### Base URL
 
@@ -32,11 +23,9 @@ Notice that the above URLs to the API information starts with [https://umbrella.
 
 For development and testing purposes, please use [https://umbrella-staging.yojee.com](https://umbrella-staging.yojee.com). In this document we will use [BASEURL] to represent the base URL
 
-
 ### Mandatory Parameters
 
 Most of the API calls will require the following parameters in the header:
-
 
 <table>
   <tr>
@@ -59,17 +48,13 @@ Most of the API calls will require the following parameters in the header:
   </tr>
 </table>
 
-
 Obtain this information from the Yojee team working with you. In this document we will use [SLUG] and [TOKEN] to represent the company_slug and access_token respectively.
 
-
 ##
-
 
 ## <span style="text-decoration:underline;">Multi-leg Order Creation</span>
 
 This API call will create an order in Yojee.
-
 
 <table>
   <tr>
@@ -80,10 +65,7 @@ This API call will create an order in Yojee.
   </tr>
 </table>
 
-
-
 ### Request Headers
-
 
 <table>
   <tr>
@@ -120,13 +102,9 @@ This API call will create an order in Yojee.
   </tr>
 </table>
 
-
-
 ### Request Body
 
-
 #### Main
-
 
 <table>
   <tr>
@@ -203,10 +181,7 @@ This API call will create an order in Yojee.
   </tr>
 </table>
 
-
-
 #### Item
-
 
 <table>
   <tr>
@@ -331,10 +306,7 @@ This API call will create an order in Yojee.
   </tr>
 </table>
 
-
-
 #### Step
-
 
 <table>
   <tr>
@@ -459,10 +431,7 @@ This API call will create an order in Yojee.
   </tr>
 </table>
 
-
-
 ### ItemStep
-
 
 <table>
   <tr>
@@ -515,12 +484,9 @@ This API call will create an order in Yojee.
   </tr>
 </table>
 
-
-
 ### Sample Request Body Payload
 
-
-```
+```json
 {
   "items": [
     {
@@ -596,13 +562,9 @@ This API call will create an order in Yojee.
   "external_id": null,
   "container_no": null
 }
-
 ```
 
-
-
 ### Responses
-
 
 <table>
   <tr>
@@ -625,64 +587,54 @@ This API call will create an order in Yojee.
   </tr>
 </table>
 
-
-
 #### Sample Success Response
 
-
-```
+```json
 {
-    "data": {
-        "cancelled_at": null,
-        "container_no": null,
-        "display_price": null,
-        "external_id": null,
-        "id": 245215,
-        "inserted_at": "2021-01-13T17:09:52.218457Z",
-        "number": "O-1NEB0HTXJFVW",
-        "order_items": [
-            {
-                "cod_price": null,
-                "id": 268096,
-                "tracking_number": "YOJ-7HSZ5YYUJP1A"
-            }
-        ],
-        "paid": false,
-        "placed_by_user_profile_id": 1437,
-        "price": null,
-        "sender_id": 1437,
-        "status": "created"
-    },
-    "message": "Order created!"
+  "data": {
+    "cancelled_at": null,
+    "container_no": null,
+    "display_price": null,
+    "external_id": null,
+    "id": 245215,
+    "inserted_at": "2021-01-13T17:09:52.218457Z",
+    "number": "O-1NEB0HTXJFVW",
+    "order_items": [
+      {
+        "cod_price": null,
+        "id": 268096,
+        "tracking_number": "YOJ-7HSZ5YYUJP1A"
+      }
+    ],
+    "paid": false,
+    "placed_by_user_profile_id": 1437,
+    "price": null,
+    "sender_id": 1437,
+    "status": "created"
+  },
+  "message": "Order created!"
 }
 ```
-
-
 
 #### Same Failure Response
 
 HTTP Response Code: 422
 
-
-```
+```json
 {
-    "data": {
-        "00000": [
-            "item_steps is referring the items or steps which doesn't exist or steps or items has extra entries that item_steps is not referring to"
-        ]
-    }
+  "data": {
+    "00000": [
+      "item_steps is referring the items or steps which doesn't exist or steps or items has extra entries that item_steps is not referring to"
+    ]
+  }
 }
 ```
 
-
-
 ##
-
 
 ## <span style="text-decoration:underline;">Order Cancellation</span>
 
 This API call will cancel an order in Yojee.
-
 
 <table>
   <tr>
@@ -693,10 +645,7 @@ This API call will cancel an order in Yojee.
   </tr>
 </table>
 
-
-
 ### Request Headers
-
 
 <table>
   <tr>
@@ -733,10 +682,7 @@ This API call will cancel an order in Yojee.
   </tr>
 </table>
 
-
-
 ### Request Body
-
 
 <table>
   <tr>
@@ -765,10 +711,7 @@ This API call will cancel an order in Yojee.
   </tr>
 </table>
 
-
-
 ### Responses
-
 
 <table>
   <tr>
@@ -791,10 +734,7 @@ This API call will cancel an order in Yojee.
   </tr>
 </table>
 
-
-
 #### Sample Success Response
-
 
 ```
 {
@@ -802,12 +742,9 @@ This API call will cancel an order in Yojee.
 }
 ```
 
-
-
 #### Same Failure Response
 
 HTTP Response Code: 422
-
 
 ```
 {
@@ -819,20 +756,15 @@ HTTP Response Code: 422
 }
 ```
 
-
-
 ##
-
 
 ## <span style="text-decoration:underline;">Webhooks</span>
 
 Webhook URLs can be registered with Yojee and the Yojee system will make HTTP calls to the URL with the relevant payload when a status update of the Order is triggered.
 
-
 ### Events Supported
 
 Events currently being supported are:
-
 
 <table>
   <tr>
@@ -909,9 +841,7 @@ Events currently being supported are:
   </tr>
 </table>
 
-
 To register a webook,
-
 
 <table>
   <tr>
@@ -922,10 +852,7 @@ To register a webook,
   </tr>
 </table>
 
-
-
 ### Request Headers
-
 
 <table>
   <tr>
@@ -954,12 +881,9 @@ To register a webook,
   </tr>
 </table>
 
-
-
 ### Request Body
 
 **Note: Send the following as form data in the POST request body**
-
 
 <table>
   <tr>
@@ -988,11 +912,9 @@ To register a webook,
   </tr>
 </table>
 
-
 To illustrate the params needed please take the following cURL command as reference, remember to replace the [BASEURL], [SLUG] and [TOKEN]. [WEBHOOK_URL] will be the URL where you will receive the webhook HTTP POST calls. Note that you can choose the events you want to register for and it is not mandatory to register for all events.
 
-
-```
+```shell
 curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]' \
@@ -1010,10 +932,7 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
 --form 'events[]="order.transfer.rejected"'
 ```
 
-
-
 ### Responses
-
 
 <table>
   <tr>
@@ -1036,67 +955,55 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
   </tr>
 </table>
 
-
-
 #### Sample Success Response
 
-
-```
+```json
 {
-    "data": {
-        "company_id": 1,
-        "events": [
-            "sender.created",
-            "task.accepted",
-            "task.reassigned",
-            "task.transferred",
-            "task.completed",
-            "task.failed",
-            "driver.arrived",
-            "driver.departed",
-            "order.created",
-            "order_item.cancelled",
-            "order.transfer.rejected"
-        ],
-        "id": 125,
-        "inserted_at": "2021-01-13T07:59:08.542587",
-        "secret_token": "OQGAM5JKCXYRYPIQ6MLI5KRTQJ6OUZL6",
-        "status": "active",
-        "updated_at": "2021-01-13T07:59:08.542587",
-        "url": "https://kcyyojee.free.beeceptor.com"
-    },
-    "message": "Webhook was created."
+  "data": {
+    "company_id": 1,
+    "events": [
+      "sender.created",
+      "task.accepted",
+      "task.reassigned",
+      "task.transferred",
+      "task.completed",
+      "task.failed",
+      "driver.arrived",
+      "driver.departed",
+      "order.created",
+      "order_item.cancelled",
+      "order.transfer.rejected"
+    ],
+    "id": 125,
+    "inserted_at": "2021-01-13T07:59:08.542587",
+    "secret_token": "OQGAM5JKCXYRYPIQ6MLI5KRTQJ6OUZL6",
+    "status": "active",
+    "updated_at": "2021-01-13T07:59:08.542587",
+    "url": "https://kcyyojee.free.beeceptor.com"
+  },
+  "message": "Webhook was created."
 }
 ```
-
-
 
 #### Same Failure Response
 
 HTTP Response Code: 422
 
-
-```
+```json
 {
-    "data": {
-        "EC401": [
-            "url can't be blank"
-        ]
-    }
+  "data": {
+    "EC401": ["url can't be blank"]
+  }
 }
 ```
-
-
 
 ### Webhook Payload Samples
 
 When the respective event is triggered, a HTTP POST will be called to the registered Webhook URL with the following sample payloads.
 
-
 ### Request Body
 
 This is the format of the HTTP Post request body your system will receive in the webhook call
-
 
 <table>
   <tr>
@@ -1143,12 +1050,9 @@ This is the format of the HTTP Post request body your system will receive in the
   </tr>
 </table>
 
-
-
 #### Event: order.created
 
-
-```
+```json
 {
   "company_slug": "yojee",
   "created_at": 1573616200,
@@ -1203,12 +1107,9 @@ This is the format of the HTTP Post request body your system will receive in the
 }
 ```
 
-
-
 #### Event: order_item.cancelled
 
-
-```
+```json
 {
   "company_slug": "yojee",
   "created_at": 1573616529,
@@ -1226,12 +1127,9 @@ This is the format of the HTTP Post request body your system will receive in the
 }
 ```
 
-
-
 #### Event: task.accepted (Pickup)
 
-
-```
+```json
 {
   "company_slug": "yojee",
   "created_at": 1573618207,
@@ -1258,12 +1156,9 @@ This is the format of the HTTP Post request body your system will receive in the
 }
 ```
 
-
-
 #### Event: task.accepted (Drop-off)
 
-
-```
+```json
 {
   "company_slug": "yojee",
   "created_at": 1573618207,
@@ -1290,12 +1185,9 @@ This is the format of the HTTP Post request body your system will receive in the
 }
 ```
 
-
-
 #### Event: driver.arrived
 
-
-```
+```json
 {
   "company_slug": "yojee",
   "created_at": 1573618472,
@@ -1322,12 +1214,9 @@ This is the format of the HTTP Post request body your system will receive in the
 }
 ```
 
-
-
 #### Event: driver.departed
 
-
-```
+```json
 {
   "company_slug": "yojee",
   "created_at": 1573618776,
@@ -1354,12 +1243,9 @@ This is the format of the HTTP Post request body your system will receive in the
 }
 ```
 
-
-
 #### Event: task.completed
 
-
-```
+```json
 {
   "company_slug": "yojee",
   "created_at": 1573619045,
@@ -1387,12 +1273,9 @@ This is the format of the HTTP Post request body your system will receive in the
 }
 ```
 
-
-
 #### Event: task.failed
 
-
-```
+```json
 {
   "company_slug": "yojee",
   "created_at": 1573619526,
@@ -1419,15 +1302,11 @@ This is the format of the HTTP Post request body your system will receive in the
 }
 ```
 
-
-
 ###
-
 
 ### Delivery Headers
 
 HTTP POST payloads that are delivered to your webhook's configured URL endpoint will contain a header.
-
 
 <table>
   <tr>
@@ -1452,46 +1331,36 @@ The HMAC hex digest is generated using the SHA256 hash function and the secret a
   </tr>
 </table>
 
-
-
 #### Verifying Signatures
 
 Yojee signs the webhook events it sends to your endpoints. We do so by including a signature using a hash-based message authentication code (HMAC) with SHA-256 in each event’s **yojee-signature** header. This allows you to validate that the events were sent by Yojee, not by a third party.
-
 
 ```
 Note: Before you can verify signatures, you need to retrieve your endpoint's secret from us. Each secret is unique to the endpoint to which it corresponds.
 ```
 
-
 The following are the steps to verify the signature:
-
-
 
 1. Retrieve **yojee-signature** and **yojee-request-timestamp** from header
 2. Prepare signed payload string
 
-    Concatenate: yojee-request-timestamp (as string), the character ‘.’, and the JSON request body
+   Concatenate: yojee-request-timestamp (as string), the character ‘.’, and the JSON request body
 
 3. Determine Expected Signature
 
-    Compute an HMAC with the SHA256 hash function. Use the endpoint’s signing **secret** as the key, and use the prepared signed payload string as the message.
+   Compute an HMAC with the SHA256 hash function. Use the endpoint’s signing **secret** as the key, and use the prepared signed payload string as the message.
 
 4. Compare signatures
 
-    Compare the signature in the HTTP Header to the Expected Signature. If the signatures match, compute the difference between the current timestamp and the received timestamp to decide if the difference is within the tolerance of your system.
-
-
+   Compare the signature in the HTTP Header to the Expected Signature. If the signatures match, compute the difference between the current timestamp and the received timestamp to decide if the difference is within the tolerance of your system.
 
 ###
-
 
 ### Responding to a Webhook
 
 To acknowledge receipt of a webhook, your endpoint should return a **_2xx HTTP status code_**. All response codes outside this range, including **_3xx codes_**, will indicate to Yojee that you did not receive the webhook.
 
 We will attempt to deliver your webhooks for up to five times with an exponential back off, according to the following table:
-
 
 <table>
   <tr>
@@ -1531,8 +1400,6 @@ We will attempt to deliver your webhooks for up to five times with an exponentia
    </td>
   </tr>
 </table>
-
-
 
 #### Best Practice
 
