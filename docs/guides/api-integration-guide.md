@@ -625,6 +625,12 @@ This API call will cancel an order in Yojee.
 
 <table>
   <tr>
+    <td><strong>Method</strong>
+    </td>
+    <td><strong>Endpoint</strong>
+    </td>
+  </tr>
+  <tr>
    <td>POST
    </td>
    <td>[BASEURL]/api/v3/dispatcher/orders/cancel
@@ -740,8 +746,6 @@ HTTP Response Code: 422
   }
 }
 ```
-
-##
 
 ## <span style="text-decoration:underline;">Webhooks</span>
 
@@ -1362,8 +1366,6 @@ This is the format of the HTTP Post request body your system will receive in the
   "yojee_instance": "https://umbrella-dev.yojee.com"
 }
 ```
-
-###
 
 ### Delivery Headers
 
