@@ -1,4 +1,4 @@
-**API Integration Intro Guide**
+**API Integration Introduction Guide**
 
 # Overview
 
@@ -16,38 +16,22 @@ The **three primary** RESTFul API calls related to this project are:
 
 ### Base URL
 
-Notice that the above URLs to the API information starts with [https://umbrella.yojee.com](https://umbrella.yojee.com). This is the base URL for the PRODUCTION API.
+[https://umbrella.yojee.com](https://umbrella.yojee.com) is the base URL for the PRODUCTION API.
 
-For development and testing purposes, please use [https://umbrella-staging.yojee.com](https://umbrella-staging.yojee.com). In this document we will use [BASEURL] to represent the base URL
+For development and testing purposes, please use [https://umbrella-staging.yojee.com](https://umbrella-staging.yojee.com).
+
+In this document we will use [BASEURL] to represent the base URL.
 
 ### Mandatory Parameters
 
 Most of the API calls will require the following parameters in the header:
 
-<table>
-  <tr>
-   <td><strong>Parameter</strong>
-   </td>
-   <td><strong>Type</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>company_slug
-   </td>
-   <td>string
-   </td>
-  </tr>
-  <tr>
-   <td>access_token
-   </td>
-   <td>string
-   </td>
-  </tr>
-</table>
+| Parameter    | Type   |
+| ------------ | ------ |
+| company_slug | string |
+| access_token | string |
 
 Obtain this information from the Yojee team working with you. In this document we will use [SLUG] and [TOKEN] to represent the company_slug and access_token respectively.
-
-##
 
 ## <span style="text-decoration:underline;">Multi-leg Order Creation</span>
 
