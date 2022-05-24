@@ -418,7 +418,7 @@ This API call will create an order in Yojee.
   </tr>
 </table>
 
-### ItemStep
+#### ItemStep
 
 <table>
   <tr>
@@ -616,8 +616,6 @@ HTTP Response Code: 422
   }
 }
 ```
-
-##
 
 ## <span style="text-decoration:underline;">Order Cancellation</span>
 
@@ -1418,8 +1416,6 @@ The following are the steps to verify the signature:
 4. Compare signatures
 
    - Compare the signature in the HTTP Header to the Expected Signature. If the signatures match, compute the difference between the current timestamp and the received timestamp to decide if the difference is within the tolerance of your system.
-
-###
 
 ### Responding to a Webhook
 
