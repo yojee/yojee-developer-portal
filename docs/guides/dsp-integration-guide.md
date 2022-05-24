@@ -418,11 +418,13 @@ curl --location --request POST '[BASEURL]/api/v3/worker/generate_batch_upload_pr
 '
 ```
 
-```
-Note: The step to upload the image to AWS S3 using the pre-signed URL is not part of the Yojee API calls. You will need to upload the file separately and the uploaded file will have the URL of https://[region].amazonaws.com/[bucket]/[name] (see "object" field above).
+<!-- theme:info -->
+
+> ### Note
+>
+> Note: The step to upload the image to AWS S3 using the pre-signed URL is not part of the Yojee API calls. You will need to upload the file separately and the uploaded file will have the URL of https://[region].amazonaws.com/[bucket]/[name] (see "object" field above).
 
 This URL of the image is used in the call to Driver Bulk Actions.
-```
 
 #### Driver Bulk Actions
 
