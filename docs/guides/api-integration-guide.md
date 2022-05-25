@@ -1197,6 +1197,16 @@ This is the format of the HTTP Post request body your system will receive in the
     "external_customer_id": null,
     "external_customer_id2": null,
     "external_customer_id3": null,
+    "order": {
+      "container_no": null,
+      "external_id": "testing",
+      "id": 7665,
+      "number": "O-SGAODV1ZMTRC",
+      "status": "cancelled"
+    },
+    "sender": {
+      "id": 24
+    },
     "tracking_number": "YOJ-ZWRW1ZBWF5MZ"
   },
   "event_type": "order_item.cancelled",
@@ -1395,9 +1405,8 @@ HTTP POST payloads that are delivered to your webhook's configured URL endpoint 
   <tr>
    <td>yojee-signature
    </td>
-   <td>The HMAC hex digest of the response body.
-<p>
-The HMAC hex digest is generated using the SHA256 hash function and the secret as the HMAC key.
+   <td>The HMAC hex digest of the response body. <br/>
+   The HMAC hex digest is generated using the SHA256 hash function and the secret as the HMAC key.
    </td>
   </tr>
   <tr>
