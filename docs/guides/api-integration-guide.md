@@ -1,27 +1,26 @@
-**API Integration Intro Guide**
+**API Integration Introduction Guide**
 
 # Overview
 
----
-
 The following diagram details the data flow between an external system and Yojee.
 
-The three primary RESTFul API calls related to this project are:
+The **three primary** RESTFul API calls related to this project are:
 
-- Multi-leg Order Creation \
-  ([https://umbrella.yojee.com/api/swagger/index.html#/[Dispatcher]%20Order/ApiWeb_V3_Dispatcher_OrderController_create_multi_leg](https://umbrella.yojee.com/api/swagger/index.html#/[Dispatcher]%20Order/ApiWeb_V3_Dispatcher_OrderController_create_multi_leg))
-- Cancel Order \
-  ([https://umbrella.yojee.com/api/swagger/index.html#/[Dispatcher]%20Order/ApiWeb_V3_Dispatcher_OrderController_cancel_order](https://umbrella.yojee.com/api/swagger/index.html#/[Dispatcher]%20Order/ApiWeb_V3_Dispatcher_OrderController_cancel_order))
-- Create Webhook \
-  ([https://umbrella.yojee.com/api/swagger/index.html#/[Dispatcher]%20Webhook/ApiWeb_V3_Dispatcher_WebhookController_create](https://umbrella.yojee.com/api/swagger/index.html#/[Dispatcher]%20Webhook/ApiWeb_V3_Dispatcher_WebhookController_create))
+1. [Multi-leg Order Creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post)
+
+2. [Cancel Order](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders~1cancel/post)
+
+3. [Create Webhook](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-webhook-api.yaml/paths/~1api~1v3~1dispatcher~1webhooks/post)
 
 ## <span style="text-decoration:underline;">Basic information on APIs</span>
 
 ### Base URL
 
-Notice that the above URLs to the API information starts with [https://umbrella.yojee.com](https://umbrella.yojee.com). This is the base URL for the PRODUCTION API
+[https://umbrella.yojee.com](https://umbrella.yojee.com) is the base URL for the PRODUCTION API.
 
-For development and testing purposes, please use [https://umbrella-staging.yojee.com](https://umbrella-staging.yojee.com). In this document we will use [BASEURL] to represent the base URL
+For development and testing purposes, please use [https://umbrella-staging.yojee.com](https://umbrella-staging.yojee.com).
+
+In this document we will use [BASEURL] to represent the base URL.
 
 ### Mandatory Parameters
 
@@ -50,13 +49,17 @@ Most of the API calls will require the following parameters in the header:
 
 Obtain this information from the Yojee team working with you. In this document we will use [SLUG] and [TOKEN] to represent the company_slug and access_token respectively.
 
-##
-
 ## <span style="text-decoration:underline;">Multi-leg Order Creation</span>
 
 This API call will create an order in Yojee.
 
 <table>
+  <tr>
+    <td><strong>Method</strong>
+    </td>
+    <td><strong>Endpoint</strong>
+    </td>
+  </tr>
   <tr>
    <td>POST
    </td>
@@ -431,7 +434,7 @@ This API call will create an order in Yojee.
   </tr>
 </table>
 
-### ItemStep
+#### ItemStep
 
 <table>
   <tr>
@@ -630,13 +633,17 @@ HTTP Response Code: 422
 }
 ```
 
-##
-
 ## <span style="text-decoration:underline;">Order Cancellation</span>
 
 This API call will cancel an order in Yojee.
 
 <table>
+  <tr>
+    <td><strong>Method</strong>
+    </td>
+    <td><strong>Endpoint</strong>
+    </td>
+  </tr>
   <tr>
    <td>POST
    </td>
@@ -736,9 +743,9 @@ This API call will cancel an order in Yojee.
 
 #### Sample Success Response
 
-```
+```json
 {
-    "message": "Order canceled."
+  "message": "Order canceled."
 }
 ```
 
@@ -746,17 +753,13 @@ This API call will cancel an order in Yojee.
 
 HTTP Response Code: 422
 
-```
+```json
 {
-    "data": {
-        "BK0510": [
-            "Order not found"
-        ]
-    }
+  "data": {
+    "BK0510": ["Order not found"]
+  }
 }
 ```
-
-##
 
 ## <span style="text-decoration:underline;">Webhooks</span>
 
@@ -841,9 +844,15 @@ Events currently being supported are:
   </tr>
 </table>
 
-To register a webook,
+To register a webhook, use the following API endpoint:
 
 <table>
+  <tr>
+    <td><strong>Method</strong>
+    </td>
+    <td><strong>Endpoint</strong>
+    </td>
+  </tr>
   <tr>
    <td>POST
    </td>
@@ -883,7 +892,13 @@ To register a webook,
 
 ### Request Body
 
-**Note: Send the following as form data in the POST request body**
+<!-- theme: info -->
+
+> #### Note
+>
+> You can send as a form data or send as JSON in the POST request body
+
+#### Send as form data
 
 <table>
   <tr>
@@ -912,7 +927,39 @@ To register a webook,
   </tr>
 </table>
 
-To illustrate the params needed please take the following cURL command as reference, remember to replace the [BASEURL], [SLUG] and [TOKEN]. [WEBHOOK_URL] will be the URL where you will receive the webhook HTTP POST calls. Note that you can choose the events you want to register for and it is not mandatory to register for all events.
+#### Send as JSON data
+
+<table>
+  <tr>
+   <td><strong>Parameter</strong>
+   </td>
+   <td><strong>Required?</strong>
+   </td>
+   <td><strong>Description</strong>
+   </td>
+  </tr>
+  <tr>
+   <td>url
+   </td>
+   <td>Y
+   </td>
+   <td>The endpoint to register the webhook with
+   </td>
+  </tr>
+  <tr>
+   <td>events
+   </td>
+   <td>Y
+   </td>
+   <td>The event to register the webhook with. For multiple events, separate event name with a comma ","
+   </td>
+  </tr>
+</table>
+
+To illustrate the params needed please take the following cURL command as reference, remember to replace the **[BASEURL]**, **[SLUG]** and **[TOKEN]**. **[WEBHOOK_URL]** will be the URL where you will receive the webhook HTTP POST calls.
+**Note:** you can choose the events you want to register for and it is _not mandatory to register for all events_.
+
+#### Sample curl command with form data
 
 ```shell
 curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
@@ -929,7 +976,32 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
 --form 'events[]="driver.departed"' \
 --form 'events[]="order.created"' \
 --form 'events[]="order_item.cancelled"' \
---form 'events[]="order.transfer.rejected"'
+--form 'events[]="order_item.cancelled"'
+```
+
+#### Sample curl command with JSON data
+
+```shell
+curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
+--header 'COMPANY_SLUG: [SLUG]' \
+--header 'ACCESS_TOKEN: [TOKEN]' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "url": "[WEBHOOK_URL]",
+  "events": [
+    "sender.created",
+    "task.accepted",
+    "task.reassigned",
+    "task.transferred",
+    "task.completed",
+    "task.failed",
+    "driver.arrived",
+    "driver.departed",
+    "order.created",
+    "order_item.cancelled",
+    "order_item.cancelled"
+    ]
+  }'
 ```
 
 ### Responses
@@ -1048,6 +1120,13 @@ This is the format of the HTTP Post request body your system will receive in the
    <td>Object containing the data associated with the event. For a different event type the data is different. See sample payloads below for examples
    </td>
   </tr>
+  <tr>
+    <td>yojee_instance
+    </td>
+     <td>Yojee API environment
+    </td>
+  </tr>
+
 </table>
 
 #### Event: order.created
@@ -1118,6 +1197,16 @@ This is the format of the HTTP Post request body your system will receive in the
     "external_customer_id": null,
     "external_customer_id2": null,
     "external_customer_id3": null,
+    "order": {
+      "container_no": null,
+      "external_id": "testing",
+      "id": 7665,
+      "number": "O-SGAODV1ZMTRC",
+      "status": "cancelled"
+    },
+    "sender": {
+      "id": 24
+    },
     "tracking_number": "YOJ-ZWRW1ZBWF5MZ"
   },
   "event_type": "order_item.cancelled",
@@ -1302,8 +1391,6 @@ This is the format of the HTTP Post request body your system will receive in the
 }
 ```
 
-###
-
 ### Delivery Headers
 
 HTTP POST payloads that are delivered to your webhook's configured URL endpoint will contain a header.
@@ -1318,9 +1405,8 @@ HTTP POST payloads that are delivered to your webhook's configured URL endpoint 
   <tr>
    <td>yojee-signature
    </td>
-   <td>The HMAC hex digest of the response body.
-<p>
-The HMAC hex digest is generated using the SHA256 hash function and the secret as the HMAC key.
+   <td>The HMAC hex digest of the response body. <br/>
+   The HMAC hex digest is generated using the SHA256 hash function and the secret as the HMAC key.
    </td>
   </tr>
   <tr>
@@ -1335,26 +1421,27 @@ The HMAC hex digest is generated using the SHA256 hash function and the secret a
 
 Yojee signs the webhook events it sends to your endpoints. We do so by including a signature using a hash-based message authentication code (HMAC) with SHA-256 in each event’s **yojee-signature** header. This allows you to validate that the events were sent by Yojee, not by a third party.
 
-```
-Note: Before you can verify signatures, you need to retrieve your endpoint's secret from us. Each secret is unique to the endpoint to which it corresponds.
-```
+<!-- theme: info -->
+
+> #### Note
+>
+> Before you can verify signatures, you need to retrieve your endpoint's secret from us. Each secret is unique to the endpoint to which it corresponds.
 
 The following are the steps to verify the signature:
 
 1. Retrieve **yojee-signature** and **yojee-request-timestamp** from header
+
 2. Prepare signed payload string
 
-   Concatenate: yojee-request-timestamp (as string), the character ‘.’, and the JSON request body
+   - Concatenate: yojee-request-timestamp (as string), the character ".", and the JSON request body.
 
 3. Determine Expected Signature
 
-   Compute an HMAC with the SHA256 hash function. Use the endpoint’s signing **secret** as the key, and use the prepared signed payload string as the message.
+   - Compute a HMAC with the SHA256 hash function.
+     Use the endpoint’s signing **secret** as the key, and use the prepared signed payload string as the message.
 
 4. Compare signatures
-
-   Compare the signature in the HTTP Header to the Expected Signature. If the signatures match, compute the difference between the current timestamp and the received timestamp to decide if the difference is within the tolerance of your system.
-
-###
+   - Compare the signature in the HTTP Header to the Expected Signature. If the signatures match, compute the difference between the current timestamp and the received timestamp to decide if the difference is within the tolerance of your system.
 
 ### Responding to a Webhook
 
