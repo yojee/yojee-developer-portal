@@ -1430,16 +1430,17 @@ Yojee signs the webhook events it sends to your endpoints. We do so by including
 The following are the steps to verify the signature:
 
 1. Retrieve **yojee-signature** and **yojee-request-timestamp** from header
+
 2. Prepare signed payload string
 
-   - Concatenate: yojee-request-timestamp (as string), the character ‘.’, and the JSON request body.
+   - Concatenate: yojee-request-timestamp (as string), the character ".", and the JSON request body.
 
 3. Determine Expected Signature
 
-   - Compute an HMAC with the SHA256 hash function. Use the endpoint’s signing **secret** as the key, and use the prepared signed payload string as the message.
+   - Compute a HMAC with the SHA256 hash function.
+     Use the endpoint’s signing **secret** as the key, and use the prepared signed payload string as the message.
 
 4. Compare signatures
-
    - Compare the signature in the HTTP Header to the Expected Signature. If the signatures match, compute the difference between the current timestamp and the received timestamp to decide if the difference is within the tolerance of your system.
 
 ### Responding to a Webhook
