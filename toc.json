@@ -37,6 +37,11 @@
       "type": "item",
       "title": "API Integration Introduction Guide",
       "uri": "docs/guides/api-integration-guide.md"
+    },
+    {
+      "type": "item",
+      "title": "API Common Error Guide",
+      "uri": "docs/guides/api-common-error-guide.md"
     }
   ]
 }
