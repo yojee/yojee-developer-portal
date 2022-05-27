@@ -4,6 +4,12 @@
 
 In this document, you can find the common API error messages for different endpoints, the description of the message and steps on how to resolve those issues.
 
+<!-- theme: info -->
+
+> #### Note
+>
+> To find out more details on each endpoint, sample request payload and sample response, you can click on the individual title below :)
+
 ### [Multi-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post)
 
 <table style="table-layout: fixed; width: 100%">
