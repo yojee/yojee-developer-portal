@@ -845,8 +845,6 @@ To send bulk actions for a **Dropoff Failed** task, we will need a payload with 
 
 #### Get Driver Bulk Action Status
 
-##### **Get Driver Bulk Action Status**
-
 This call is to check the status of the bulk action called in **Driver Bulk Actions**.
 
 ###### Sample Curl Command

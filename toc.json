@@ -42,6 +42,11 @@
       "type": "item",
       "title": "V3 to V4 Order Creation Mapping Guide",
       "uri": "docs/guides/api-v3-v4-order-guide.md"
+    },
+    {
+      "type": "item",
+      "title": "API Common Error Guide",
+      "uri": "docs/guides/api-common-error-guide.md"
     }
   ]
 }
