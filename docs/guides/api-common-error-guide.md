@@ -512,7 +512,7 @@ OR
 
 </td>
   <td>This happens when the current task state is already in final state (completed/invalidated/failed).</td>
-  <td><strong>Note that</strong>, you can only mark task as failed or complete when the current task status is in initially state which is created.</td>
+  <td><strong>Note that</strong>, you can only mark task as failed or complete when the current task status is in initial state which is created.</td>
   </tr>
   <tr>
 <td>
