@@ -4,7 +4,7 @@
 
 In this document, you can find the common API error messages for different endpoints, the description of the message and steps on how to resolve those issues.
 
-## Generic Errors
+# Generic Errors
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
@@ -78,7 +78,7 @@ OR
   </tr>
 </table>
 
-## Other Errors
+# Other Errors
 
 <!-- theme: info -->
 
@@ -86,7 +86,7 @@ OR
 >
 > To find out more details on each endpoint, sample request payload and sample response, you can click on the individual title below :)
 
-### [Authentication - Login](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-public-api.yaml/paths/~1api~1v3~1auth~1signin/post)
+## [Authentication - Login](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-public-api.yaml/paths/~1api~1v3~1auth~1signin/post)
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
@@ -135,7 +135,7 @@ OR
   </tr>
 </table>
 
-### [Multi-leg](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post) and [Single-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders/post)
+## [Multi-leg](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post) and [Single-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders/post)
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
@@ -163,7 +163,7 @@ OR
   </tr>
 </table>
 
-### [Multi-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post)
+## [Multi-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post)
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
@@ -290,7 +290,7 @@ OR
   </tr>
 </table>
 
-### Order cancellation - via [order number](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders~1cancel/put) or [other parameters](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders~1cancel/post)
+## Order cancellation - via [order number](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders~1cancel/put) or [other parameters](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders~1cancel/post)
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
@@ -360,7 +360,7 @@ OR
   </tr>
 </table>
 
-### [Multi-leg](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1order_items~1{id}~1update_multi/put) and [Single-leg order item update](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1order_items~1{id}/put)
+## [Multi-leg](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1order_items~1{id}~1update_multi/put) and [Single-leg order item update](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1order_items~1{id}/put)
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
@@ -387,7 +387,7 @@ OR
         <li>order item is transferred from upstream partner and "allow_downstream_edit_transferred_items" is disabled.</li>
       </ul>
     </td>
-    <td>For upstream and downstream partner scenario, to edit/update a transferred order item, please ensure that "allow_downstream_edit_transferred_items" indicator is enabled.</td>
+    <td>For upstream and downstream partner scenario, to edit/update a transferred order item, please contact system administrator to enable the "allow_downstream_edit_transferred_items" indicator.</td>
   </tr>
   <tr>
 <td>
@@ -487,11 +487,11 @@ OR
 
 > #### Note
 >
-> Other validation that happen in the order creation also take place when updating order record.
+> Other validation(s) that take place in the order creation will also take place during updating of order record.
 
-### Task
+## Task
 
-#### [Mark as failed](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1task~1{id}~1mark_as_failed/post), [Mark as Completed](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1tasks~1{id}~1complete/put), [Mark Arrival](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1tasks~1mark_arrival/post), [Mark Departure](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1tasks~1mark_departure/post)
+### [Mark as failed](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1task~1{id}~1mark_as_failed/post), [Mark as Completed](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1tasks~1{id}~1complete/put), [Mark Arrival](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1tasks~1mark_arrival/post), [Mark Departure](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1tasks~1mark_departure/post)
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
@@ -548,9 +548,9 @@ OR
   </tr>
 </table>
 
-### Task Group
+## Task Group
 
-#### [Accept](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1task_groups~1{id}~1accept/put), [Reject](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1task_groups~1{id}~1reject/put)
+### [Accept](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1task_groups~1{id}~1accept/put), [Reject](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1task_groups~1{id}~1reject/put)
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
@@ -589,7 +589,7 @@ OR
   </tr>
 </table>
 
-### [Complete Subtask](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-task-api.yaml/paths/~1api~1v3~1dispatcher~1sub_tasks/put)
+## [Complete Subtask](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-task-api.yaml/paths/~1api~1v3~1dispatcher~1sub_tasks/put)
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
@@ -651,9 +651,9 @@ OR
   </tr>
 </table>
 
-### Partner
+## Partner
 
-#### Invite - [Send](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partners~1{cip}~1send_invite/put), [Cancel](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partners~1{cip}~1cancel_invite/put), [Accept](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partners~1{cip}~1accept_invite/put), [Reject](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partners~1{cip}~1reject_invite/put)
+### Invite - [Send](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partners~1{cip}~1send_invite/put), [Cancel](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partners~1{cip}~1cancel_invite/put), [Accept](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partners~1{cip}~1accept_invite/put), [Reject](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partners~1{cip}~1reject_invite/put)
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
@@ -708,7 +708,7 @@ OR
   </tr>
 </table>
 
-#### Transfer Order - [Create](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partner_transfer~1sender~1create_order/post), [Cancel](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partner_transfer~1sender~1withdraw_order~1{order_number}/put), [Accept](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partner_transfer~1dispatcher~1accept_order~1{order_number}/put), [Reject](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partner_transfer~1dispatcher~1reject_order~1{order_number}/put)
+### Transfer Order - [Create](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partner_transfer~1sender~1create_order/post), [Cancel](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partner_transfer~1sender~1withdraw_order~1{order_number}/put), [Accept](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partner_transfer~1dispatcher~1accept_order~1{order_number}/put), [Reject](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partner_transfer~1dispatcher~1reject_order~1{order_number}/put)
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
