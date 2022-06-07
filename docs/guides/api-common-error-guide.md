@@ -135,7 +135,7 @@ OR
   </tr>
 </table>
 
-## [Multi-leg](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post) and [Single-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders/post)
+## [Multi-leg](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post) and [Single-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders/post)
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
@@ -163,7 +163,7 @@ OR
   </tr>
 </table>
 
-## [Multi-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post)
+## [Multi-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post)
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
@@ -290,7 +290,7 @@ OR
   </tr>
 </table>
 
-## Order cancellation - via [order number](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders~1cancel/put) or [other parameters](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders~1cancel/post)
+## Order cancellation - via [order number](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders~1cancel/put) or [other parameters](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders~1cancel/post)
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
@@ -360,7 +360,7 @@ OR
   </tr>
 </table>
 
-## [Multi-leg](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1order_items~1{id}~1update_multi/put) and [Single-leg order item update](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1order_items~1{id}/put)
+## [Multi-leg](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1order_items~1{id}~1update_multi/put) and [Single-leg order item update](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1order_items~1{id}/put)
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
