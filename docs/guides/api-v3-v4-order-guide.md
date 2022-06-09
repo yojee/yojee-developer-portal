@@ -383,7 +383,6 @@ Let's first take a look at sample payload of both versions before we move into f
       ],
       "order_item_steps": [
         {
-          "quantity": 4,
           "order_item_index": 0,
           "order_step_index": 0,
           "order_step_group_index": 0,
@@ -391,7 +390,6 @@ Let's first take a look at sample payload of both versions before we move into f
           "type": "pickup"
         },
         {
-          "quantity": 4,
           "order_item_index": 0,
           "order_step_index": 1,
           "order_step_group_index": 0,
@@ -734,7 +732,6 @@ For example:
     {
       "order_item_steps": [
         {
-          "quantity": 4, //moved from v3 "steps"
           "order_item_index": 0,
           "order_step_index": 0,
           "order_step_group_index": 0,
@@ -746,12 +743,6 @@ For example:
   ]
 }
 ```
-
-<strong>Note:</strong>
-
-<ul>
-    <li>In V3, "quantity" param is inside "steps" object, however, in V4, this param is moved to "order_item_steps" object.</li>
-</ul>
 
 </td>
     </tr>
@@ -797,7 +788,7 @@ For example:
 
 > #### Note
 >
-> For those parameters that marked with '\*', we can customize whether those are required or optional field in the booking template.
+> For those parameters that marked with '\*', it can be configured in the booking template, whether it should be a required or optional field.
 
 ## List of available options
 
