@@ -12,7 +12,7 @@ In V4 order api, we introduced `data` parameter to allow creation of multiple or
 
 Therefore, in this document, we will focus on the mapping of order payload from [V3 order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1idspatcher~1orders_multi_leg/post) to [V4 order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders~1create/post).
 
-<table>
+<table style="text-align: left;">
     <tr>
         <th></th>
         <th>Method</th>
@@ -36,9 +36,9 @@ The table below shows the main components in both versions.
 
 <table>
     <tr>
-        <th colspan="4">V3</th>
+        <th colspan="4" style="text-align: center;">V3</th>
     </tr>
-    <tr>
+    <tr style="text-align: center;">
         <th>Field</th>
         <th>Data Type</th>
         <th>Required? (Y/N)</th>
@@ -122,7 +122,7 @@ The table below shows the main components in both versions.
 
 <table>
     <tr>
-        <th colspan="4">V4</th>
+        <th colspan="4" style="text-align: center;">V4</th>
     </tr>
     <tr>
         <th>Field</th>
@@ -174,7 +174,9 @@ The table below shows the main components in both versions.
     </tr>
 </table>
 
-#### Note
+<!-- theme: info -->
+
+> #### Note
 
 > In V4, order creation components will be wrapped as a single object (one order) inside <strong>"data"</strong> array.
 >
@@ -211,7 +213,7 @@ Let's first take a look sample payload of both versions before we move into fiel
     <tr>
         <th colspan="2" style="text-align: center;">Sample Payload</th>
     </tr>
-    <tr>
+    <tr style="text-align: center;">
         <th>V3</th>
         <th>V4</th>
     </tr>
@@ -410,7 +412,7 @@ Let's first take a look sample payload of both versions before we move into fiel
 ## Fields Mapping Table
 
 <table>
-    <tr>
+    <tr style="text-align: left;">
         <th>V3 fields</th>
         <th>V4 fields</th>
         <th>Required? (Y/N/*)</th>
@@ -804,10 +806,10 @@ For example:
 > #### Note
 >
 > Refer to table below for list of available options for new parameters.
-> Sample options also available at [V4 - Order Creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders~1create/post)
+> Sample options are also available at [V4 - Order Creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders~1create/post)
 
 <table>
-    <tr>
+    <tr style="text-align: left;">
         <th>Name</th>
         <th>Description</th>
     </tr>
