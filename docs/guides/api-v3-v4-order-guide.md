@@ -14,17 +14,17 @@ Therefore, in this document, we will focus on the mapping of order payload from 
 
 <table style="text-align: left;">
     <tr>
-        <th></th>
-        <th>Method</th>
-        <th>Endpoint</th>
+        <td></td>
+        <td><strong>Method</strong></td>
+        <td><strong>Endpoint</strong></td>
     </tr>
     <tr>
-        <th>V3</th>
+        <td><strong>V3</strong></td>
         <td>POST</td>
         <td>[BASEURL]/api/v3/dispatcher/orders_multi_leg</td>
     </tr>
     <tr>
-        <th>V4</th>
+        <td><strong>V4</strong></td>
         <td>POST</td>
         <td>[BASEURL]/api/v4/company/orders/create</td>
     </tr>
@@ -36,13 +36,13 @@ The table below shows the main components in both versions.
 
 <table>
     <tr>
-        <th colspan="4" style="text-align: center;">V3</th>
+        <td colspan="4" style="text-align: center;"><strong>V3</strong></td>
     </tr>
-    <tr style="text-align: center;">
-        <th>Field</th>
-        <th>Data Type</th>
-        <th>Required? (Y/N)</th>
-        <th>Payload Schema</th>
+    <tr>
+        <td><strong>Field</strong></td>
+        <td><strong>Data Type</strong></td>
+        <td><strong>Required? (Y/N)</strong></td>
+        <td><strong>Payload Schema</strong></td>
     </tr>
     <tr>
         <td>external_id</td>
@@ -122,13 +122,13 @@ The table below shows the main components in both versions.
 
 <table>
     <tr>
-        <th colspan="4" style="text-align: center;">V4</th>
+        <td colspan="4" style="text-align: center;"><strong>V4</strong></td>
     </tr>
     <tr>
-        <th>Field</th>
-        <th>Data Type</th>
-        <th>Required? (Y/N)</th>
-        <th>Payload Schema</th>
+        <td><strong>Field</strong></td>
+        <td><strong>Data Type</strong></td>
+        <td><strong>Required? (Y/N)</strong></td>
+        <td><strong>Payload Schema</strong></td>
     </tr>
     <tr>
         <td>order_info</td>
@@ -211,11 +211,11 @@ Let's first take a look sample payload of both versions before we move into fiel
 
 <table>
     <tr>
-        <th colspan="2" style="text-align: center;">Sample Payload</th>
+        <td colspan="2" style="text-align: center;"><strong>Sample Payload</strong></td>
     </tr>
     <tr style="text-align: center;">
-        <th>V3</th>
-        <th>V4</th>
+        <td><strong>V3</strong></td>
+        <td><strong>V4</strong></td>
     </tr>
     <tr style="vertical-align: top;">
 <td>
@@ -413,10 +413,10 @@ Let's first take a look sample payload of both versions before we move into fiel
 
 <table>
     <tr style="text-align: left;">
-        <th>V3 fields</th>
-        <th>V4 fields</th>
-        <th>Required? (Y/N/*)</th>
-        <th>Description</th>
+        <td><strong>V3 fields</strong></td>
+        <td><strong>V4 fields</strong></td>
+        <td><strong>Required? (Y/N/*)</strong></td>
+        <td><strong>Description</strong></td>
     </tr>
     <tr>
         <td colspan="2" style="text-align: center;">external_id</td>
@@ -810,8 +810,8 @@ For example:
 
 <table>
     <tr style="text-align: left;">
-        <th>Name</th>
-        <th>Description</th>
+        <td><strong>Name</strong></td>
+        <td><strong>Description</strong></td>
     </tr>
     <tr>
         <td>packing_mode</td>
