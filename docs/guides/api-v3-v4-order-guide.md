@@ -207,7 +207,7 @@ For example:
 
 ## Sample payload conversion
 
-Let's first take a look sample payload of both versions before we move into field mapping table in the next section.
+Let's first take a look at sample payload of both versions before we move into field mapping table in the next section.
 
 <table>
     <tr>
