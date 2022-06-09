@@ -37,6 +37,11 @@
       "type": "item",
       "title": "API Integration Introduction Guide",
       "uri": "docs/guides/api-integration-guide.md"
+    },
+    {
+      "type": "item",
+      "title": "V3 to V4 Order Creation Mapping Guide",
+      "uri": "docs/guides/api-v3-v4-order-guide.md"
     }
   ]
 }
