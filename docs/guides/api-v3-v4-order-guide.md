@@ -319,7 +319,7 @@ Let's first take a look sample payload of both versions before we move into fiel
           "user_profile_id": 123
         },
         "service_type_name": "express",
-        "template_id": 1 //compulsory field
+        "template_id": 1 //required field
       },
       "order_items": [
         {
@@ -397,7 +397,7 @@ Let's first take a look sample payload of both versions before we move into fiel
           "type": "dropoff"
         }
       ],
-      "order_step_groups": [{}] //compulsory field
+      "order_step_groups": [{}] //required field
     }
   ]
 }
