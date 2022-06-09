@@ -179,6 +179,7 @@ The table below shows the main components in both versions.
 > #### Note
 >
 > In V4, order creation components will be wrapped as a single object (one order) inside <strong>"data"</strong> array.
+>
 > Therefore, to create multiple orders in the same payload, append the object inside the data array.
 
 For example:
