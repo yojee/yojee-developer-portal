@@ -217,13 +217,13 @@ Let's first take a look at sample payload of both versions before we move into f
     <tr>
         <td colspan="3" style="text-align: center;"><strong>Sample Payload</strong></td>
     </tr>
-    <tr style="text-align: center;">
-        <td colspan="2"><strong>V3</strong></td>
-        <td><strong>V4</strong></td>
+    <tr>
+        <td colspan="2" style="text-align: center;"><strong>V3</strong></td>
+        <td style="text-align: center;"><strong>V4</strong></td>
     </tr>
-    <tr style="text-align: center;">
-        <td><strong>Single-leg</strong></td>
-        <td><strong>Multi-leg</strong></td>
+    <tr>
+        <td style="text-align: center;"><strong>Single-leg</strong></td>
+        <td style="text-align: center;"><strong>Multi-leg</strong></td>
         <td><strong></strong></td>
     </tr>
     <tr style="vertical-align: top;">
