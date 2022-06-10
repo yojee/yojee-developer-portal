@@ -19,7 +19,7 @@ Therefore, in this document, we will focus on the mapping of order payload from 
         <td><strong>Endpoint</strong></td>
     </tr>
     <tr>
-        <td rowspan="2"><strong>V3</strong></td>
+        <td rowspan="2" style="vertical-align: center;"><strong>V3</strong></td>
         <td>POST</td>
         <td>[BASEURL]/api/v3/dispatcher/orders</td>
     </tr>
@@ -215,13 +215,102 @@ Let's first take a look at sample payload of both versions before we move into f
 
 <table>
     <tr>
-        <td colspan="2" style="text-align: center;"><strong>Sample Payload</strong></td>
+        <td colspan="3" style="text-align: center;"><strong>Sample Payload</strong></td>
     </tr>
     <tr style="text-align: center;">
-        <td><strong>V3</strong></td>
+        <td colspan="2"><strong>V3</strong></td>
         <td><strong>V4</strong></td>
     </tr>
+    <tr style="text-align: center;">
+        <td><strong>Single-leg</strong></td>
+        <td><strong>Multi-leg</strong></td>
+        <td><strong></strong></td>
+    </tr>
     <tr style="vertical-align: top;">
+<td>
+
+```json
+{
+  "external_id": "TEST-ORDER-001",
+  "external_sender_id": "KCYCorp",
+  "sender_id": 123,
+  "sender_type": "organisation",
+  "placed_by_user_profile_id": "123",
+  "price_currency": "SGD",
+  "price_amount": 100,
+  "container_no": "CONTAINER-TEST",
+  "items": [
+    {
+      "description": "Laptop Computer",
+      "width": 0.11,
+      "length": 0.12,
+      "height": 0.044,
+      "weight": 334,
+      "volume": 1000,
+      "volumetric_weight": 1,
+      "quantity": 4,
+      "info": "Item Info",
+      "external_customer_id": "TN-001",
+      "external_customer_id2": "CUSTOMER-INFO-001",
+      "external_customer_id3": "",
+      "payload_type": "Package",
+      "service_type": "express",
+      "price_info": "",
+      "price_amount": 0
+    }
+  ],
+  "steps": [
+    {
+      "quantity": 4,
+      "address": "20 Pasir Pajang Road",
+      "address2": "",
+      "city": "",
+      "country": "Singapore",
+      "state": "",
+      "postal_code": "117439",
+      "contact_company": "S Company",
+      "contact_name": "John Lim",
+      "contact_phone": 62010000,
+      "contact_email": "john@company1.example.com",
+      "from_time": "2021-08-01T08:59:22.813Z",
+      "to_time": "2021-08-02T07:59:59.813Z",
+      "lat": 14.6332747,
+      "lng": 121.052446
+    },
+    {
+      "quantity": 4,
+      "address": "1 Changi Business Park",
+      "address2": "Avenue 1",
+      "city": "",
+      "country": "Singapore",
+      "state": "",
+      "postal_code": "486058",
+      "contact_company": "C Company",
+      "contact_name": "Peter Tan",
+      "contact_phone": 62010001,
+      "contact_email": "peter@company2.example.com",
+      "from_time": "2021-08-03T08:59:22.813Z",
+      "to_time": "2021-08-04T07:59:59.813Z",
+      "lat": 14.5126048,
+      "lng": 120.9778036
+    }
+  ],
+  "item_steps": [
+    {
+      "item_id": 0,
+      "order_step_id": 0,
+      "type": "pickup"
+    },
+    {
+      "item_id": 0,
+      "order_step_id": 1,
+      "type": "dropoff"
+    }
+  ]
+}
+```
+
+</td>
 <td>
 
 ```json
@@ -409,6 +498,32 @@ Let's first take a look at sample payload of both versions before we move into f
 
 </td>
     </tr>
+</table>
+
+### Note
+
+- The 2 main difference in V3 single-leg and V3 multi-leg are:
+
+<table>
+    <tr>
+        <td></td>
+        <td><strong>Single-leg</strong></td>
+        <td><strong>Multi-leg</strong></td>
+    </tr>
+    <tr>
+        <td>contact_phone</td>
+        <td>Data type = "number"</td>
+        <td>Data type = "string"</td>
+    </tr>
+    <tr>
+        <td>step_group</td>
+        <td rowspan="2">non-mandatory field</td>
+        <td rowspan="2">mandatory field</td>
+    </tr>
+     <tr>
+        <td>step_sequence</td>
+    </tr>
+
 </table>
 
 ## Fields Mapping Table
@@ -792,7 +907,7 @@ For example:
 
 > #### Note
 >
-> For those parameters that marked with '\*', it can be configured in the booking template, whether it should be a required or optional field.
+> For those parameters that marked with '\*', it can be configured in the booking template, whether it should be a required or an optional field.
 
 ## List of available options
 
@@ -821,7 +936,8 @@ For example:
     <tr>
         <td>template_id</td>
         <td>To get template_id, refer to this endpoint
-        <a href="https://yojee.stoplight.io/docs/yojee-api/publish/yojee-public-api.yaml/paths/~1api~1v4~1public~1templates~1active/get">Get active templates</a>. To know which item is a default template, its "default_at" will not be null.
+        <a href="https://yojee.stoplight.io/docs/yojee-api/publish/yojee-public-api.yaml/paths/~1api~1v4~1public~1templates~1active/get">Get active templates</a>. <br/>
+        To know which item is a default template, its "default_at" will not be null.
         </td>
     </tr>
     <tr>
@@ -889,7 +1005,7 @@ For example:
     </tr>
     <tr>
         <td>service_type_name</td>
-        <td>To get service type name, refer to this endpoint <a href="https://yojee.stoplight.io/docs/yojee-api/publish/yojee-configuration-api.yaml/paths/~1api~1v3~1dispatcher~1service_types/get">Get Service Types</a>
+        <td>To get service type name, refer to this endpoint <a href="https://yojee.stoplight.io/docs/yojee-api/publish/yojee-configuration-api.yaml/paths/~1api~1v3~1dispatcher~1service_types/get">Get Service Types</a>.
         </td>
     </tr>
 </table>
