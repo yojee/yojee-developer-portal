@@ -10,7 +10,7 @@ In V4 order api, we introduced `data` parameter to allow creation of multiple or
 >
 > In V4, validation of order creation/updating will vary depending on the given template_id.
 
-Therefore, in this document, we will focus on the mapping of order payload from [V3 order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1idspatcher~1orders_multi_leg/post) to [V4 order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders~1create/post).
+Therefore, in this document, we will focus on the mapping of order payload from [V3 single-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders/post) and [V3 multi-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post) to [V4 order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders~1create/post).
 
 <table style="text-align: left;">
     <tr>
@@ -19,7 +19,11 @@ Therefore, in this document, we will focus on the mapping of order payload from 
         <td><strong>Endpoint</strong></td>
     </tr>
     <tr>
-        <td><strong>V3</strong></td>
+        <td rowspan="2"><strong>V3</strong></td>
+        <td>POST</td>
+        <td>[BASEURL]/api/v3/dispatcher/orders</td>
+    </tr>
+    <tr>
         <td>POST</td>
         <td>[BASEURL]/api/v3/dispatcher/orders_multi_leg</td>
     </tr>
