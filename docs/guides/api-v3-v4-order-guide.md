@@ -9,6 +9,8 @@ In V4 order api, we introduced `data` parameter to allow creation of multiple or
 > #### Note
 >
 > In V4, validation of order creation/updating will vary depending on the given template_id.
+>
+> Refer to "Booking Template" section to find out more information.
 
 Therefore, in this document, we will focus on the mapping of order payload from [V3 single-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders/post) and [V3 multi-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post) to [V4 order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders~1create/post).
 
@@ -811,7 +813,7 @@ For example:
     </tr>
      <tr>
         <td colspan="2" style="text-align: center;">lat</td>
-        <td>*</td>
+        <td>N</td>
 <td rowspan="2">It is a nested parameter insider <strong>"location"</strong> object and "location" is nested insider "order_steps" array. <br/>
 For example:
 
@@ -836,7 +838,7 @@ For example:
     </tr>
      <tr>
         <td colspan="2" style="text-align: center;">lng</td>
-        <td>*</td>
+        <td>N</td>
     </tr>
      <tr>
         <td>item_id</td>
@@ -937,7 +939,8 @@ For example:
         <td>template_id</td>
         <td>To get template_id, refer to this endpoint
         <a href="https://yojee.stoplight.io/docs/yojee-api/publish/yojee-public-api.yaml/paths/~1api~1v4~1public~1templates~1active/get">Get active templates</a>. <br/>
-        To know which item is a default template, its "default_at" will not be null.
+        To know which item is a default template, its "default_at" will not be null. <br/>
+        <strong>NOTE:</strong> Please call the above mentioned endpoint to get the latest default template_id as this id will be updated when we make any changes to the template.
         </td>
     </tr>
     <tr>
@@ -1008,4 +1011,41 @@ For example:
         <td>To get service type name, refer to this endpoint <a href="https://yojee.stoplight.io/docs/yojee-api/publish/yojee-configuration-api.yaml/paths/~1api~1v3~1dispatcher~1service_types/get">Get Service Types</a>.
         </td>
     </tr>
+</table>
+
+## Booking Template
+
+There are few things to take note while customising your booking template.
+Under `Template Properties`, there are 2 checkboxes:
+
+<table>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td><strong>Description</strong></td>
+  </tr>
+  <tr>
+    <td>"Allow missing info"</td>
+    <td>If this checkbox is:<br/><br/>
+      <ul>
+        <li><strong>"checked":</strong> it means that system will allow order to be created even though any of the required field(s) is not present in the payload. The order record will just display with <strong>"missing info"</strong> status.<br/>
+        <span style="text-decoration: underline;">For example:</span> In template ABC, we configured "description" and "postal_code" to be a required fields and "Allow missing info" is checked. Therefore, even if "description" or "postal_code" is not found in the payload, system will allow this order to be created successfully and attach this order record with "missing info" status.
+        <br/><br/>
+        </li>
+        <li><strong>"unchecked":</strong> it means that order can only be created successfully if and only if ALL required fields are present in the payload.</li>
+      </ul>
+      <strong>Note:</strong> System will reject the order if "address" value is invalid. However, if "Allow missing info" is checked, system will accept the order and attach it with "missing info" status.
+  </tr>
+  <tr>
+    <td>"Allow dispatcher to add more legs"</td>
+    <td>if this checkbox is:<br/><br/>
+      <ul>
+        <li><strong>"checked":</strong> it means that system will allow order to be created with more legs.
+        <br/>
+        <br/>
+        </li>
+        <li><strong>"unchecked":</strong> it means that system will reject the order, if in the request payload, there are more legs than the given number of legs that defined in the template.</li>
+      </ul>
+      <strong>Note:</strong> This checkbox is NOT APPLICABLE for batch uploading. This means that for batch uploading, the number of legs must be the same as the number of legs that is defined in the template.
+    </td>
+  </tr>
 </table>
