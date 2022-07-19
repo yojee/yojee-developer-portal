@@ -2,7 +2,7 @@
 
 # Overview
 
-In this document, you can find the common API error messages for different endpoints, the description of the message and steps on how to resolve those issues.
+In this document, you could be able to find the common API error messages for different endpoints, the description of the message and steps on how to resolve those issues.
 
 # Generic Errors
 
@@ -76,6 +76,20 @@ OR
     <td>This happens when "company_slug" value is invalid.</td>
     <td>Ensure that "company_slug" is valid or contact system administrator to get your company_slug.</td>
   </tr>
+  <tr>
+<td>
+
+```json
+{
+  "message": "Unauthorized access!"
+}
+```
+
+</td>
+  <td>This happens when "access_token" value is invalid.</td>
+  <td>Ensure that "access_token" is value or contact system administrator to get your access_token.</td>
+
+  </tr>
 </table>
 
 # Other Errors
@@ -135,7 +149,9 @@ OR
   </tr>
 </table>
 
-## [Multi-leg](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post) and [Single-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders/post)
+## V3 Order API
+
+### [Multi-leg](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post) and [Single-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders/post)
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
@@ -163,7 +179,7 @@ OR
   </tr>
 </table>
 
-## [Multi-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post)
+### [Multi-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post)
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
@@ -290,7 +306,7 @@ OR
   </tr>
 </table>
 
-## Order cancellation - via [order number](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders~1cancel/put) or [other parameters](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders~1cancel/post)
+### Order cancellation - via [order number](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders~1cancel/put) or [other parameters](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders~1cancel/post)
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
@@ -360,7 +376,7 @@ OR
   </tr>
 </table>
 
-## [Multi-leg](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1order_items~1{id}~1update_multi/put) and [Single-leg order item update](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1order_items~1{id}/put)
+### [Multi-leg](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1order_items~1{id}~1update_multi/put) and [Single-leg order item update](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1order_items~1{id}/put)
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
@@ -489,6 +505,206 @@ OR
 >
 > Other validation(s) that take place in the order creation will also take place during updating of order record.
 
+## V4 Order API
+
+### [Dispatcher Order](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders~1create/post) and [Sender order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-sender-api-v4.yaml/paths/~1api~1v4~1sender~1orders~1create/post)
+
+For v4 order creation, the validation will varies depending on the given template id/template type id in the payload.
+
+Let's take a look at the sample example of the common error messages that you might encounter and how to identity and resolve such errors.
+
+<table style="table-layout: fixed; width: 100%">
+  <tr>
+    <td><strong>Error Message</strong></td>
+    <td><strong>Explanation</strong></td>
+    <td><strong>How to resolve?</strong></td>
+  </tr>
+  <tr>
+<td>
+
+```json
+{
+  "errors": [
+    {
+      "code": "EC403",
+      "message": "sender is invalid",
+      "metadata": {
+        "data_entity": "order",
+        "field": "sender",
+        "ref": "data[0].order_info",
+        "value": {
+          "external_id": "tester"
+        }
+      }
+    }
+  ],
+  "request_id": "FwMaGv4SMgT2sAMAAGHB"
+}
+```
+
+</td>
+    <td>This happens when sender external id = "tester" is invalid in your dispatcher system.</td>
+    <td>To resolve this, ensure that sender external id is valid.<br/> 
+      <ul>
+        <li>To get the value, navigate to Dispatcher UI, under Manage > Customers > Sender.</li>
+        <li>Or with our case, we can create a new sender record with external id = "tester".</li>
+        <li>Or contact system administrator to get the value.</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+<td>
+
+```json
+{
+  "errors": [
+    {
+      "code": "EC424",
+      "message": "order.external_id: INV350963 has already been taken",
+      "metadata": {
+        "field": "order.external_id",
+        "value": "INV350963"
+      }
+    }
+  ],
+  "request_id": "Fv0Do0Ih1G8pH7oAANZR"
+}
+```
+
+</td>
+    <td>This happens when order external id is set to be unique in your dispatcher system.</td>
+    <td>To resolve this, ensure that order external id value cannot be duplicated.</td>
+  </tr>
+  <tr>
+<td>
+
+```json
+{
+  "errors": [
+    {
+      "code": "BK0527",
+      "message": "to_time End time cannot be before start time",
+      "metadata": {
+        "data_entity": "order_step",
+        "field": "to_time",
+        "ref": "data[0].order_steps[0]",
+        "value": "2022-01-14T18:48:00"
+      }
+    }
+  ],
+  "request_id": "FwMap_eNfFxLIs0AAHFh"
+}
+```
+
+</td>
+    <td>This happens when "to_time" value is earlier than "from_time" value.</td>
+    <td>To resolve this, ensure that "to_time" value should always be later than "from_time".</td>
+  </tr>
+  <tr>
+<td>
+
+```json
+{
+  "errors": [
+    {
+      "code": "EC403",
+      "message": "payload_type is invalid",
+      "metadata": {
+        "data_entity": "order_item",
+        "field": "payload_type",
+        "ref": "data[0].order_items[0]",
+        "value": "import"
+      }
+    }
+  ],
+  "request_id": "FwMa7j-KLuf2hxsAAJyi"
+}
+```
+
+</td>
+    <td>This happens when payload_type = "import" is not exist in your dispatcher system.</td>
+    <td>To resolve this, ensure that payload_type is valid.
+      <ul>
+        <li>To get the value, navigate to Dispatcher UI, under Manage > Orders > Item Types.</li>
+        <li>Or call either one of the following endpoints to get the value: <br/>
+        - <a href="https://yojee.stoplight.io/docs/yojee-api/publish/yojee-configuration-api.yaml/paths/~1api~1v3~1dispatcher~1item_types/get">Get Item Types with dispatcher token</a> <br/>
+        - <a href="https://yojee.stoplight.io/docs/yojee-api/publish/yojee-public-api.yaml/paths/~1api~1v3~1public~1orders~1item_types/get">Get Company Item Types</a></li>
+        <li>Or contact system administrator to get the value.</li>
+        <li>Or with our case, we can create a new payload_type record = "import".</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+<td>
+
+```json
+{
+  "errors": [
+    {
+      "code": "EC403",
+      "message": "service_type_name is invalid",
+      "metadata": {
+        "data_entity": "order",
+        "field": "service_type_name",
+        "ref": "data[0].order_info",
+        "value": "service type test"
+      }
+    }
+  ],
+  "request_id": "FwMbWAt-0orl2lMAAJ7B"
+}
+```
+
+</td>
+     <td>This happens when service_type_name = "service type test" is not exist in your dispatcher system.</td>
+    <td>To resolve this, ensure that service_type_name is valid.<br/> 
+      <ul>
+        <li>To get the value, navigate to Dispatcher UI, under Manage > Orders > Service Types.</li>
+        <li>Or call either one of the following endpoints to get the value: <br/>
+        - <a href="https://yojee.stoplight.io/docs/yojee-api/publish/yojee-configuration-api.yaml/paths/~1api~1v3~1dispatcher~1service_types/get">Get Service Types with dispatcher token</a> <br/>
+        - <a href="https://yojee.stoplight.io/docs/yojee-api/publish/yojee-sender-api.yaml/paths/~1api~1v3~1sender~1service_types/get">Get Service Types with sender token</a></li>
+        <li>Or contact system administrator to get the value.</li>
+        <li> Or with our case, we can create a new service_type_name record = "service type test".</li>
+      </ul>
+   </td>
+  </tr>
+</tr>
+</table>
+
+<!-- theme: info -->
+
+> #### Note
+>
+> Validation(s) that take place in the order creation will also take place during updating of order record.
+
+### [Order Cancellation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1order~1cancel/put)
+
+<table style="table-layout: fixed; width: 100%">
+  <tr>
+    <td><strong>Error Message</strong></td>
+    <td><strong>Explanation</strong></td>
+    <td><strong>How to resolve?</strong></td>
+  </tr>
+  <tr>
+<td>
+
+```json
+{
+  "errors": [
+    {
+      "code": "BK0510",
+      "message": "Order not found",
+      "metadata": {}
+    }
+  ],
+  "request_id": "FwMmGZa5zAQStEwAABbS"
+}
+```
+
+</td>
+   <td>This happens when system could not find the order record based on the given identifier from the request payload.</td>
+  <td>Ensure that identifier is valid.</td>
+</table>
 ## Task
 
 ### [Mark as failed](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1task~1{id}~1mark_as_failed/post), [Mark as Completed](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1tasks~1{id}~1complete/put), [Mark Arrival](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1tasks~1mark_arrival/post), [Mark Departure](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1tasks~1mark_departure/post)
