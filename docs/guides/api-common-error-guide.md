@@ -509,9 +509,15 @@ OR
 
 ### [Dispatcher Order](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders~1create/post) and [Sender order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-sender-api-v4.yaml/paths/~1api~1v4~1sender~1orders~1create/post)
 
-For v4 order creation, the validation will varies depending on the given template id/template type id in the payload.
+For v4 order creation, the validation will vary depending on the given template id/template type id in the payload.
 
 Let's take a look at the sample example of the common error messages that you might encounter and how to identity and resolve such errors.
+
+<!-- theme: info -->
+
+> #### Note
+>
+> If there are multiple orders in the request payload, please refer to "ref" field to identify which index of the items contain the invalid value.
 
 <table style="table-layout: fixed; width: 100%">
   <tr>
@@ -546,7 +552,9 @@ Let's take a look at the sample example of the common error messages that you mi
     <td>This happens when sender external id = "tester" is invalid in your dispatcher system.</td>
     <td>To resolve this, ensure that sender external id is valid.<br/> 
       <ul>
-        <li>To get the value, navigate to Dispatcher UI, under Manage > Customers > Sender.</li>
+        <li>To get the value, navigate to Dispatcher UI, under Manage > Customers > Sender (Individual/Corporate). <br/>
+        <strong>NOTE:</strong> please choose Corporate for integration purposes.
+        </li>
         <li>Or with our case, we can create a new sender record with external id = "tester".</li>
         <li>Or contact system administrator to get the value.</li>
       </ul>
@@ -598,7 +606,8 @@ Let's take a look at the sample example of the common error messages that you mi
 
 </td>
     <td>This happens when "to_time" value is earlier than "from_time" value.</td>
-    <td>To resolve this, ensure that "to_time" value should always be later than "from_time".</td>
+    <td>To resolve this, ensure that "to_time" value should always be later than "from_time". <br/><br/>
+    <strong>Note that</strong>, both "from_time" and "to_time" should be in the ISO8601 format.</td>
   </tr>
   <tr>
 <td>
@@ -705,6 +714,7 @@ Let's take a look at the sample example of the common error messages that you mi
    <td>This happens when system could not find the order record based on the given identifier from the request payload.</td>
   <td>Ensure that identifier is valid.</td>
 </table>
+
 ## Task
 
 ### [Mark as failed](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1task~1{id}~1mark_as_failed/post), [Mark as Completed](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1tasks~1{id}~1complete/put), [Mark Arrival](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1tasks~1mark_arrival/post), [Mark Departure](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1tasks~1mark_departure/post)
