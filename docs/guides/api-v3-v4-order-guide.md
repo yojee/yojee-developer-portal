@@ -12,7 +12,7 @@ On top of that, with `template_id` or `template_type_id`, user can now customize
 > In V4, validation of order creation/updating will vary depending on the given **template_id** or **template_type_id**.
 > Note that, we can use either one of these fields to create/update an order, but one of it must be provided in the payload.
 >
-> Refer to "Booking Template" section to find out more information.
+> Refer to "Sample payload conversion" section to see how to convert to v4 payload and "Booking Template" section to find out more additional information on booking template.
 
 Therefore, in this document, we will focus on the mapping of order payload from [V3 single-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders/post) and [V3 multi-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post) to [V4 order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders~1create/post).
 
