@@ -2,15 +2,17 @@
 
 # Overview
 
-In V4 order api, we introduced `data` parameter to allow creation of multiple orders in a single payload. On top of that, with `template_id`, user can now customize the booking template(s) to cater to different order.
+In V4 order api, we introduced `data` parameter to allow creation of multiple orders in a single payload.
+On top of that, with `template_id` or `template_type_id`, user can now customize the booking template(s) to cater to different order.
 
 <!-- theme: warning -->
 
 > #### Note
 >
-> In V4, validation of order creation/updating will vary depending on the given template_id.
+> In V4, validation of order creation/updating will vary depending on the given **template_id** or **template_type_id**.
+> Note that, we can use either one of these fields to create/update an order, but one of it must be provided in the payload.
 >
-> Refer to "Booking Template" section to find out more information.
+> Refer to "Sample payload conversion" section to see how to convert to v4 payload and "Booking Template" section to find out more additional information on booking template.
 
 Therefore, in this document, we will focus on the mapping of order payload from [V3 single-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders/post) and [V3 multi-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post) to [V4 order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders~1create/post).
 
@@ -217,16 +219,14 @@ Let's first take a look at sample payload of both versions before we move into f
 
 <table>
     <tr>
-        <td colspan="3" style="text-align: center;"><strong>Sample Payload</strong></td>
+        <td colspan="2" style="text-align: center;"><strong>Sample Payload</strong></td>
     </tr>
     <tr>
         <td colspan="2" style="text-align: center;"><strong>V3</strong></td>
-        <td style="text-align: center;"><strong>V4</strong></td>
     </tr>
     <tr>
         <td style="text-align: center;"><strong>Single-leg</strong></td>
         <td style="text-align: center;"><strong>Multi-leg</strong></td>
-        <td><strong></strong></td>
     </tr>
     <tr style="vertical-align: top;">
 <td>
@@ -401,6 +401,21 @@ Let's first take a look at sample payload of both versions before we move into f
 ```
 
 </td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <td colspan="2" style="text-align: center;"><strong>Sample Payload</strong></td>
+    </tr>
+    <tr>
+        <td colspan="2" style="text-align: center;"><strong>V4</strong></td>
+    </tr>
+    <tr>
+        <td style="text-align: center;"><strong>Using template_id</strong></td>
+        <td style="text-align: center;"><strong>Using template_type_id</strong></td>
+    </tr>
+    <tr style="vertical-align: top;">
 <td>
 
 ```json
@@ -417,6 +432,104 @@ Let's first take a look at sample payload of both versions before we move into f
         },
         "service_type_name": "express",
         "template_id": 1 //required field
+      },
+      "order_items": [
+        {
+          "description": "Laptop Computer",
+          "width": 0.11,
+          "length": 0.12,
+          "height": 0.044,
+          "weight": 334,
+          "volume": 1000,
+          "volumetric_weight": 1,
+          "quantity": 4,
+          "info": "Item Info",
+          "external_customer_id": "TN-001",
+          "external_customer_id2": "CUSTOMER-INFO-001",
+          "external_customer_id3": "",
+          "payload_type": "Package",
+          "item_container": {
+            "container_no": "CONTAINER-TEST"
+          }
+        }
+      ],
+      "order_steps": [
+        {
+          "address": "20 Pasir Pajang Road",
+          "address2": "",
+          "city": "",
+          "country": "Singapore",
+          "state": "",
+          "postal_code": "117439",
+          "contact_company": "S Company",
+          "contact_name": "John Lim",
+          "contact_phone": "62010000",
+          "contact_email": "john@company1.example.com",
+          "from_time": "2021-08-01T08:59:22.813Z",
+          "to_time": "2021-08-02T07:59:59.813Z",
+          "location": {
+            "lat": 14.6332747,
+            "lng": 121.052446
+          }
+        },
+        {
+          "address": "1 Changi Business Park",
+          "address2": "Avenue 1",
+          "city": "",
+          "country": "Singapore",
+          "state": "",
+          "postal_code": "486058",
+          "contact_company": "C Company",
+          "contact_name": "Peter Tan",
+          "contact_phone": "62010001",
+          "contact_email": "peter@company2.example.com",
+          "from_time": "2021-08-03T08:59:22.813Z",
+          "to_time": "2021-08-04T07:59:59.813Z",
+          "location": {
+            "lat": 14.5126048,
+            "lng": 120.9778036
+          }
+        }
+      ],
+      "order_item_steps": [
+        {
+          "order_item_index": 0,
+          "order_step_index": 0,
+          "order_step_group_index": 0,
+          "step_sequence": 0,
+          "type": "pickup"
+        },
+        {
+          "order_item_index": 0,
+          "order_step_index": 1,
+          "order_step_group_index": 0,
+          "step_sequence": 1,
+          "type": "dropoff"
+        }
+      ],
+      "order_step_groups": [{}] //required field
+    }
+  ]
+}
+```
+
+</td>
+<td>
+
+```json
+{
+  "data": [
+    {
+      "order_info": {
+        "external_id": "TEST-ORDER-001",
+        "sender": {
+          "external_id": "KCYCorp",
+          "id": 123,
+          "sender_type": "organisation",
+          "user_profile_id": 123
+        },
+        "service_type_name": "express",
+        "template_type_id": 123 //required field
       },
       "order_items": [
         {
