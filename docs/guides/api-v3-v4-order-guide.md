@@ -130,18 +130,21 @@ The table below shows the main components in both versions.
 
 <table>
     <tr>
-        <td colspan="4" style="text-align: center;"><strong>V4</strong></td>
+        <td colspan="5" style="text-align: center;"><strong>V4</strong></td>
     </tr>
     <tr>
         <td><strong>Field</strong></td>
         <td><strong>Data Type</strong></td>
         <td><strong>Required? (Y/N)</strong></td>
+        <td><strong>Description</strong></td>
         <td><strong>Payload Schema</strong></td>
     </tr>
     <tr>
         <td>order_info</td>
         <td>object</td>
         <td>Y</td>
+        <td>Contains main information about an order.<br/>
+        For example: order number, order external id, sender information etc.</td>
 <td rowspan="5" style="vertical-align: top;">
 
 ```json
@@ -164,21 +167,27 @@ The table below shows the main components in both versions.
         <td>order_items</td>
         <td>array</td>
         <td>Y</td>
+        <td>A list of items that belongs to an order. Each item contains an order item information. <br/>
+        For example: description, quantity, dimension, container details etc.</td>
     </tr>
     <tr>
         <td>order_steps</td>
         <td>array</td>
         <td>Y</td>
+        <td>A list of steps which will contain information and time requirements for respective tasks.<br/>
+        For example: address, pickup/dropoff time windows, contact information.</td>
     </tr>
     <tr>
         <td>order_item_steps</td>
         <td>array</td>
         <td>Y</td>
+        <td>A list of objects that link order_items to order_steps. In this section, it indicates the step_group and step_sequence of an order.</td>
     </tr>
     <tr>
         <td>order_step_groups</td>
         <td>array</td>
         <td>Y</td>
+        <td>Contains grouping information of an order.</td>
     </tr>
 </table>
 
@@ -1023,6 +1032,116 @@ For example:
 > #### Note
 >
 > For those parameters that marked with '\*', it can be configured in the booking template, whether it should be a required or an optional field.
+
+## Thing to take notes from v3 to v4 for an order
+
+<table style="text-align: left;">
+    <tr>
+        <td><strong>Field name</strong></td>
+        <td><strong>V3 <br/> old booking template</strong></td>
+        <td><strong>V4 <br/> new booking template</strong></td>
+        <td><strong>Remarks</strong></td>
+    </tr>
+    <tr>
+        <td>step_group</td>
+        <td>1</td>
+        <td>0</td>
+        <td rowspan="2">In the new booking template, the value will start from its index. </td>
+    </tr>
+    <tr>
+        <td>step_sequence</td>
+        <td>1</td>
+        <td>0</td>
+    </tr>
+</table>
+
+**Another thing to take note:**
+In **v3**, specifically for **multi-leg orders**, all tasks (task 1, task 2, task 3, task 4) in an order are **grouped under one single group**. However, in **v4**, we **split the grouping into two groups**; where the first group consists of task 1 and task 2 and second group consists of task 3 and task 4.
+With this grouping, users will have the flexibility to either assign each group to different drivers or all groups to the same driver.
+
+Let’s take a look at the small portion of structure below:
+
+<table style="text-align: left;">
+    <tr>
+        <td><strong>V3</strong></td>
+        <td><strong>V4</strong></td>
+        <td><strong>Remarks</strong></td>
+    </tr>
+    <tr>
+<td>
+
+```json
+{
+   "type": "pickup",
+   "step_group": 1,
+   "step_group_size": 1,
+   "step_sequence": 1
+},
+{
+   "type": "dropoff",
+   "step_group": 1,
+   "step_group_size": 1,
+   "step_sequence": 2,
+
+},
+{
+   "type": "pickup",
+   "step_group": 1,
+   "step_group_size": 1,
+   "step_sequence": 3,
+
+},
+{
+   "type": "dropoff",
+   "step_group": 1,
+   "step_group_size": 1,
+   "step_sequence": 4,
+}
+```
+
+</td>
+<td>
+
+```json
+{
+   "type": "pickup",
+   "step_group": 0,
+   "step_group_size": 2,
+   "step_sequence": 0
+},
+{
+   "type": "dropoff",
+   "step_group": 0,
+   "step_group_size": 2,
+   "step_sequence": 1,
+
+},
+{
+   "type": "pickup",
+   "step_group": 1,
+   "step_group_size": 2,
+   "step_sequence": 2,
+
+},
+{
+   "type": "dropoff",
+   "step_group": 1,
+   "step_group_size": 2,
+   "step_sequence": 3,
+}
+```
+
+</td>
+        <td>Notice that:<br/>
+
+- step_sequence in v3 is starting from its index+1, where in v4, it is starting from its index.
+
+- In v3, there is only one group where step_group = 1. However, in v4, there are 2 groups:
+  - Leg 1 (task 1 and task 2) belongs to step_group = 0
+  - Leg 2 (task 3 and task 4) belongs to step_group = 1
+  </td>
+      </tr>
+  </table>
 
 ## List of available options
 

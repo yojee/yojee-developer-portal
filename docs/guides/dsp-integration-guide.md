@@ -6,7 +6,9 @@ Yojee’s customers use our platform to track their transport orders. In some us
 
 **Section 1** in this document will outline the current operations for the above flow in further detail.
 
-In certain cases, the DSPs have their own Transport Management Systems, and would like to integrate with Yojee. To achieve this, there is a need to call specific Yojee APIs. **Section 2** in this document will first outline the integration flow, and describe the individual API calls needed. It is also important to understand the flow in Section 1 to be able to understand how the integration flow will work.
+In certain cases, the DSPs have their own Transport Management Systems, and would like to integrate with Yojee. To achieve this, there is a need to call specific Yojee APIs.
+
+**Section 2** in this document will first outline the integration flow, and describe the individual API calls needed. It is also important to understand the flow in Section 1 to be able to understand how the integration flow will work.
 
 ## Current Operations
 
@@ -27,9 +29,11 @@ In the diagram above:
 
 - **Company A** has access to the Dispatcher Portal for its own slug (green background with thick borders).
 - **Company B** (downstream partner) has access to the Dispatcher for its own slug (green background).
-- **Driver** has access to the Mobile App
+- **Driver** has access to the Mobile App.
 
 ### Order Transfer
+
+![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-02.png)
 
 #### Process Description
 
@@ -41,6 +45,8 @@ In the diagram above:
 3. If Company B **accepts** the transfer, the order will show as **Transferred - Unassigned** in Co. A’s slug and **Accepted** in Co. B’s slug. The order would now be transferred from Company A to Company B.
 
 ### Driver Management and Assignment
+
+![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-03.png)
 
 #### Process Description
 
@@ -60,11 +66,13 @@ To assign the task(s) to a driver, in Co. B’s slug:
 
 ### Task Status Tracking + POD updates
 
+![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-04.png)
+
 #### Process Description
 
 1. When the driver arrives at the location, he has to first use the mobile app to **Mark as Arrived**. A message will be sent to mark the driver’s arrival and the driver’s arrival time can be viewed in the order’s item audit log in Co. B’s slug.
 
-After that, depending on whether there is any task exception, meaning that whether it is possible to complete the task, it will either be **Completed** or **Reported**
+After that, depending on whether there is any task exception, meaning that whether it is possible to complete the task, it will either be **Completed** or **Reported**.
 
 2. If the task can be completed, the driver will proceed to scan the QR Code in the waybill.
 3. The driver will take a photo or obtain the required signature. The rules for whether photo and/or signature are required is configurable. After the photo and/or signature are obtained, the mobile app will upload the images to the cloud.
@@ -78,6 +86,8 @@ After that, depending on whether there is any task exception, meaning that wheth
 ## Integration Solution
 
 ### Integration Solution Overview
+
+![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-05.png)
 
 With the understanding in Section 1 of how the Current Operations work, the solution to integrate Yojee with DSP’s TMS is designed as follows:
 
@@ -102,33 +112,45 @@ The Integration Solution can also be broken down into the following components.
 
 ### Order Transfer
 
-The API calls under **Order Transfer** in this solution will need to be called using Co. B’s Dispatcher credentials.
+![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-06.png)
+
+For the API calls in this section **Order Transfer**, the Integration Layer needs to authenticate using Co. B’s Dispatcher credentials. This is typically done by including the COMPANY_SLUG and the Dispatcher’s ACCESS_TOKEN in the HTTP header.
+
+<!-- theme: info -->
+
+> ### Note
+>
+> See the section on **Basic Information on APIs - Authentication** at the end of this document for more information on authentication.
 
 #### Retrieve incoming order details
 
 Incoming transfer orders will be in Co. B’s slug as orders with **created** status. To retrieve the order information and the order item information for these orders, we will need to make 2 calls:
 
 - Dispatcher Get Orders with status **created**.
-- Dispatcher Get OrderItems by retrieving the **order_id** from the call above.
+- Dispatcher Get Single Order Detail by retrieving the **order_number** from the call above.
 
-##### **Dispatcher Get Orders**
+##### **Dispatcher Get List of Orders**
+
+This API call will retrieve orders matching the criteria provided in the parameters.
+For full details, please refer to this [V4 List Orders](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders/get).
 
 ###### Sample Curl Command
 
 ```shell
-curl --location -g --request GET '[BASEURL]/api/v3/dispatcher/orders?page_size=50&page=1&order=desc&status[]=created&from=2021-05-15T16:00:00.000Z&to=2021-05-16T16:00:00.000Z' \
+curl --location -g --request GET '[BASEURL]/api/v4/company/orders?page_size=50&page=1&status[]=created&from=2022-11-14T16:00:00.000Z&to=2022-11-14T16:00:00.000Z' \
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]'
 ```
 
-##### **Dispatcher Get OrderItems**
+##### **Dispatcher Get Order**
 
-This API call will retrieve order items matching the criteria provided in the parameters. Use the order id from the result of the Dispatcher** Get Order** call.
+This API call will retrieve order information based on either order number or order external id.
+For full details, please refer to this [V4 Get Order](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1order/get).
 
 ###### Sample Curl Command
 
 ```shell
-curl --location -g --request GET '[BASEURL]/api/v3/dispatcher/order_items?order_id=248602 \
+curl --location -g --request GET '[BASEURL]/api/v4/company/order?number=O-K02IHA1XHHWU' \
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]'
 ```
@@ -139,18 +161,19 @@ curl --location -g --request GET '[BASEURL]/api/v3/dispatcher/order_items?order_
 
 Call this API to **accept** the transfer order from upstream partner.
 
-##### Sample Curl Command
+###### Sample Curl Command
 
 ```shell
 curl --location --request PUT '[BASEURL]/api/v3/dispatcher/partner_transfer/dispatcher/accept_order/O-8AWKFQYH168U' \
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]'
-
 ```
 
 #### Decline the transfer order
 
 ##### **Dispatcher Reject Partner Transfer Order**
+
+Call this API to **reject** the transfer order from upstream partner.
 
 ###### Sample Curl Command
 
@@ -158,40 +181,33 @@ curl --location --request PUT '[BASEURL]/api/v3/dispatcher/partner_transfer/disp
 curl --location --request PUT '[BASEURL]/api/v3/dispatcher/partner_transfer/dispatcher/reject_order/O-8AWKFQYH168U' \
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]'
-
 ```
 
 ### Driver Management and Assignment
 
-There are two sets of API calls in **Driver Management and Assignment**. The first set are to achieve the following:
+![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-07.png)
 
-- Before assigning a driver to a task, we need to create drivers in the Yojee system. The **Dispatcher Create Worker**, **Dispatcher Update Worker** and **Dispatcher Delete Worker** API calls are used to manage Drivers in Yojee.
-- After the Driver is created, we will need to call **Dispatcher Get Tasks** for the list of tasks that are pending assignment.
-- With the list of the pending tasks and the list of drivers, the integration layer will need to decide which driver to assign the tasks to, and call **Dispatcher Assign Driver to Tasks.**
-
-For the first set of API calls, the Integration Layer needs to authenticate as Dispatcher to Yojee. This is typically done by including the COMPANY_SLUG and the Dispatcher’s ACCESS_TOKEN in the HTTP header.
-
-The second set of API calls are to achieve the following:
-
-- Get list of tasks assigned to the particular driver, but pending his acceptance. This calls **Worker Get TaskGroups** with status **assigned** and **broadcast**.
-- If the Driver rejects the assignment, **Worker TaskGroups Reject** will be called.
-- If the Driver accepts the assignment, **Worker TaskGroups Accept** will be called.
-
-For this second set of API calls, the Integration Layer needs to authenticate as a Driver to Yojee, as the calls will take the id of the authenticated account as part of the input to perform the operations. This is typically done through JWT tokens.
+For the API calls in this section **Driver Management and Assignment**, the Integration Layer needs to authenticate as Dispatcher to Yojee. This is typically done by including the COMPANY_SLUG and the Dispatcher’s ACCESS_TOKEN in the HTTP header.
 
 <!-- theme: info -->
 
 > ### Note
 >
-> See the section on Basic Information on APIs - Authentication at the end of this document for more information on authentication.
+> See the section on **Basic Information on APIs - Authentication** at the end of this document for more information on authentication.
+
+Before assigning a driver to a task, we need to create drivers in the Yojee system. The **Dispatcher Create Worker**, **Dispatcher Update Worker** and **Dispatcher Delete Worker** API calls are used to manage Drivers in Yojee.
+
+After the Driver is created, we will need to call **Dispatcher Get Tasks** for the list of tasks that are pending assignment.
+
+With the list of the pending tasks and the list of drivers, the integration layer will need to decide which driver to assign the tasks to, and call **Dispatcher Assign Driver to Tasks.**
 
 #### Driver Management - Create Driver
 
 ##### **Dispatcher Create Worker**
 
-Call this API to **create** a new Driver the transfer order from upstream partner.
+Call this API to **create** a new Driver.
 
-##### Sample Curl Command
+###### Sample Curl Command
 
 ```shell
 curl --location --request POST '[BASEURL]/api/v3/dispatcher/workers/' \
@@ -214,7 +230,7 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/workers/' \
 
 ##### **Dispatcher Update Worker**
 
-Call this API to **update** a Driver’s details
+Call this API to **update** a Driver’s details.
 
 ###### Sample Curl Command
 
@@ -237,7 +253,7 @@ curl --location --request PUT '[BASEURL]/api/v3/dispatcher/workers/4232' \
 
 ##### **Dispatcher Delete Worker**
 
-Call this API to **delete** a Driver’s details
+Call this API to **delete** a Driver’s details.
 
 ###### Sample Curl Command
 
@@ -273,7 +289,7 @@ Driver assignment is done by a background job. The first call is to send the par
 
 ##### **Dispatcher Assign Driver to tasks**
 
-Call this API to assign a Driver to tasks
+Call this API to assign a Driver to tasks.
 
 ###### Sample Curl Command
 
@@ -290,54 +306,23 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/tasks/quick_assign_b
 ```shell
 curl --location --request POST '[BASEURL]/api/v3/dispatcher/tasks/bg_status' \
 --header 'COMPANY_SLUG: [SLUG]' \
---header 'ACCESS_TOKEN: [TOKEN] \
+--header 'ACCESS_TOKEN: [TOKEN]' \
 --header 'Content-Type: application/json' \
 --data-raw '{"id":"c8cc52f50a7c4ef28249377a1645e113"}'
-
-```
-
-#### Driver Get Task Groups
-
-##### **Driver Get TaskGroups**
-
-This call will retrieve the task groups that have been assigned to the Driver, but pending Driver’s acceptance / rejection.
-
-###### Sample Curl Command
-
-```shell
-curl --location -g --request GET '[BASEURL]/api/v3/worker/task_groups?status[]=assigned&status[]=broadcasted' \
---header 'COMPANY_SLUG: [SLUG]' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' \
---data-raw ''
-```
-
-#### Driver Accepts Task
-
-##### **Driver Accepts Task**
-
-For the Driver to **accept** the task, call this API.
-
-###### Sample Curl Command
-
-```shell
-curl --location --request PUT '[BASEURL]/api/v3/worker/task_groups/285642/accept' \
---header 'COMPANY_SLUG: [SLUG]' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
-```
-
-#### Driver Rejects Task
-
-##### **Driver Rejects Task**
-
-For the Driver to **reject** the task, call this API.
-
-```shell
-curl --location --request PUT '[BASEURL]/api/v3/worker/task_groups/285637/reject \
---header 'COMPANY_SLUG: [SLUG]' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
 ```
 
 ### Task Status Tracking + POD updates
+
+![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-08.png)
+
+For the API calls in this section **Task Status Tracking + POD updates**, the Integration Layer needs to authenticate as a Driver to Yojee, as the calls will take the id of the authenticated account as part of the input to perform the operations. This is typically done through **JWT tokens**.
+
+<!-- theme: info -->
+
+> ### Note
+>
+> See the section on **Basic Information on APIs - Authentication** at the end of this document for more information on authentication.
+> To get the **Driver’s JWT Token** call the **Verify Phone OTP** API call
 
 #### Driver Get Ongoing Tasks
 
@@ -350,8 +335,14 @@ This call will list out the tasks that are currently on hand for the driver.
 ```shell
 curl --location --request GET '[BASEURL]/api/v3/worker/tasks/ongoing' \
 --header 'COMPANY_SLUG: [SLUG]' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+--header 'Authorization: Bearer [JWT]'
 ```
+
+<!-- theme: info -->
+
+> ### Note
+>
+> There is **_one task_** for **‘pickup’** and **_one task_** for **‘dropoff’**. Also note that each of these tasks, there are sub-tasks for complete and fail. The sub-task information will be needed when formatting the payload for the Driver Bulk Actions call.
 
 #### Validate Completion
 
@@ -364,7 +355,7 @@ Before updating status for a task, we need to call Validate Completion to ensure
 ```shell
 curl --location --request POST '[BASEURL]/api/v3/worker/tasks/validate_completion' \
 --header 'COMPANY_SLUG: [SLUG]' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' \
+--header 'Authorization: Bearer [JWT]' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "task_ids": [
@@ -373,19 +364,80 @@ curl --location --request POST '[BASEURL]/api/v3/worker/tasks/validate_completio
 }'
 ```
 
+<!-- theme: info -->
+
+> ### Note
+>
+> The response will be 200 even if there are validation errors. The return payload needs to be checked for any messages in the “errors” field for any errors.
+
+###### Sample Success Response: 200 - validation passed, task can be acted upon
+
+```json
+{
+  "data": {
+    "errors": [],
+    "ok": [568271]
+  },
+  "message": "validate completion successfully"
+}
+```
+
+###### Sample Success Response: 200 - Validation failed, check error message
+
+```json
+{
+  "data": {
+    "errors": [
+      {
+        "message": "Previous tasks had not been completed",
+        "task_ids": [568272],
+        "type": "previous_task_not_completed"
+      }
+    ],
+    "ok": []
+  },
+  "message": "validate completion successfully"
+}
+```
+
+###### Sample Success Response: 200 - Validation failed, check error message
+
+```json
+{
+  "data": {
+    "errors": [
+      {
+        "message": "Tasks do not exist",
+        "task_ids": [5682721],
+        "type": "task_not_found"
+      }
+    ],
+    "ok": []
+  },
+  "message": "validate completion successfully"
+}
+```
+
+###### Sample Error Response: 401
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
 #### Driver Mark Arrival
 
 ##### **Driver Mark Arrival**
 
-This call is to mark the arrival of the Drive at the location for a task
+This call is to mark the arrival of the Drive at the location for a task.
 
 ###### Sample Curl Command
 
 ```shell
 curl --location --request POST '[BASEURL]/api/v3/worker/tasks/mark_arrival' \
 --header 'COMPANY_SLUG: [SLUG]' \
---header 'ACCESS_TOKEN: NAN3acMWpyzLpJ7f2yNqt238e3aDxzfx0OjikfF2ORc=' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' \
+--header 'Authorization: Bearer [JWT]' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "task_ids": [
@@ -395,36 +447,122 @@ curl --location --request POST '[BASEURL]/api/v3/worker/tasks/mark_arrival' \
 }'
 ```
 
+#### Driver Update Container Details
+
+##### **Driver Update Container Details**
+
+This call is to update the information for a task, and in this case, the container information. We can update information such as container number, description, seal number, slot date, slot reference, iso type and tare weight.
+Note that, we can choose to update all details at once or update individually.
+
+###### Sample Curl Command - update container number
+
+```shell
+curl --location --request PUT '[BASEURL]/api/v3/worker/tasks/update_task_infos' \
+--header 'COMPANY_SLUG: [SLUG]' \
+--header 'Authorization: Bearer [JWT]' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+   "item_containers": [
+       {
+           "task_id": 930211,
+           "container_no": {
+               "old": null,
+               "new": "AC33AS4MV"
+           },
+           "updated_at": "2021-10-07T03:54:55.274Z"
+       }
+   ]
+}'
+```
+
+###### Sample Curl Command - update all container information
+
+```shell
+curl --location --request PUT '[BASEURL]/api/v3/worker/tasks/update_task_infos' \
+--header 'COMPANY_SLUG: [SLUG]' \
+--header 'Authorization: Bearer [TOKEN]' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "item_containers": [
+        {
+            "task_id": 2033473,
+            "container_no": {
+                "old": null,
+                "new": "CONTAINER 002"
+            },
+            "seal_no": {
+                "old": null,
+                "new": "SEALNO 002"
+            },
+            "description": {
+                "old": null,
+                "new": "Container description"
+            },
+            "slot_date": {
+                "old": null,
+                "new": "2022-11-14T09:09:00.000Z"
+            },
+            "slot_reference": {
+                "old": null,
+                "new": "Slot reference"
+            },
+            "iso_type": {
+                "old": null,
+                "new": "420G"
+            },
+            "tare_weight": {
+                "old": null,
+                "new": 4321
+            },
+            "updated_at": "2022-11-16T09:20:00.000Z"
+        }
+    ]
+}'
+```
+
 #### Driver Generate Batch Upload Pre-signed URLs
 
 In some sub-tasks, there is a need to upload POD/signature images to a AWS S3 Bucket. To perform this securely, a pre-signed URL is generated first, and the image is uploaded to AWS S3 via the methods described at [https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html](https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html).
 
 ##### **Generate Batch Upload Pre-signed URLs**
 
-Generate AWS S3 pre-signed URL for uploading
+Generate AWS S3 pre-signed URL for uploading.
 
 ###### Sample Curl Command
 
 ```shell
 curl --location --request POST '[BASEURL]/api/v3/worker/generate_batch_upload_presigned_urls' \
 --header 'COMPANY_SLUG: [SLUG]' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' \
+--header 'Authorization: Bearer [JWT]' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "filenames": [
         "1_signature_1621265036.jpg"
     ]
+}'
+```
+
+###### Sample Success Response: 200
+
+```json
+{
+  "1_signature_1621265036.jpg": {
+    "object": {
+      "bucket": "choongyong-yojee-umbrella",
+      "name": "/uploads-presigned/kcy-ds/20210517/20210517152407-1_signature_1621265036.jpg",
+      "region": "ap-southeast-1"
+    },
+    "presigned_url": "https://s3.ap-southeast-1.amazonaws.com/choongyong-yojee-umbrella/uploads-presigned/kcy-ds/20210517/20210517152407-1_signature_1621265036.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJY4J5TPO3XC7JRAQ%2F20210517%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20210517T152407Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=cb2f0eaefa0ebd2f9054f938a2ce9e6de5772fe75c6cf8c12f63cc21329bd129"
+  }
 }
-'
 ```
 
 <!-- theme:info -->
 
 > ### Note
 >
-> Note: The step to upload the image to AWS S3 using the pre-signed URL is not part of the Yojee API calls. You will need to upload the file separately and the uploaded file will have the URL of https://[region].amazonaws.com/[bucket]/[name] (see "object" field above).
-
-This URL of the image is used in the call to Driver Bulk Actions.
+> The step to upload the image to AWS S3 using the pre-signed URL is not part of the Yojee API calls. You will need to upload the file separately and the uploaded file will have the URL of https://[region].amazonaws.com/[bucket]/[name] (see "object" field above).
+> This URL of the image is used in the call to **Driver Bulk Actions**.
 
 #### Driver Bulk Actions
 
@@ -445,7 +583,7 @@ This sample Curl command is to illustrate a complete call to **Driver Bulk Actio
 ```shell
 curl --location --request PUT '[BASEURL]/api/v3/worker/tasks/bulk_actions' \
 --header 'COMPANY_SLUG: [SLUG]' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' \
+--header 'Authorization: Bearer [JWT]' \
 --header 'Content-Type: application/json' \
 --data-raw '{
   "actions": [
@@ -853,25 +991,132 @@ This call is to check the status of the bulk action called in **Driver Bulk Acti
 
 ```shell
 curl --location --request GET '[BASEURL]/api/v3/worker/tasks/bulk_actions/TlhhcEJ4WjR2ZE09/status' \
---header 'COMPANY_SLUG: [SLUG]'
-
+--header 'COMPANY_SLUG: [SLUG]' \
+--header 'Authorization: Bearer [JWT]' \
 ```
 
-#### JWT tokens
+###### Sample Success Response: 200
+
+```json
+{
+  "data": {
+    "processed": 3,
+    "results": {
+      "_subtask_0_0": {
+        "success": true
+      },
+      "_task_0": {
+        "success": true
+      },
+      "arrival_departure_time_0": {
+        "success": true
+      }
+    },
+    "status": "completed",
+    "total": 3
+  }
+}
+```
+
+###### Sample Success Response: 200 - With some errors, task is already completed
+
+```json
+{
+  "data": {
+    "processed": 3,
+    "results": {
+      "_subtask_0_0": {
+        "success": true
+      },
+      "_task_0": {
+        "errors": [
+          {
+            "00000": ["Tasks already completed"]
+          }
+        ],
+        "success": false
+      },
+      "arrival_departure_time_0": {
+        "success": true
+      }
+    },
+    "status": "completed",
+    "total": 3
+  }
+}
+```
+
+###### Sample Error Response: 401
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+###### Sample Success Response: 404
+
+```json
+{
+  "data": {},
+  "message": "Batch expired or not found!"
+}
+```
+
+#### Basic Information on APIs
+
+##### **Base URL**
+
+In this document we will use [BASEURL] to represent the base URL for the calls.
+For **development and testing purposes**, please use https://umbrella-staging.yojee.com.
+The base URL for the **Production API** is https://umbrella.yojee.com.
+
+##### **Authentication**
+
+Most of the API calls will require the following parameters in the header:
+
+<table style="text-align: left;">
+    <tr>
+        <td><strong>Parameter</strong></td>
+        <td><strong>Type</strong></td>
+    </tr>
+    <tr>
+        <td>company_slug</td>
+        <td>string</td>
+    </tr>
+    <tr>
+        <td>access_token</td>
+        <td>string</td>
+    </tr>
+</table>
+
+###### Company Slug
+
+The Company Slug is a string to uniquely identify each instance of a customer’s company in Yojee. Each customer is assigned a slug which they will use as part of the authentication information.
+
+###### Access Token
+
+A long-lived Access Token is generated for the Dispatcher account. This token will only change upon a change in the password of the Dispatcher account.
+Obtain this information from the Yojee team working with you.
+In this document we will use [SLUG] and [TOKEN] to represent the company_slug and access_token respectively.
+
+###### JWT tokens
 
 Another way of authentication is to use JWT tokens. To authenticate Drivers/Workers, we typically use JWT tokens.
 
 To obtain the JWT Token for a Driver, use the **Verify Phone OTP** call.
 
-```shell
-After the Verify Phone OTP call succeeds, extract the access_token in the success payload, and include it in the Authorization Bearer Token calls that are to be made using the Driver's credentials.
-```
+<!-- theme:info -->
+
+> ### Note
+>
+> After the Verify Phone OTP call succeeds, extract the **access_token** in the success payload, and include it in the **Authorization Bearer Token** calls that are to be made using the Driver's credentials.
 
 ##### **Verify Phone OTP**
 
-Call this API to **get** a Driver’s JWT Token
+Call this API to **get** a **Driver’s JWT Token**.
 
-##### Sample Curl Command
+###### Sample Curl Command
 
 ```shell
 curl --location --request POST '[BASEURL]/api/v3/public/verify_phone_otp' \
@@ -881,3 +1126,38 @@ curl --location --request POST '[BASEURL]/api/v3/public/verify_phone_otp' \
     "otp_code": "11223344"
 }'
 ```
+
+###### Sample Success Response: 200
+
+```json
+{
+  "data": {
+    "kcy-ds": {
+      "company_name": "KCY Downstream",
+      "company_slug": "kcy-ds",
+      "email": null,
+      "jwt_tokens": {
+        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NfdHlwZSI6Im1haW4iLCJwZXJtaXNzaW9uc191cGRhdGVkX2F0IjpudWxsLCJhdWQiOiJKb2tlbiIsImNvbXBhbnlfaWQiOjk5NywiY29tcGFueV9zbHVnIjoia2N5LWRzIiwiZXhwIaoxNjIxMjM0MDc3LCJpYXQiOjE2MjEyMzMxNzcsImlzcyI6Ikpva2VuIiwianRpIjoiMnB2c2R2MjZiZ3FoczM0YWlrMDAwYzE3IiwibmJmIjoxNjIxMjMzMTc3LCJ1c2VyX3Byb2ZpbGVfaWQiOjk4NzZ9.S1dn7-h1_4hZxuIV10x5t27J1hzddatqj8qD3Ia7H74",
+        "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NfdHlwZSI6InJlZnJlc2hfdG9rZW4iLCJhdWQiOiJKb2tlbiIsImNvbXBhbnlaaWQiOjk5NywiY29tcGFueV9zbHVnIjoia2N5LWRzIiwiZXhwIjoxNjUyMzM3MTc3LCJpYXQiOjE2MjEyMzMxNzcsImlzcyI6Ikpva2VuIiwianRpIjoiMnB2c2R2MjZidDE1czM0YWlrMDAwYzI3IiwibmJmIjoxNjIxMjMzMTc3LCJ1c2VyX3Byb2ZpbGVfaWQiOjk4NzZ9.W4rz5CUev_60nctMLyzvRuQbEFG2EA-yy5wPPQTC3sQ"
+      },
+      "name": "Driver KCY from API 4",
+      "phone": "+6522222226",
+      "user_profile_id": 9876
+    }
+  }
+}
+```
+
+###### Sample Error Response: 422
+
+```json
+{
+  "data": {
+    "AC0002": ["OTP code expired or invalid"]
+  }
+}
+```
+
+<!-- theme:success -->
+
+> Read more about `Thing to take notes from v3 to v4 for an order` in [V3 to V4 Order Creation Mapping Guide](./api-v3-v4-order-guide.md).
