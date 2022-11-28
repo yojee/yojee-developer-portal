@@ -1,67 +1,5 @@
 **Downstream Partner Integration Solution Guide**
 
-## Revision
-
-<table style="text-align: left;">
-    <tr>
-        <td><strong>Version</strong></td>
-        <td><strong>Date</strong></td>
-        <td><strong>Change</strong></td>
-    </tr>
-    <tr>
-        <td>May 2021</td>
-        <td>18 May 2021</td>
-        <td>First Version</td>
-    </tr>
-    <tr>
-        <td>Jun 2021</td>
-        <td>18 Jun 2021</td>
-        <td>
-        - <strong>Get Background Job Status:</strong> corrected Request Body Parameters <br/>
-        - <strong>Validate Completion:</strong> corrected typos and corrected HTTP method from GET to POST <br/>
-        - <strong>Generate Batch Upload Pre-signed URLs</strong>: corrected URL <br/>
-        - </strong>Driver Bulk Actions:</strong> corrected HTTP method from GET to PUT and corrected URL
-        </td>
-    </tr>
-    <tr>
-        <td>Oct 2021</td>
-        <td>11 Oct 2021</td>
-        <td><strong>Added Driver Update Container Number</strong></td>
-    </tr>
-    <tr>
-        <td>Jan 2022</td>
-        <td>2 Jan 2022</td>
-        <td><strong>Removed sections on Driver Accepts Task and Driver Rejects Task</strong></td>
-    </tr>
-    <tr>
-        <td>Nov 2022</td>
-        <td>11 Nov 2022</td>
-        <td><strong>Driver Bulk Actions:</strong> Include "completion_quantity" in the request payload when task (pick/dropoff) is completed</td>
-    </tr>
-    <tr>
-        <td>Nov 2022</td>
-        <td>16 Nov 2022</td>
-        <td>
-        - <strong>Added Section on New Booking Template</strong> <br/>
-        - <strong>Updated Driver update container information</strong></td>
-    </tr>
-    <tr>
-        <td>Nov 2022</td>
-        <td>17 Nov 2022</td>
-        <td>
-        - <strong>Updated section on Notes</strong> <br/>
-        - <strong>Added V4 Order Structure</strong>
-        </td>
-    </tr>
-    <tr>
-        <td>Nov 2022</td>
-        <td>28 Nov 2022</td>
-        <td>
-        - <strong>Dispatcher Get Orders and OrderItems:</strong> remove v3 orders api and added in v4 orders api<br/>
-        - <strong>V4 Order Structure:</strong> added a reference section to "Things to take note from v3 to v4 for an order" to another guide</td>
-    </tr>
-</table>
-
 # Overview
 
 Yojee’s customers use our platform to track their transport orders. In some use cases, they transfer orders to their downstream partners (DSPs for abbreviation) for further order execution. This is achieved through creating a separate instance in Yojee (we refer to this as a ‘slug’) and providing the DSP to access this slug. The DSP will proceed to assign drivers to the transferred orders and their drivers will make use of Yojee’s mobile app to provide the status updates. The status updates will be visible in both the DSP and the upstream partner (USP), Yojee customer’s slugs.
@@ -646,8 +584,7 @@ curl --location --request PUT '[BASEURL]/api/v3/worker/tasks/bulk_actions' \
       "params": {
         "sub_task_params": {
           "completion_data":{
-            "recipient_name": "Tan Ah Kow",
-            "completion_quantity": 1
+            "recipient_name": "Tan Ah Kow"
           },
           "completion_location": {
             "lat": 1.2777957,
@@ -802,8 +739,7 @@ To send bulk actions for a **Pickup Completed** task, we will need a payload wit
       "params": {
         "sub_task_params": {
           "completion_data": {
-            "arrival_time": "2021-05-12T06:50:28Z",
-            "completion_quantity": 1
+            "arrival_time": "2021-05-12T06:50:28Z"
           },
           "completion_location": {
             "lat": 1.2778017,
@@ -932,8 +868,7 @@ To send bulk actions for a **Dropoff Completed** task, we will need a payload wi
       "params": {
         "sub_task_params": {
           "completion_data": {
-            "recipient_name": "Kcy",
-            "completion_quantity": 1
+            "recipient_name": "Kcy"
           },
           "completion_location": {
             "lat": 1.2777957,
