@@ -1215,4 +1215,4 @@ curl --location --request POST '[BASEURL]/api/v3/public/verify_phone_otp' \
 
 <!-- theme:success -->
 
-> Read more about `Thing to take notes from v3 to v4 for an order` in [V3 to V4 Order Creation Mapping Guide](./api-v3-v4-order-guide.md).
+> Read more about `Thing to take notes from v3 to v4 for an order` in [V3 to V4 Order Creation Mapping Guide](./api-v3-v4-order-guide.md#thing-to-take-notes-from-v3-to-v4-for-an-order).
