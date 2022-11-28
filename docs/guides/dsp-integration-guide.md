@@ -85,7 +85,7 @@ After that, depending on whether there is any task exception, meaning that wheth
 
 ## Integration Solution
 
-### Integration Solution Overview
+### Overview
 
 ![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-05.png)
 
@@ -326,8 +326,6 @@ For the API calls in this section **Task Status Tracking + POD updates**, the In
 
 #### Driver Get Ongoing Tasks
 
-##### **Driver Get Ongoing Tasks**
-
 This call will list out the tasks that are currently on hand for the driver.
 
 ###### Sample Curl Command
@@ -345,8 +343,6 @@ curl --location --request GET '[BASEURL]/api/v3/worker/tasks/ongoing' \
 > There is **_one task_** for **‘pickup’** and **_one task_** for **‘dropoff’**. Also note that each of these tasks, there are sub-tasks for complete and fail. The sub-task information will be needed when formatting the payload for the Driver Bulk Actions call.
 
 #### Validate Completion
-
-##### **Validate Completion**
 
 Before updating status for a task, we need to call Validate Completion to ensure that the task can be acted upon.
 
@@ -428,8 +424,6 @@ curl --location --request POST '[BASEURL]/api/v3/worker/tasks/validate_completio
 
 #### Driver Mark Arrival
 
-##### **Driver Mark Arrival**
-
 This call is to mark the arrival of the Drive at the location for a task.
 
 ###### Sample Curl Command
@@ -448,8 +442,6 @@ curl --location --request POST '[BASEURL]/api/v3/worker/tasks/mark_arrival' \
 ```
 
 #### Driver Update Container Details
-
-##### **Driver Update Container Details**
 
 This call is to update the information for a task, and in this case, the container information. We can update information such as container number, description, seal number, slot date, slot reference, iso type and tare weight.
 Note that, we can choose to update all details at once or update individually.
@@ -983,8 +975,6 @@ To send bulk actions for a **Dropoff Failed** task, we will need a payload with 
 
 #### Get Driver Bulk Action Status
 
-##### **Get Driver Bulk Action Status**
-
 This call is to check the status of the bulk action called in **Driver Bulk Actions**.
 
 ###### Sample Curl Command
@@ -1063,15 +1053,15 @@ curl --location --request GET '[BASEURL]/api/v3/worker/tasks/bulk_actions/TlhhcE
 }
 ```
 
-#### Basic Information on APIs
+### Basic Information on APIs
 
-##### **Base URL**
+#### **Base URL**
 
 In this document we will use [BASEURL] to represent the base URL for the calls.
 For **development and testing purposes**, please use https://umbrella-staging.yojee.com.
 The base URL for the **Production API** is https://umbrella.yojee.com.
 
-##### **Authentication**
+#### **Authentication**
 
 Most of the API calls will require the following parameters in the header:
 
@@ -1090,17 +1080,17 @@ Most of the API calls will require the following parameters in the header:
     </tr>
 </table>
 
-###### Company Slug
+##### Company Slug
 
 The Company Slug is a string to uniquely identify each instance of a customer’s company in Yojee. Each customer is assigned a slug which they will use as part of the authentication information.
 
-###### Access Token
+##### Access Token
 
 A long-lived Access Token is generated for the Dispatcher account. This token will only change upon a change in the password of the Dispatcher account.
 Obtain this information from the Yojee team working with you.
 In this document we will use [SLUG] and [TOKEN] to represent the company_slug and access_token respectively.
 
-###### JWT tokens
+##### JWT tokens
 
 Another way of authentication is to use JWT tokens. To authenticate Drivers/Workers, we typically use JWT tokens.
 
@@ -1112,7 +1102,7 @@ To obtain the JWT Token for a Driver, use the **Verify Phone OTP** call.
 >
 > After the Verify Phone OTP call succeeds, extract the **access_token** in the success payload, and include it in the **Authorization Bearer Token** calls that are to be made using the Driver's credentials.
 
-##### **Verify Phone OTP**
+#### **Verify Phone OTP**
 
 Call this API to **get** a **Driver’s JWT Token**.
 
