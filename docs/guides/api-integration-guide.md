@@ -20,6 +20,11 @@
         - <strong>Updated V4 endpoints:</strong> for order creation and order cancellation<br/>
         - <strong>Updated webhook sample event payload</strong></td>
     </tr>
+    <tr>
+        <td>Nov 2022</td>
+        <td>30 Nov 2022</td>
+        <td><strong>Updated webhook details:</strong> specify the Sender with the sender_id to register this webhook for<br/> 
+    </tr>
 </table>
 
 # Overview
@@ -36,7 +41,7 @@ The **three primary** RESTful API calls related to this project are:
 
 ### Base URL
 
-In this document we will use [BASEURL] to represent the base URL for the calls.
+In this document we will use `[BASEURL]` to represent the base URL for the calls.
 
 For **development and testing purposes**, please use https://umbrella-staging.yojee.com.
 
@@ -67,13 +72,16 @@ The Company Slug is a string to uniquely identify each instance of a customer’
 
 #### Access Token
 
-A long-lived Access Token is generated for the Dispatcher account. This token will only change upon a change in the password of the Dispatcher account.
+A long-lived Access Token is generated for the `Dispatcher` account. This token will only change upon a change in the password of the Dispatcher account.
 
-Obtain this information from the Yojee team working with you. In this document we will use [SLUG] and [TOKEN] to represent the company_slug and access_token respectively.
+Obtain this information from the Yojee team working with you.
+
+In this document we will use `[SLUG]` and `[TOKEN]` to represent the `company_slug` and `access_token` respectively.
 
 ## Order Creation
 
 This API call will create an order in Yojee.
+
 For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders~1create/post).
 
 <table style="text-align: left;">
@@ -613,6 +621,7 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
 ## Order Cancellation
 
 This API call will cancel an order in Yojee.
+
 For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1order~1cancel/put).
 
 <table style="text-align: left;">
@@ -718,66 +727,102 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
 
 Webhook URLs can be registered with Yojee and the Yojee system will make HTTP calls to the URL with the relevant payload when a status update of the Order is triggered.
 
+<!-- theme:info -->
+
+> ### Note
+>
+> Webhooks registered with `sender_id` will only be triggered for Orders created by the Sender with the sender_id (Sender Level).
+
 ### Events Supported
 
 Events currently being supported are:
 
 <table style="text-align: left;">
   <tr>
-    <td><strong>Event Name</strong></td>
-    <td><strong>Description</strong></td>
+    <td rowspan="2"><strong>Event Name</strong></td>
+    <td rowspan="2"><strong>Description</strong></td>
+    <td colspan="2" style="text-align: center;"><strong>Level</strong></td>
+  </tr>
+  <tr>
+    <td><strong>Company</strong></td>
+    <td><strong>Sender</strong></td>
   </tr>
   <tr>
     <td><a href="#event-sendercreated">sender.created</a></td>
     <td>When a Sender is created</td>
+    <td style="text-align: center;">Y</td>
+    <td style="text-align: center;">N</td>
   </tr>
   <tr>
     <td><a href="#event-ordercreated">order.created</a></td>
     <td>When an Order is created</td>
+    <td style="text-align: center;">Y</td>
+    <td style="text-align: center;">Y</td>
   </tr>
   <tr>
     <td><a href="#event-taskaccepted-pickup">task.accepted</a></td>
     <td>When a task (assigned to a driver - pickup / drop-off) is accepted</td>
+    <td style="text-align: center;">Y</td>
+    <td style="text-align: center;">Y</td>
   </tr>
   <tr>
     <td><a href="#event-taskcompleted">task.completed</a></td>
     <td>When a task (assigned to a driver - pickup / drop-off) is completed</td>
+    <td style="text-align: center;">Y</td>
+    <td style="text-align: center;">Y</td>
   </tr>
   <tr>
     <td><a href="#event-taskfailed">task.failed</a></td>
     <td>When a task (assigned to a driver - pickup / drop-off) is reported</td>
+    <td style="text-align: center;">Y</td>
+    <td style="text-align: center;">Y</td>
   </tr>
   <tr>
     <td><a href="#event-taskreassigned">task.reassigned</a></td>
     <td>When a task (assigned to a driver & not accepted yet) is reassigned</td>
+    <td style="text-align: center;">Y</td>
+    <td style="text-align: center;">Y</td>
   </tr>
   <tr>
     <td><a href="#event-tasktransferred">task.transferred</a></td>
     <td>When a task is transferred to an upstream / downstream partner</td>
+    <td style="text-align: center;">Y</td>
+    <td style="text-align: center;">N</td>
   </tr>
   <tr>
     <td><a href="#event-order_itemcancelled">order_item.cancelled</a></td>
     <td>When an Order Item is cancelled</td>
+    <td style="text-align: center;">Y</td>
+    <td style="text-align: center;">Y</td>
   </tr>
   <tr>
     <td><a href="#event-driverarrived">driver.arrived</a></td>
     <td>When a driver has arrived at the pickup / drop-off destination point</td>
+    <td style="text-align: center;">Y</td>
+    <td style="text-align: center;">Y</td>
   </tr>
   <tr>
     <td><a href="#event-driverdeparted">driver.departed</a></td>
     <td>When a driver has departed from the pickup / drop-off destination point</td>
+    <td style="text-align: center;">Y</td>
+    <td style="text-align: center;">Y</td>
   </tr>
   <tr>
     <td><a href="#event-ordertransferrejected">order.transfer.rejected</a></td>
     <td>When a transferred Order is rejected by the downstream partner</td>
+    <td style="text-align: center;">Y</td>
+    <td style="text-align: center;">N</td>
   </tr>
   <tr>
     <td><a href="#event-paymentcompleted">payment.completed</a></td>
     <td>When a Payment is completed</td>
+    <td style="text-align: center;">Y</td>
+    <td style="text-align: center;">N</td>
   </tr>
 </table>
 
 To register a webhook, use the following API endpoint:
+
 For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-webhook-api.yaml/paths/~1api~1v3~1dispatcher~1webhooks/post).
 
 <table style="text-align: left;">
@@ -807,7 +852,7 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
   <tr>
     <td>access_token</td>
     <td>Y</td>
-    <td>Access token</td>
+    <td>Access token <strong>(Dispatcher Credentials)</strong></td>
   </tr>
   <tr>
     <td>Content-Type</td>
@@ -842,6 +887,11 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
     <td>Y</td>
     <td>The event to register the webhook with. For multiple events, repeat with another events[] parameter</td>
   </tr>
+  <tr>
+    <td>sender_id</td>
+    <td>N</td>
+    <td>Specify the Sender with the sender_id to register this webhook for</td>
+  </tr>
 </table>
 
 #### Send as JSON data
@@ -861,6 +911,11 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
     <td>events</td>
     <td>Y</td>
     <td>The event to register the webhook with. For multiple events, separate event name with a comma ","</td>
+  </tr>
+  <tr>
+    <td>sender_id</td>
+    <td>N</td>
+    <td>Specify the Sender with the sender_id to register this webhook for</td>
   </tr>
 </table>
 

@@ -1123,7 +1123,9 @@ curl --location --request GET '[BASEURL]/api/v3/worker/tasks/bulk_actions/TlhhcE
 #### **Base URL**
 
 In this document we will use [BASEURL] to represent the base URL for the calls.
+
 For **development and testing purposes**, please use https://umbrella-staging.yojee.com.
+
 The base URL for the **Production API** is https://umbrella.yojee.com.
 
 #### **Authentication**
@@ -1151,9 +1153,11 @@ The Company Slug is a string to uniquely identify each instance of a customer’
 
 ##### Access Token
 
-A long-lived Access Token is generated for the Dispatcher account. This token will only change upon a change in the password of the Dispatcher account.
+A long-lived Access Token is generated for the `Dispatcher` account. This token will only change upon a change in the password of the Dispatcher account.
+
 Obtain this information from the Yojee team working with you.
-In this document we will use [SLUG] and [TOKEN] to represent the company_slug and access_token respectively.
+
+In this document we will use `[SLUG]` and `[TOKEN]` to represent the `company_slug` and `access_token` respectively.
 
 ##### JWT tokens
 
