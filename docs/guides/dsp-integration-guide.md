@@ -60,6 +60,14 @@
         - <strong>Dispatcher Get Orders and OrderItems:</strong> remove v3 orders api and added in v4 orders api<br/>
         - <strong>V4 Order Structure:</strong> added a reference section to "Things to take note from v3 to v4 for an order" to another guide</td>
     </tr>
+    <tr>
+        <td>Dec 2022</td>
+        <td>12 Dec 2022</td>
+        <td>
+        - <strong>Driver Management:</strong> added in Dispatcher get list of workers and get worker endpoint<br/>
+        - <strong>Assign Driver:</strong> added in sample response for task assignment and check task assignment status<br/>
+        - <strong>Assign Driver and Bulk Actions:</strong> note section on temporary id value</td>
+    </tr>
 </table>
 
 # Overview
@@ -288,6 +296,34 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/workers/' \
 }'
 ```
 
+#### Driver Management - Get List of Drivers
+
+##### **Dispatcher Get List of Worker**
+
+Call this API to **get** list of workers that belongs to your company slug.
+
+###### Sample Curl Command
+
+```shell
+curl --location --request GET '[BASEURL]/api/v3/dispatcher/workers' \
+--header 'COMPANY_SLUG: [SLUG]' \
+--header 'ACCESS_TOKEN: [TOKEN]'
+```
+
+#### Driver Management - Get Driver
+
+##### **Dispatcher Get Worker**
+
+Call this API to **get** worker information.
+
+###### Sample Curl Command
+
+```shell
+curl --location --request GET '[BASEURL]/api/v3/dispatcher/workers/{worker_id}' \
+--header 'COMPANY_SLUG: [SLUG]' \
+--header 'ACCESS_TOKEN: [TOKEN]'
+```
+
 #### Driver Management - Update Driver Information
 
 ##### **Dispatcher Update Worker**
@@ -297,7 +333,7 @@ Call this API to **update** a Driver’s details.
 ###### Sample Curl Command
 
 ```shell
-curl --location --request PUT '[BASEURL]/api/v3/dispatcher/workers/4232' \
+curl --location --request PUT '[BASEURL]/api/v3/dispatcher/workers/{worker_id}' \
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]' \
 --header 'Content-Type: application/json' \
@@ -320,7 +356,7 @@ Call this API to **delete** a Driver’s details.
 ###### Sample Curl Command
 
 ```shell
-curl --location --request DELETE '[BASEURL]/api/v3/dispatcher/workers/4231' \
+curl --location --request DELETE '[BASEURL]/api/v3/dispatcher/workers/{worker_id}' \
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]'
 ```
@@ -335,7 +371,7 @@ This API call will retrieve tasks under the slug.
 
 > ### Note
 >
-> Note: To retrieve tasks pending assignment, use the Request Query Parameters as listed below.
+> To retrieve tasks pending assignment, use the Request Query Parameters as listed below.
 
 ###### Sample Curl Command
 
@@ -344,6 +380,25 @@ curl --location -g --request GET '[BASEURL]/api/v3/dispatcher/tasks?from=2021-05
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]'
 ```
+
+##### **Dispatcher Get Tasks - belongs to specific order**
+
+This API call will retrieve tasks that belongs to the given order number.
+
+###### Sample Curl Command
+
+```shell
+curl --location --request GET '[BASEURL]/api/v3/dispatcher/tasks?order_number={order_number}' \
+--header 'COMPANY_SLUG: [SLUG]' \
+--header 'ACCESS_TOKEN: [TOKEN]'
+```
+
+<!-- theme:info -->
+
+> ### Note
+>
+> Order number here refers to Yojee Order Number.
+> For example: O-MEHMBOELCMPJ
 
 #### Assign Driver
 
@@ -363,6 +418,28 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/tasks/quick_assign_b
 --data-raw '{"task_ids":[568259,568260],"worker_id":4233}'
 ```
 
+###### Sample Response
+
+```json
+{
+  "cancelled_at": null,
+  "completed_at": null,
+  "failed_at": null,
+  "id": "c97c69e000344c9c800fc0e087613318",
+  "inserted_at": "2022-12-12T06:56:17.112961",
+  "processed": null,
+  "progress": null,
+  "result": null,
+  "total": null,
+  "type": "quick_assign",
+  "updated_at": "2022-12-12T06:56:17.112961"
+}
+```
+
+##### **Dispatcher Check Task Assignment Status**
+
+Call this API to check if the task assignment to driver is successful.
+
 ###### Sample Curl Command
 
 ```shell
@@ -370,8 +447,47 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/tasks/bg_status' \
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]' \
 --header 'Content-Type: application/json' \
---data-raw '{"id":"c8cc52f50a7c4ef28249377a1645e113"}'
+--data-raw '{"id":"c97c69e000344c9c800fc0e087613318"}'
 ```
+
+<!-- theme:info -->
+
+> ### Note
+>
+> As we do not store the id value in the database, this value will have an expiry lifespan of 60 seconds. We generate a temporary value for id in order for the background task to be executed.
+>
+> Therefore, we would recommend you to call the above endpoint few seconds after assigning task to the drivers.
+
+###### Sample Success Response: 200 - task assignment to driver is successful
+
+```json
+{
+  "cancelled_at": null,
+  "completed_at": "2022-12-12T06:56:17.508073",
+  "failed_at": null,
+  "id": "c97c69e000344c9c800fc0e087613318",
+  "inserted_at": "2022-12-12T06:56:17.112961",
+  "processed": null,
+  "progress": "Update tasks distance",
+  "result": {
+    "message": "Allocation successful",
+    "status": 200
+  },
+  "total": null,
+  "type": "quick_assign",
+  "updated_at": "2022-12-12T06:56:17.508073"
+}
+```
+
+###### Sample Response: 404 - task id is expired
+
+```json
+{
+  "message": "Resource not found!"
+}
+```
+
+Alternatively, to check if task has successfully assigned to driver, you can call this endpoint: `GET [BASEURL]/api/v3/worker/tasks/ongoing?page=1&page_size=10` OR `GET [BASEURL]/api/v3/dispatcher/tasks?order_number={order_number}` and look for field = **worker**.
 
 ### Task Status Tracking + POD updates
 
@@ -1117,6 +1233,14 @@ curl --location --request GET '[BASEURL]/api/v3/worker/tasks/bulk_actions/TlhhcE
   "message": "Batch expired or not found!"
 }
 ```
+
+<!-- theme:info -->
+
+> ### Note
+>
+> As we do not store the id value in the database, this value will have an expiry lifespan of 60 seconds. We generate a temporary value for id in order for the background task to be executed.
+>
+> Therefore, we would recommend you to call the above endpoint few seconds after requesting for task completion.
 
 ### Basic Information on APIs
 
