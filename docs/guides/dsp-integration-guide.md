@@ -199,7 +199,7 @@ Incoming transfer orders will be in Co. B’s slug as orders with **created** st
 - Dispatcher Get Orders with status **created**.
 - Dispatcher Get Single Order Detail by retrieving the **order_number** from the call above.
 
-#### [Dispatcher Get List of Orders](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders/get)
+### [Dispatcher Get List of Orders](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders/get)
 
 This API call will retrieve orders matching the criteria provided in the parameters.
 
@@ -213,7 +213,7 @@ curl --location -g --request GET '[BASEURL]/api/v4/company/orders?page_size=50&p
 --header 'ACCESS_TOKEN: [TOKEN]'
 ```
 
-#### [Dispatcher Get Order](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1order/get)
+### [Dispatcher Get Order](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1order/get)
 
 This API call will retrieve order information based on either order number or order external id.
 
@@ -227,9 +227,9 @@ curl --location -g --request GET '[BASEURL]/api/v4/company/order?number=O-K02IHA
 --header 'ACCESS_TOKEN: [TOKEN]'
 ```
 
-#### [Accept the transfer order](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partner_transfer~1dispatcher~1accept_order~1{order_number}/put)
+### [Accept the transfer order](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partner_transfer~1dispatcher~1accept_order~1{order_number}/put)
 
-##### **Dispatcher Accept Partner Transfer Order**
+#### **Dispatcher Accept Partner Transfer Order**
 
 Call this API to **accept** the transfer order from upstream partner.
 
@@ -243,7 +243,7 @@ curl --location --request PUT '[BASEURL]/api/v3/dispatcher/partner_transfer/disp
 
 For full request/response details, please click on the title.
 
-#### [Decline the transfer order](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partner_transfer~1dispatcher~1reject_order~1{order_number}/put)
+### [Decline the transfer order](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partner_transfer~1dispatcher~1reject_order~1{order_number}/put)
 
 ##### **Dispatcher Reject Partner Transfer Order**
 
@@ -424,7 +424,7 @@ For full request/response details, please click on the title.
 
 Driver assignment is done by a background job. The first call is to send the parameters to the background job for execution, and the second call is to get the status of the background job to see the outcome.
 
-#### [Dispatcher Assign Driver to tasks]
+#### Dispatcher Assign Driver to tasks
 
 Call this API to assign a Driver to tasks.
 
@@ -458,7 +458,7 @@ For full request/response details, please click on the title.
 }
 ```
 
-#### [Dispatcher Check Task Assignment Status]
+#### Dispatcher Check Task Assignment Status
 
 Call this API to check if the task assignment to driver is successful.
 
@@ -649,7 +649,7 @@ curl --location --request POST '[BASEURL]/api/v3/worker/tasks/mark_arrival' \
 
 For full request/response details, please click on the title.
 
-### [Driver Update Container Details]
+### Driver Update Container Details
 
 This call is to update the information for a task, and in this case, the container information. We can update information such as container number, description, seal number, slot date, slot reference, iso type and tare weight.
 Note that, we can choose to update all details at once or update individually.
