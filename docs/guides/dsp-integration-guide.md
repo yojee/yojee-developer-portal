@@ -722,7 +722,7 @@ curl --location --request PUT '[BASEURL]/api/v3/worker/tasks/update_task_infos' 
 
 For full request/response details, please click on the title.
 
-### [Driver Generate Batch Upload Pre-signed URLs]
+### Driver Generate Batch Upload Pre-signed URLs
 
 In some sub-tasks, there is a need to upload POD/signature images to a AWS S3 Bucket. To perform this securely, a pre-signed URL is generated first, and the image is uploaded to AWS S3 via the methods described at [https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html](https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html).
 
@@ -1329,7 +1329,7 @@ To obtain the JWT Token for a Driver, use the **Verify Phone OTP** call.
 >
 > After the Verify Phone OTP call succeeds, extract the **access_token** in the success payload, and include it in the **Authorization Bearer Token** calls that are to be made using the Driver's credentials.
 
-### [Verify Phone OTP]
+### [Verify Phone OTP](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-public-api.yaml/paths/~1api~1v3~1public~1verify_phone_otp/post)
 
 Call this API to **get** a **Driver’s JWT Token**.
 
