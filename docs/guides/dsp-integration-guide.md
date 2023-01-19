@@ -1,6 +1,6 @@
 **Downstream Partner Integration Solution Guide**
 
-# Revision
+## Revision
 
 <table style="text-align: left;">
     <tr>
@@ -70,7 +70,7 @@
     </tr>
 </table>
 
-# Overview
+## Overview
 
 Yojee’s customers use our platform to track their transport orders. In some use cases, they transfer orders to their downstream partners (DSPs for abbreviation) for further order execution. This is achieved through creating a separate instance in Yojee (we refer to this as a ‘slug’) and providing the DSP to access this slug. The DSP will proceed to assign drivers to the transferred orders and their drivers will make use of Yojee’s mobile app to provide the status updates. The status updates will be visible in both the DSP and the upstream partner (USP), Yojee customer’s slugs.
 
@@ -80,7 +80,7 @@ In certain cases, the DSPs have their own Transport Management Systems, and woul
 
 **Section 2** in this document will first outline the integration flow, and describe the individual API calls needed. It is also important to understand the flow in Section 1 to be able to understand how the integration flow will work.
 
-# Current Operations
+## Current Operations
 
 The diagram below outlines the main components of current transfer order operations.
 
@@ -153,7 +153,7 @@ After that, depending on whether there is any task exception, meaning that wheth
 8. Driver will confirm reporting of the task, and
 9. Mark departure from the location. The task would then be marked as Reported. At this point, messages will be sent to the Yojee backend to update the task as reported. In Co. B’s slug the task will show as **Reported** along with the POD link. In Co. A’s slug the task will show as **Transferred-Reported** along with the POD link.
 
-# Integration Solution
+## Integration Solution
 
 ## Overview
 
