@@ -149,6 +149,7 @@ OR
   </tr>
 </table>
 
+<!-- This is commented out.
 ## V3 Order API
 
 ### [Multi-leg](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post) and [Single-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders/post)
@@ -498,12 +499,14 @@ OR
   <td><strong>Note that</strong>, you can only remove tasks that exist in your current order record.</td>
   </tr>
 </table>
+-->
 
 <!-- theme: info -->
-
+<!--
 > #### Note
 >
 > Other validation(s) that take place in the order creation will also take place during updating of order record.
+-->
 
 ## V4 Order API
 
@@ -532,15 +535,12 @@ Let's take a look at the sample example of the common error messages that you mi
 {
   "errors": [
     {
-      "code": "EC403",
-      "message": "sender is invalid",
+      "code": "AC0014",
+      "message": "No corporate and sender exists. please create a sender account before create a order.",
       "metadata": {
         "data_entity": "order",
         "field": "sender",
-        "ref": "data[0].order_info",
-        "value": {
-          "external_id": "tester"
-        }
+        "ref": "data[0].order_info"
       }
     }
   ],
@@ -549,13 +549,12 @@ Let's take a look at the sample example of the common error messages that you mi
 ```
 
 </td>
-    <td>This happens when sender external id = "tester" is invalid in your dispatcher system.</td>
+    <td>This happens when the given sender value is invalid in your dispatcher system.</td>
     <td>To resolve this, ensure that sender external id is valid.<br/> 
       <ul>
         <li>To get the value, navigate to Dispatcher UI, under Manage > Customers > Sender (Individual/Corporate). <br/>
         <strong>NOTE:</strong> please choose Corporate for integration purposes.
         </li>
-        <li>Or with our case, we can create a new sender record with external id = "tester".</li>
         <li>Or contact system administrator to get the value.</li>
       </ul>
     </td>
