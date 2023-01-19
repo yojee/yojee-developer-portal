@@ -47,6 +47,11 @@
       "type": "item",
       "title": "Sender API Guide",
       "uri": "docs/guides/sender-api-guide.md"
+    },
+    {
+      "type": "item",
+      "title": "API Common Error Guide",
+      "uri": "docs/guides/api-common-error-guide.md"
     }
   ]
 }
