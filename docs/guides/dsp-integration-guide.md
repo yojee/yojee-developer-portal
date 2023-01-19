@@ -60,9 +60,17 @@
         - <strong>Dispatcher Get Orders and OrderItems:</strong> remove v3 orders api and added in v4 orders api<br/>
         - <strong>V4 Order Structure:</strong> added a reference section to "Things to take note from v3 to v4 for an order" to another guide</td>
     </tr>
+    <tr>
+        <td>Dec 2022</td>
+        <td>12 Dec 2022</td>
+        <td>
+        - <strong>Driver Management:</strong> added in Dispatcher get list of workers and get worker endpoint<br/>
+        - <strong>Assign Driver:</strong> added in sample response for task assignment and check task assignment status<br/>
+        - <strong>Assign Driver and Bulk Actions:</strong> note section on temporary id value</td>
+    </tr>
 </table>
 
-# Overview
+## Overview
 
 Yojee’s customers use our platform to track their transport orders. In some use cases, they transfer orders to their downstream partners (DSPs for abbreviation) for further order execution. This is achieved through creating a separate instance in Yojee (we refer to this as a ‘slug’) and providing the DSP to access this slug. The DSP will proceed to assign drivers to the transferred orders and their drivers will make use of Yojee’s mobile app to provide the status updates. The status updates will be visible in both the DSP and the upstream partner (USP), Yojee customer’s slugs.
 
@@ -93,11 +101,11 @@ In the diagram above:
 - **Company B** (downstream partner) has access to the Dispatcher for its own slug (green background).
 - **Driver** has access to the Mobile App.
 
-### Order Transfer
+## Order Transfer
 
 ![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-02.png)
 
-#### Process Description
+### Process Description
 
 1. When Company A has an order it wishes to transfer to its DSP Company B, the Company A Dispatcher will go to Company A’s Yojee Dispatcher portal (in short, in **Co. A’s slug**) to select the order and initiate the transfer. The order will be in the status **Transferred - Pending** in Co. A’s slug.
 
@@ -106,11 +114,11 @@ In the diagram above:
 2. If Company B **declines** the transfer, the order will return as **unassigned** in Co’s A slug, and show as **Cancelled** in Co. B’s slug
 3. If Company B **accepts** the transfer, the order will show as **Transferred - Unassigned** in Co. A’s slug and **Accepted** in Co. B’s slug. The order would now be transferred from Company A to Company B.
 
-### Driver Management and Assignment
+## Driver Management and Assignment
 
 ![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-03.png)
 
-#### Process Description
+### Process Description
 
 After the order has been transferred to Co. B, it is the responsibility of Co. B to assign the order to a Driver for the execution of the order.
 
@@ -126,11 +134,11 @@ To assign the task(s) to a driver, in Co. B’s slug:
 3. If the driver **rejects** the incoming assignment, the task will show as **Unassigned** again in Co. B’s slug
 4. If the driver **accepts** the incoming assignment, the task will show as **Assigned** in Co. B’s slug. At the same time, the order will show as Transferred-Assigned in Co. A’s slug.
 
-### Task Status Tracking + POD updates
+## Task Status Tracking + POD updates
 
 ![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-04.png)
 
-#### Process Description
+### Process Description
 
 1. When the driver arrives at the location, he has to first use the mobile app to **Mark as Arrived**. A message will be sent to mark the driver’s arrival and the driver’s arrival time can be viewed in the order’s item audit log in Co. B’s slug.
 
@@ -147,7 +155,7 @@ After that, depending on whether there is any task exception, meaning that wheth
 
 ## Integration Solution
 
-### Overview
+## Overview
 
 ![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-05.png)
 
@@ -172,7 +180,7 @@ The Integration Solution can also be broken down into the following components.
   - to send status updates to Yojee backend
   - to notify Yojee backend of uploaded photo and/or signature images.
 
-### Order Transfer
+## Order Transfer
 
 ![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-06.png)
 
@@ -184,17 +192,18 @@ For the API calls in this section **Order Transfer**, the Integration Layer need
 >
 > See the section on **Basic Information on APIs - Authentication** at the end of this document for more information on authentication.
 
-#### Retrieve incoming order details
+### Retrieve incoming order details
 
 Incoming transfer orders will be in Co. B’s slug as orders with **created** status. To retrieve the order information and the order item information for these orders, we will need to make 2 calls:
 
 - Dispatcher Get Orders with status **created**.
 - Dispatcher Get Single Order Detail by retrieving the **order_number** from the call above.
 
-##### **Dispatcher Get List of Orders**
+### [Dispatcher Get List of Orders](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders/get)
 
 This API call will retrieve orders matching the criteria provided in the parameters.
-For full details, please refer to this [V4 List Orders](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders/get).
+
+For full request/response details, please click on the title.
 
 ###### Sample Curl Command
 
@@ -204,10 +213,11 @@ curl --location -g --request GET '[BASEURL]/api/v4/company/orders?page_size=50&p
 --header 'ACCESS_TOKEN: [TOKEN]'
 ```
 
-##### **Dispatcher Get Order**
+### [Dispatcher Get Order](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1order/get)
 
 This API call will retrieve order information based on either order number or order external id.
-For full details, please refer to this [V4 Get Order](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1order/get).
+
+For full request/response details, please click on the title.
 
 ###### Sample Curl Command
 
@@ -217,9 +227,9 @@ curl --location -g --request GET '[BASEURL]/api/v4/company/order?number=O-K02IHA
 --header 'ACCESS_TOKEN: [TOKEN]'
 ```
 
-#### Accept the transfer order
+### [Accept the transfer order](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partner_transfer~1dispatcher~1accept_order~1{order_number}/put)
 
-##### **Dispatcher Accept Partner Transfer Order**
+#### **Dispatcher Accept Partner Transfer Order**
 
 Call this API to **accept** the transfer order from upstream partner.
 
@@ -231,7 +241,9 @@ curl --location --request PUT '[BASEURL]/api/v3/dispatcher/partner_transfer/disp
 --header 'ACCESS_TOKEN: [TOKEN]'
 ```
 
-#### Decline the transfer order
+For full request/response details, please click on the title.
+
+### [Decline the transfer order](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-dispatcher-api.yaml/paths/~1api~1v3~1dispatcher~1partner_transfer~1dispatcher~1reject_order~1{order_number}/put)
 
 ##### **Dispatcher Reject Partner Transfer Order**
 
@@ -244,6 +256,8 @@ curl --location --request PUT '[BASEURL]/api/v3/dispatcher/partner_transfer/disp
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]'
 ```
+
+For full request/response details, please click on the title.
 
 ### Driver Management and Assignment
 
@@ -263,9 +277,9 @@ After the Driver is created, we will need to call **Dispatcher Get Tasks** for t
 
 With the list of the pending tasks and the list of drivers, the integration layer will need to decide which driver to assign the tasks to, and call **Dispatcher Assign Driver to Tasks.**
 
-#### Driver Management - Create Driver
+### [Driver Management - Create Driver](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-user-api.yaml/paths/~1api~1v3~1dispatcher~1workers/post)
 
-##### **Dispatcher Create Worker**
+#### Dispatcher Create Worker
 
 Call this API to **create** a new Driver.
 
@@ -288,16 +302,50 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/workers/' \
 }'
 ```
 
-#### Driver Management - Update Driver Information
+For full request/response details, please click on the title.
 
-##### **Dispatcher Update Worker**
+### [Driver Management - Get List of Drivers](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-user-api.yaml/paths/~1api~1v3~1dispatcher~1workers/get)
+
+##### Dispatcher Get List of Worker
+
+Call this API to **get** list of workers that belongs to your company slug.
+
+###### Sample Curl Command
+
+```shell
+curl --location --request GET '[BASEURL]/api/v3/dispatcher/workers' \
+--header 'COMPANY_SLUG: [SLUG]' \
+--header 'ACCESS_TOKEN: [TOKEN]'
+```
+
+For full request/response details, please click on the title.
+
+### [Driver Management - Get Driver](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-user-api.yaml/paths/~1api~1v3~1dispatcher~1workers~1{id}/get)
+
+##### Dispatcher Get Worker
+
+Call this API to **get** worker information.
+
+###### Sample Curl Command
+
+```shell
+curl --location --request GET '[BASEURL]/api/v3/dispatcher/workers/{worker_id}' \
+--header 'COMPANY_SLUG: [SLUG]' \
+--header 'ACCESS_TOKEN: [TOKEN]'
+```
+
+For full request/response details, please click on the title.
+
+### [Driver Management - Update Driver Information](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-user-api.yaml/paths/~1api~1v3~1dispatcher~1workers~1{id}/put)
+
+#### Dispatcher Update Worker
 
 Call this API to **update** a Driver’s details.
 
 ###### Sample Curl Command
 
 ```shell
-curl --location --request PUT '[BASEURL]/api/v3/dispatcher/workers/4232' \
+curl --location --request PUT '[BASEURL]/api/v3/dispatcher/workers/{worker_id}' \
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]' \
 --header 'Content-Type: application/json' \
@@ -311,23 +359,27 @@ curl --location --request PUT '[BASEURL]/api/v3/dispatcher/workers/4232' \
 }'
 ```
 
-#### Driver Management - Delete Driver Information
+For full request/response details, please click on the title.
 
-##### **Dispatcher Delete Worker**
+### [Driver Management - Delete Driver Information](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-user-api.yaml/paths/~1api~1v3~1dispatcher~1workers~1{id}/delete)
+
+#### Dispatcher Delete Worker
 
 Call this API to **delete** a Driver’s details.
 
 ###### Sample Curl Command
 
 ```shell
-curl --location --request DELETE '[BASEURL]/api/v3/dispatcher/workers/4231' \
+curl --location --request DELETE '[BASEURL]/api/v3/dispatcher/workers/{worker_id}' \
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]'
 ```
 
-#### Get Tasks
+For full request/response details, please click on the title.
 
-##### **Dispatcher Get Tasks**
+### Get Tasks
+
+#### [Dispatcher Get Tasks](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-task-api.yaml/paths/~1api~1v3~1dispatcher~1tasks/get)
 
 This API call will retrieve tasks under the slug.
 
@@ -335,7 +387,7 @@ This API call will retrieve tasks under the slug.
 
 > ### Note
 >
-> Note: To retrieve tasks pending assignment, use the Request Query Parameters as listed below.
+> To retrieve tasks pending assignment, use the Request Query Parameters as listed below.
 
 ###### Sample Curl Command
 
@@ -345,11 +397,34 @@ curl --location -g --request GET '[BASEURL]/api/v3/dispatcher/tasks?from=2021-05
 --header 'ACCESS_TOKEN: [TOKEN]'
 ```
 
-#### Assign Driver
+For full request/response details, please click on the title.
+
+#### [Dispatcher Get Tasks - belongs to specific order](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-task-api.yaml/paths/~1api~1v3~1dispatcher~1tasks/get)
+
+This API call will retrieve tasks that belongs to the given order number.
+
+###### Sample Curl Command
+
+```shell
+curl --location --request GET '[BASEURL]/api/v3/dispatcher/tasks?order_number={order_number}' \
+--header 'COMPANY_SLUG: [SLUG]' \
+--header 'ACCESS_TOKEN: [TOKEN]'
+```
+
+For full request/response details, please click on the title.
+
+<!-- theme:info -->
+
+> ### Note
+>
+> Order number here refers to Yojee Order Number.
+> For example: O-MEHMBOELCMPJ
+
+### Assign Driver
 
 Driver assignment is done by a background job. The first call is to send the parameters to the background job for execution, and the second call is to get the status of the background job to see the outcome.
 
-##### **Dispatcher Assign Driver to tasks**
+#### Dispatcher Assign Driver to tasks
 
 Call this API to assign a Driver to tasks.
 
@@ -363,6 +438,30 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/tasks/quick_assign_b
 --data-raw '{"task_ids":[568259,568260],"worker_id":4233}'
 ```
 
+For full request/response details, please click on the title.
+
+###### Sample Response
+
+```json
+{
+  "cancelled_at": null,
+  "completed_at": null,
+  "failed_at": null,
+  "id": "c97c69e000344c9c800fc0e087613318",
+  "inserted_at": "2022-12-12T06:56:17.112961",
+  "processed": null,
+  "progress": null,
+  "result": null,
+  "total": null,
+  "type": "quick_assign",
+  "updated_at": "2022-12-12T06:56:17.112961"
+}
+```
+
+#### Dispatcher Check Task Assignment Status
+
+Call this API to check if the task assignment to driver is successful.
+
 ###### Sample Curl Command
 
 ```shell
@@ -370,10 +469,51 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/tasks/bg_status' \
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]' \
 --header 'Content-Type: application/json' \
---data-raw '{"id":"c8cc52f50a7c4ef28249377a1645e113"}'
+--data-raw '{"id":"c97c69e000344c9c800fc0e087613318"}'
 ```
 
-### Task Status Tracking + POD updates
+For full request/response details, please click on the title.
+
+<!-- theme:info -->
+
+> ### Note
+>
+> As we do not store the id value in the database, this value will have an expiry lifespan of **60 seconds**. We generate a temporary value for id in order for the background task to be executed.
+>
+> Therefore, we would recommend you to call the above endpoint few seconds after assigning task to the drivers.
+
+###### Sample Success Response: 200 - task assignment to driver is successful
+
+```json
+{
+  "cancelled_at": null,
+  "completed_at": "2022-12-12T06:56:17.508073",
+  "failed_at": null,
+  "id": "c97c69e000344c9c800fc0e087613318",
+  "inserted_at": "2022-12-12T06:56:17.112961",
+  "processed": null,
+  "progress": "Update tasks distance",
+  "result": {
+    "message": "Allocation successful",
+    "status": 200
+  },
+  "total": null,
+  "type": "quick_assign",
+  "updated_at": "2022-12-12T06:56:17.508073"
+}
+```
+
+###### Sample Response: 404 - task id is expired
+
+```json
+{
+  "message": "Resource not found!"
+}
+```
+
+Alternatively, to check if task has successfully assigned to driver, you can call this endpoint: `GET [BASEURL]/api/v3/worker/tasks/ongoing?page=1&page_size=10` OR `GET [BASEURL]/api/v3/dispatcher/tasks?order_number={order_number}` and look for field = **worker**.
+
+## Task Status Tracking + POD updates
 
 ![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-08.png)
 
@@ -386,7 +526,7 @@ For the API calls in this section **Task Status Tracking + POD updates**, the In
 > See the section on **Basic Information on APIs - Authentication** at the end of this document for more information on authentication.
 > To get the **Driver’s JWT Token** call the **Verify Phone OTP** API call
 
-#### Driver Get Ongoing Tasks
+### [Driver Get Ongoing Tasks](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1tasks~1ongoing/get)
 
 This call will list out the tasks that are currently on hand for the driver.
 
@@ -398,13 +538,15 @@ curl --location --request GET '[BASEURL]/api/v3/worker/tasks/ongoing' \
 --header 'Authorization: Bearer [JWT]'
 ```
 
+For full request/response details, please click on the title.
+
 <!-- theme: info -->
 
 > ### Note
 >
 > There is **_one task_** for **‘pickup’** and **_one task_** for **‘dropoff’**. Also note that each of these tasks, there are sub-tasks for complete and fail. The sub-task information will be needed when formatting the payload for the Driver Bulk Actions call.
 
-#### Validate Completion
+### [Validate Completion](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1tasks~1validate_completion/get)
 
 Before updating status for a task, we need to call Validate Completion to ensure that the task can be acted upon.
 
@@ -421,6 +563,8 @@ curl --location --request POST '[BASEURL]/api/v3/worker/tasks/validate_completio
     ]
 }'
 ```
+
+For full request/response details, please click on the title.
 
 <!-- theme: info -->
 
@@ -484,7 +628,7 @@ curl --location --request POST '[BASEURL]/api/v3/worker/tasks/validate_completio
 }
 ```
 
-#### Driver Mark Arrival
+### [Driver Mark Arrival](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1tasks~1mark_arrival/post)
 
 This call is to mark the arrival of the Drive at the location for a task.
 
@@ -503,7 +647,9 @@ curl --location --request POST '[BASEURL]/api/v3/worker/tasks/mark_arrival' \
 }'
 ```
 
-#### Driver Update Container Details
+For full request/response details, please click on the title.
+
+### Driver Update Container Details
 
 This call is to update the information for a task, and in this case, the container information. We can update information such as container number, description, seal number, slot date, slot reference, iso type and tare weight.
 Note that, we can choose to update all details at once or update individually.
@@ -574,11 +720,13 @@ curl --location --request PUT '[BASEURL]/api/v3/worker/tasks/update_task_infos' 
 }'
 ```
 
-#### Driver Generate Batch Upload Pre-signed URLs
+For full request/response details, please click on the title.
+
+### Driver Generate Batch Upload Pre-signed URLs
 
 In some sub-tasks, there is a need to upload POD/signature images to a AWS S3 Bucket. To perform this securely, a pre-signed URL is generated first, and the image is uploaded to AWS S3 via the methods described at [https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html](https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html).
 
-##### **Generate Batch Upload Pre-signed URLs**
+#### Generate Batch Upload Pre-signed URLs
 
 Generate AWS S3 pre-signed URL for uploading.
 
@@ -595,6 +743,8 @@ curl --location --request POST '[BASEURL]/api/v3/worker/generate_batch_upload_pr
     ]
 }'
 ```
+
+For full request/response details, please click on the title.
 
 ###### Sample Success Response: 200
 
@@ -618,7 +768,7 @@ curl --location --request POST '[BASEURL]/api/v3/worker/generate_batch_upload_pr
 > The step to upload the image to AWS S3 using the pre-signed URL is not part of the Yojee API calls. You will need to upload the file separately and the uploaded file will have the URL of https://[region].amazonaws.com/[bucket]/[name] (see "object" field above).
 > This URL of the image is used in the call to **Driver Bulk Actions**.
 
-#### Driver Bulk Actions
+### [Driver Bulk Actions](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1tasks~1bulk_actions/put)
 
 Driver Bulk Actions is where the main status updates take place. For each **pickup** task, there is a **pickup_completed** and a **pickup_failed** array of sub-tasks. For each dropoff task, there is a **dropoff_completed** and a **dropoff_failed** array of sub-tasks.
 
@@ -626,7 +776,7 @@ Each of these arrays of sub-tasks lists the sub-tasks that need to be completed 
 
 The Bulk Actions call combines the updates of the sub-tasks into one call with a number of action elements. Each Bulk Actions call will return a batch_id which will be used in **Get Driver Bulk Action Status** to check if the bulk action has completed.
 
-##### **Driver Bulk Actions**
+#### Driver Bulk Actions
 
 This call is to send multiple actions based on the sub-tasks to be completed.
 
@@ -700,7 +850,7 @@ curl --location --request PUT '[BASEURL]/api/v3/worker/tasks/bulk_actions' \
 }'
 ```
 
-##### Bulk Actions Payload Format
+#### Bulk Actions Payload Format
 
 Each of the Bulk Action payloads includes a number of actions. Each action is either:
 
@@ -1038,7 +1188,7 @@ To send bulk actions for a **Dropoff Failed** task, we will need a payload with 
 }
 ```
 
-#### Get Driver Bulk Action Status
+### [Get Driver Bulk Action Status](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-worker-api.yaml/paths/~1api~1v3~1worker~1tasks~1bulk_actions~1{id}~1status/get)
 
 This call is to check the status of the bulk action called in **Driver Bulk Actions**.
 
@@ -1118,15 +1268,25 @@ curl --location --request GET '[BASEURL]/api/v3/worker/tasks/bulk_actions/TlhhcE
 }
 ```
 
-### Basic Information on APIs
+<!-- theme:info -->
 
-#### **Base URL**
+> ### Note
+>
+> As we do not store the id value in the database, this value will have an expiry lifespan of 60 seconds. We generate a temporary value for id in order for the background task to be executed.
+>
+> Therefore, we would recommend you to call the above endpoint few seconds after requesting for task completion.
+
+## Basic Information on APIs
+
+### Base URL
 
 In this document we will use [BASEURL] to represent the base URL for the calls.
+
 For **development and testing purposes**, please use https://umbrella-staging.yojee.com.
+
 The base URL for the **Production API** is https://umbrella.yojee.com.
 
-#### **Authentication**
+### Authentication
 
 Most of the API calls will require the following parameters in the header:
 
@@ -1151,9 +1311,11 @@ The Company Slug is a string to uniquely identify each instance of a customer’
 
 ##### Access Token
 
-A long-lived Access Token is generated for the Dispatcher account. This token will only change upon a change in the password of the Dispatcher account.
+A long-lived Access Token is generated for the `Dispatcher` account. This token will only change upon a change in the password of the Dispatcher account.
+
 Obtain this information from the Yojee team working with you.
-In this document we will use [SLUG] and [TOKEN] to represent the company_slug and access_token respectively.
+
+In this document we will use `[SLUG]` and `[TOKEN]` to represent the `company_slug` and `access_token` respectively.
 
 ##### JWT tokens
 
@@ -1167,7 +1329,7 @@ To obtain the JWT Token for a Driver, use the **Verify Phone OTP** call.
 >
 > After the Verify Phone OTP call succeeds, extract the **access_token** in the success payload, and include it in the **Authorization Bearer Token** calls that are to be made using the Driver's credentials.
 
-#### **Verify Phone OTP**
+### [Verify Phone OTP](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-public-api.yaml/paths/~1api~1v3~1public~1verify_phone_otp/post)
 
 Call this API to **get** a **Driver’s JWT Token**.
 
@@ -1181,6 +1343,8 @@ curl --location --request POST '[BASEURL]/api/v3/public/verify_phone_otp' \
     "otp_code": "11223344"
 }'
 ```
+
+For full request/response details, please click on the title.
 
 ###### Sample Success Response: 200
 
