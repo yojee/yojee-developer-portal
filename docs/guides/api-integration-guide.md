@@ -760,6 +760,12 @@ Events currently being supported are:
     <td style="text-align: center;">Y</td>
   </tr>
   <tr>
+    <td><a href="#event-orderupdated">order.updated</a></td>
+    <td>When an Order is updated</td>
+    <td style="text-align: center;">Y</td>
+    <td style="text-align: center;">Y</td>
+  </tr>
+  <tr>
     <td><a href="#event-taskaccepted-pickup">task.accepted</a></td>
     <td>When a task (assigned to a driver - pickup / drop-off) is accepted</td>
     <td style="text-align: center;">Y</td>
@@ -938,6 +944,7 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
 --form 'events[]="driver.arrived"' \
 --form 'events[]="driver.departed"' \
 --form 'events[]="order.created"' \
+--form 'events[]="order.updated"' \
 --form 'events[]="order_item.cancelled"' \
 --form 'events[]="order_item.cancelled"'
 ```
@@ -961,7 +968,7 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
     "driver.arrived",
     "driver.departed",
     "order.created",
-    "order_item.cancelled",
+    "order.updated",
     "order_item.cancelled"
     ]
   }'
@@ -1000,6 +1007,7 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
       "driver.arrived",
       "driver.departed",
       "order.created",
+      "order.updated",
       "order_item.cancelled",
       "order.transfer.rejected"
     ],
@@ -1158,6 +1166,63 @@ This is the format of the HTTP Post request body your system will receive in the
     "status": "accepted"
   },
   "event_type": "order.created",
+  "id": "72574e3c-77e1-445f-805a-5c246d4dda55",
+  "webhook_id": 96,
+  "yojee_instance": "https://umbrella-dev.yojee.com"
+}
+```
+
+#### Event: order.updated
+
+```json
+{
+  "company_slug": "yojee",
+  "created_at": 1573616200,
+  "data": {
+    "cancelled_at": null,
+    "completion_time": null,
+    "container_no": null,
+    "display_price": null,
+    "external_id": null,
+    "id": 3465,
+    "inserted_at": "2019-11-13T03:36:19.446090Z",
+    "number": "O-IWWYG6ADYLLW",
+    "order_items": [
+      {
+        "external_customer_id": null,
+        "external_customer_id2": null,
+        "external_customer_id3": null,
+        "id": 14411,
+        "inserted_at": "2019-11-13T03:36:19.473411Z",
+        "item": {
+          "description": null,
+          "global_tracking_number": "Y-V6QYRPCGCU9B",
+          "height": "50",
+          "id": 14279,
+          "length": "50",
+          "payload_type": "package",
+          "quantity": null,
+          "volume": "125000",
+          "volumetric_weight": "25",
+          "weight": "30",
+          "width": "50"
+        },
+        "service_type": "next_day",
+        "status": "created",
+        "tracking_number": "YOJ-ZWRW1ZBWF5MZ",
+        "transfer_info": null
+      }
+    ],
+    "price": null,
+    "sender": {
+      "id": 745,
+      "name": null,
+      "organisation_name": "Nikola Test Company",
+      "type": "organisation"
+    },
+    "status": "accepted"
+  },
+  "event_type": "order.updated",
   "id": "72574e3c-77e1-445f-805a-5c246d4dda55",
   "webhook_id": 96,
   "yojee_instance": "https://umbrella-dev.yojee.com"
