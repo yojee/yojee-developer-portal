@@ -945,7 +945,6 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
 --form 'events[]="driver.departed"' \
 --form 'events[]="order.created"' \
 --form 'events[]="order.updated"' \
---form 'events[]="order_item.cancelled"' \
 --form 'events[]="order_item.cancelled"'
 ```
 
