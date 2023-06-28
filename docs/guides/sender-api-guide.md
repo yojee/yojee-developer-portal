@@ -20,17 +20,21 @@
         - <strong>Updated V4 endpoints:</strong> for sender order creation<br/>
         - <strong>Updated reference link to:</strong> webhook section in API Integration Introduction Guide</td>
     </tr>
+    <tr>
+        <td>Jun 2023</td>
+        <td>27 Jun 2023</td>
+        <td> Add new section on POD
+    </tr>
 </table>
 
 # Overview
 
-The **three primary** RESTful API calls related to this project are:
+The **three primary** RESTful API calls related to this guide are:
 
 1. [Sender Order Creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-sender-api-v4.yaml/paths/~1api~1v4~1sender~1orders~1create/post)
-
 2. [Sender Order Cancellation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-sender-api.yaml/paths/~1api~1v3~1sender~1orders~1cancel/post)
-
-3. [Sender Webhook Registration](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-webhook-api.yaml/paths/~1api~1v3~1dispatcher~1webhooks/post)
+3. [Sender Webhook Registration](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-webhook-api.yaml/paths/~1api~1v3~1dispatcher~1webhooks/post) (for order status update)
+   - For more information on [POD](#pod), please refer to last section of this guide.
 
 ## Basic information on APIs
 
@@ -44,7 +48,7 @@ The base URL for the **Production API** is https://umbrella.yojee.com.
 
 ### Authentication
 
-Most of the API calls will require the following parameters in the header:
+Most of the API calls requires the following parameters in the header:
 
 <table style="text-align: left;">
     <tr>
@@ -63,7 +67,7 @@ Most of the API calls will require the following parameters in the header:
 
 #### Company Slug
 
-The Company Slug is a string to uniquely identify each instance of a customer’s company in Yojee. Each customer is assigned a slug which they will use as part of the authentication information.
+The Company Slug is a string to uniquely identify each instance of a customer’s company in Yojee. Each customer is assigned to a slug which they will use as part of the authentication information.
 
 #### Access Token
 
@@ -125,7 +129,8 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
       "order_items": [{...}],
       "order_steps": [{...}],
       "order_item_steps": [{...}],
-      "order_step_groups": [{...}]
+      "order_step_groups": [{...}],
+      "order_voyage_info": {}
     }
   ]
 }
@@ -143,21 +148,21 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
         <td>object</td>
         <td>Y</td>
         <td>Contains main information about an order.<br/>
-        For example: order number, order external id, sender information etc.</td>
+        - For example: order number, order external id, booking template information etc.</td>
     </tr>
     <tr>
         <td>order_items</td>
         <td>array</td>
         <td>Y</td>
         <td>A list of items that belongs to an order. Each item contains an order item information. <br/>
-        For example: description, quantity, dimension, container details etc.</td>
+        - For example: description, quantity, dimension, container details etc.</td>
     </tr>
     <tr>
         <td>order_steps</td>
         <td>array</td>
         <td>Y</td>
-        <td>A list of steps which will contain information and time requirements for respective tasks.<br/>
-        For example: address, pickup/dropoff time windows, contact information.</td>
+        <td>A list of steps which contains address information and time requirements for respective tasks.<br/>
+        - For example: address, pickup/dropoff time windows, contact information etc.</td>
     </tr>
     <tr>
         <td>order_item_steps</td>
@@ -170,6 +175,12 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
         <td>array</td>
         <td>Y</td>
         <td>Contains grouping information of an order.</td>
+    </tr>
+    <tr>
+        <td>order_voyage_info</td>
+        <td>object</td>
+        <td>N</td>
+        <td>Contains voyage information of an order.</td>
     </tr>
 </table>
 
@@ -776,8 +787,81 @@ The following message is returned if the data supplied does not match any Order 
 }
 ```
 
-## Sender Webhooks
+## Sender Webhooks - Order Status Update
 
-This is the same API call to register Webhooks at the Dispatcher level (Company Level), the only difference being that Webhooks registered with `sender_id` will only be triggered for Orders created by the Sender with the sender_id (Sender Level).
+To get a status update of an order, we need to register to Yojee webhook event(s).
 
-For full details, please refer to `webhooks section` which can be found at [API Integration Introduction Guide](./api-integration-guide.md#webhooks)
+- For example, when order is assigned to a driver, when order is completed and when order is cancelled etc.
+  - Please refer to this list of supported events which can be found [here.](./api-integration-guide.md#events-supported)
+
+The Sender webhook api endpoint is the same as Dispatcher webhook (Company Level). The only difference being that Webhooks registered with `sender_id` will only be triggered for Orders created by the Sender with the sender_id (Sender Level).
+
+For more information on Yojee webhook related, please refer to `webhooks section` which can be found at [API Integration Introduction Guide.](./api-integration-guide.md#webhooks)
+
+## POD
+
+In this section, we will focus more on:
+
+1. how to identify if an order is completed
+2. how to retrieve a POD
+
+### How to identify if order is completed?
+
+When an order is marked as **completed**, a webhook event = `task.completed` will be triggered and Yojee platform will send a post request to the registered url.
+
+Below shows a sample of webhook event = `task.completed` when order is completed.
+
+```json
+{
+  "company_slug": "yojee",
+  "created_at": 1679017779,
+  "data": {
+    "driver": {
+      "id": 20496,
+      "name": "Driver 1"
+    },
+    "eta": "2023-03-17T20:39:13.543787",
+    "event_time": "2023-03-17T01:49:39.009000Z",
+    "id": 17683868,
+    "inserted_at": "2023-03-17T01:29:13.001319Z",
+    "order": {
+      "external_id": "YOJ01234567",
+      "number": "O-CQDSIW0ETB1O"
+    },
+    "order_item": {
+      "external_customer_id": "108E23",
+      "external_customer_id2": "108E23C",
+      "external_customer_id3": null,
+      "state": "completed",
+      "tracking_number": "YOJ-7LK7R3EF2GCA"
+    },
+    "order_item_step": {
+      "metadata": { "sequence": "2" }
+    },
+    "pod_url": "https://umbrella-staging.yojee.com/api/v3/public/pods/order_item/YOJ-7LK7R3EF2GCA",
+    "reasons": [],
+    "sender": {
+      "id": 20794
+    },
+    "step_sequence": 1,
+    "task_type": "dropoff"
+  },
+  "event_type": "task.completed",
+  "id": "b1485b39-f598-4dca-8f56-a766a741454d",
+  "webhook_id": 37,
+  "yojee_instance": "https://umbrella-staging.yojee.com"
+}
+```
+
+To identify a completed order, there are three points to notice:
+
+1. event_type = `'task.completed'`
+2. data.task_type = `'dropoff'`
+3. data.order_item.state = `'completed'`
+
+### How to retrieve POD?
+
+There are two ways to retrieve a POD.
+
+1. [by order number](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-public-api.yaml/paths/~1api~1v3~1public~1pods~1order~1{order_number}/get)
+2. [by tracking number](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-public-api.yaml/paths/~1api~1v3~1public~1pods~1order_item~1{tracking_number}/get)
