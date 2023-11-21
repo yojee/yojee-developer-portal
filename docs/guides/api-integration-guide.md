@@ -1109,6 +1109,7 @@ This is the format of the HTTP Post request body your system will receive in the
   },
   "event_type": "sender.created",
   "id": "5fdd1d4a-f103-4a6a-afad-c69563c53940",
+  "version": "2",
   "webhook_id": 130,
   "yojee_instance": "https://umbrella-staging.yojee.com"
 }
@@ -1166,6 +1167,7 @@ This is the format of the HTTP Post request body your system will receive in the
   },
   "event_type": "order.created",
   "id": "72574e3c-77e1-445f-805a-5c246d4dda55",
+  "version": "2",
   "webhook_id": 96,
   "yojee_instance": "https://umbrella-dev.yojee.com"
 }
@@ -1223,6 +1225,7 @@ This is the format of the HTTP Post request body your system will receive in the
   },
   "event_type": "order.updated",
   "id": "72574e3c-77e1-445f-805a-5c246d4dda55",
+  "version": "2",
   "webhook_id": 96,
   "yojee_instance": "https://umbrella-dev.yojee.com"
 }
@@ -1239,19 +1242,24 @@ This is the format of the HTTP Post request body your system will receive in the
       "id": 683,
       "name": "Nikola Test Driver"
     },
-    "event_time": "2019-11-13T04:08:36.848982Z",
-    "id": 35852,
-    "inserted_at": "2019-11-13T04:02:50.850823Z",
+    "eta": "2023-11-21T09:09:00.000000",
+    "event_time": "2023-11-21T09:28:44.957776Z",
+    "id": 14299954,
+    "inserted_at": "2023-11-21T08:49:29.149877Z",
     "order_item": {
       "external_customer_id": null,
       "external_customer_id2": null,
       "external_customer_id3": null,
+      "state": "processing",
       "tracking_number": "YOJ-VBBS9LFIOBG9"
     },
+    "sender": {"id": 15399},
+    "step_sequence": 1,
     "task_type": "pickup"
   },
   "event_type": "task.accepted",
   "id": "4f8d2be4-1306-465e-8651-1e0d5b86c8e6",
+  "version": "2",
   "webhook_id": 96,
   "yojee_instance": "https://umbrella-dev.yojee.com"
 }
@@ -1268,19 +1276,24 @@ This is the format of the HTTP Post request body your system will receive in the
       "id": 683,
       "name": "Nikola Test Driver"
     },
-    "event_time": "2019-11-13T04:08:36.848982Z",
-    "id": 35851,
-    "inserted_at": "2019-11-13T04:02:50.850823Z",
+    "eta": "2023-11-21T09:29:01.000000",
+    "event_time": "2023-11-21T09:28:44.957776Z",
+    "id": 14299955,
+    "inserted_at": "2023-11-21T08:49:29.149877Z",
     "order_item": {
       "external_customer_id": null,
       "external_customer_id2": null,
       "external_customer_id3": null,
+      "state": "processing",
       "tracking_number": "YOJ-VBBS9LFIOBG9"
     },
+    "sender": {"id": 15399},
+    "step_sequence": 1,
     "task_type": "dropoff"
   },
   "event_type": "task.accepted",
   "id": "16f40019-424e-4a29-baa2-a7886c661921",
+  "version": "2",
   "webhook_id": 96,
   "yojee_instance": "https://umbrella-dev.yojee.com"
 }
@@ -1297,20 +1310,26 @@ This is the format of the HTTP Post request body your system will receive in the
       "id": 683,
       "name": "Nikola Test Driver"
     },
+    "eta": "2023-11-21T09:29:01.000000",
     "event_time": "2019-11-13T04:22:18.000000Z",
     "id": 35851,
     "inserted_at": "2019-11-13T04:02:50.850823Z",
+    "order": {"external_id": null, "number": "O-ELIDYWA9X0ED"},
     "order_item": {
       "external_customer_id": null,
       "external_customer_id2": null,
       "external_customer_id3": null,
+      "state": "completed",
       "tracking_number": "YOJ-VBBS9LFIOBG9"
     },
+    "sender": {"id": 15399},
+    "step_sequence": 1,
     "pod_url": "https://umbrella-dev.yojee.com/api/v3/public/pods/order_item/YOJ-VBBS9LFIOBG9",
     "task_type": "dropoff"
   },
   "event_type": "task.completed",
   "id": "4b067931-b83b-45f4-92ff-85c908a6f417",
+  "version": "2",
   "webhook_id": 96,
   "yojee_instance": "https://umbrella-dev.yojee.com"
 }
@@ -1334,12 +1353,17 @@ This is the format of the HTTP Post request body your system will receive in the
       "external_customer_id": null,
       "external_customer_id2": null,
       "external_customer_id3": null,
+      "state": "processing",
+      "sender": {"id": 15399},
+      "step_sequence": 0,
       "tracking_number": "YOJ-MDMSLHECUDWP"
     },
+    "reasons": ["package damage"],
     "task_type": "pickup"
   },
   "event_type": "task.failed",
   "id": "730d3078-7c55-4afe-a90d-890f64545a9b",
+  "version": "2",
   "webhook_id": 96,
   "yojee_instance": "https://umbrella-dev.yojee.com"
 }
@@ -1373,6 +1397,7 @@ This is the format of the HTTP Post request body your system will receive in the
   },
   "event_type": "task.reassigned",
   "id": "b92bd595-b626-4181-8ceb-0a5bb4ff3f9d",
+  "version": "2",
   "webhook_id": 116,
   "yojee_instance": "https://umbrella-staging.yojee.com"
 }
@@ -1412,6 +1437,7 @@ This is the format of the HTTP Post request body your system will receive in the
   ],
   "event_type": "task.transferred",
   "id": "9601c6c8-9b17-442a-be6f-307399f7533a",
+  "version": "2",
   "webhook_id": 103,
   "yojee_instance": "https://umbrella-dev.yojee.com"
 }
@@ -1442,6 +1468,7 @@ This is the format of the HTTP Post request body your system will receive in the
   },
   "event_type": "order_item.cancelled",
   "id": "1c0d2750-b75b-4831-b7d2-2c79a1ef36ce",
+  "version": "2",
   "webhook_id": 96,
   "yojee_instance": "https://umbrella-dev.yojee.com"
 }
@@ -1471,6 +1498,7 @@ This is the format of the HTTP Post request body your system will receive in the
   },
   "event_type": "driver.arrived",
   "id": "6e450fe1-973c-4056-b588-11b433095718",
+  "version": "2",
   "webhook_id": 96,
   "yojee_instance": "https://umbrella-dev.yojee.com"
 }
@@ -1500,6 +1528,7 @@ This is the format of the HTTP Post request body your system will receive in the
   },
   "event_type": "driver.departed",
   "id": "f17246f9-35ab-44c6-96c8-0061cb1dcf08",
+  "version": "2",
   "webhook_id": 96,
   "yojee_instance": "https://umbrella-dev.yojee.com"
 }
@@ -1563,6 +1592,7 @@ This is the format of the HTTP Post request body your system will receive in the
   },
   "event_type": "order.transfer.rejected",
   "id": "3814906a-9c62-4937-83d9-f337add13e5e",
+  "version": "2",
   "webhook_id": 130,
   "yojee_instance": "https://umbrella-staging.yojee.com"
 }
@@ -1740,6 +1770,7 @@ This is the format of the HTTP Post request body your system will receive in the
   },
   "event_type": "payment.completed",
   "id": "f1b5da54-f75d-40b9-9647-2a4fdf7dc835",
+  "version": "2",
   "webhook_id": 75,
   "yojee_instance": "https://umbrella-staging.yojee.com"
 }
