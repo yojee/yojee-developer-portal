@@ -1310,7 +1310,6 @@ This is the format of the HTTP Post request body your system will receive in the
       "id": 683,
       "name": "Nikola Test Driver"
     },
-    "eta": "2023-11-21T09:29:01.000000",
     "event_time": "2019-11-13T04:22:18.000000Z",
     "id": 35851,
     "inserted_at": "2019-11-13T04:02:50.850823Z",
