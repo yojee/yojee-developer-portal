@@ -25,15 +25,20 @@
         <td>30 Nov 2022</td>
         <td><strong>Updated webhook details:</strong> specify the Sender with the sender_id to register this webhook for<br/> 
     </tr>
+     <tr>
+        <td>Apr 2024</td>
+        <td>24 Apr 2024</td>
+        <td>Update request payload, and list of supported webhook events
+    </tr>
 </table>
 
 # Overview
 
-The **three primary** RESTful API calls related to this project are:
+The **three primary** RESTful API calls related to this document are:
 
-1. [Order Creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders~1create/post)
+1. [Order Creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v4~1company~1orders~1create/post)
 
-2. [Order Cancellation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1order~1cancel/put)
+2. [Order Cancellation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v4~1company~1order~1cancel/put)
 
 3. [Webhook Registration](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-webhook-api.yaml/paths/~1api~1v3~1dispatcher~1webhooks/post)
 
@@ -49,7 +54,7 @@ The base URL for the **Production API** is https://umbrella.yojee.com.
 
 ### Authentication
 
-Most of the API calls will require the following parameters in the header:
+Most of the API calls will require the following parameters in the HTTP header:
 
 <table style="text-align: left;">
     <tr>
@@ -82,7 +87,7 @@ In this document we will use `[SLUG]` and `[TOKEN]` to represent the `company_sl
 
 This API call will create an order in Yojee.
 
-For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders~1create/post).
+For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v4~1company~1orders~1create/post).
 
 <table style="text-align: left;">
   <tr>
@@ -173,7 +178,7 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
     <tr>
         <td>order_step_groups</td>
         <td>array</td>
-        <td>Y</td>
+        <td>N</td>
         <td>Contains grouping information of an order.</td>
     </tr>
 </table>
@@ -622,7 +627,7 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
 
 This API call will cancel an order in Yojee.
 
-For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1order~1cancel/put).
+For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v4~1company~1order~1cancel/put).
 
 <table style="text-align: left;">
   <tr>
@@ -760,8 +765,20 @@ Events currently being supported are:
     <td style="text-align: center;">Y</td>
   </tr>
   <tr>
+    <td><a href="#event-orderaccepted">order.accepted</a></td>
+    <td>When an Order is accepted</td>
+    <td style="text-align: center;">Y</td>
+    <td style="text-align: center;">Y</td>
+  </tr>
+  <tr>
     <td><a href="#event-orderupdated">order.updated</a></td>
     <td>When an Order is updated</td>
+    <td style="text-align: center;">Y</td>
+    <td style="text-align: center;">Y</td>
+  </tr>
+  <tr>
+    <td><a href="#event-ordercompleted">order.completed</a></td>
+    <td>When an Order is completed</td>
     <td style="text-align: center;">Y</td>
     <td style="text-align: center;">Y</td>
   </tr>
@@ -824,6 +841,18 @@ Events currently being supported are:
     <td>When a Payment is completed</td>
     <td style="text-align: center;">Y</td>
     <td style="text-align: center;">N</td>
+  </tr>
+   <tr>
+    <td><a href="#event-documentcreated">document.created</a></td>
+    <td>When a document is created and attached to an order/order item</td>
+    <td style="text-align: center;">Y</td>
+    <td style="text-align: center;">Y</td>
+  </tr>
+   <tr>
+    <td><a href="#event-documentupdated">document.updated</a></td>
+    <td>When an attached document is updated</td>
+    <td style="text-align: center;">Y</td>
+    <td style="text-align: center;">Y</td>
   </tr>
 </table>
 
@@ -1079,7 +1108,7 @@ This is the format of the HTTP Post request body your system will receive in the
 
 ```json
 {
-  "company_slug": "theary-test",
+  "company_slug": "yojee",
   "created_at": 1663039247,
   "data": {
     "billing_address": "International financial center",
@@ -1163,13 +1192,77 @@ This is the format of the HTTP Post request body your system will receive in the
       "organisation_name": "Nikola Test Company",
       "type": "organisation"
     },
-    "status": "accepted"
+    "status": "created"
   },
   "event_type": "order.created",
   "id": "72574e3c-77e1-445f-805a-5c246d4dda55",
   "version": "2",
   "webhook_id": 96,
-  "yojee_instance": "https://umbrella-dev.yojee.com"
+  "yojee_instance": "https://umbrella-staging.yojee.com"
+}
+```
+
+#### Event: order.accepted
+
+```json
+{
+  "data": {
+    "id": 11014,
+    "status": "accepted",
+    "number": "O-QLJWMFMWKQ7E",
+    "price": {
+      "currency": "SGD",
+      "amount": "0.00000000"
+    },
+    "external_id": "external ID",
+    "inserted_at": "2023-10-10T08:12:26.646164Z",
+    "completion_time": null,
+    "sender": {
+      "id": 26,
+      "name": null,
+      "type": "organisation",
+      "organisation_name": "Local Dev"
+    },
+    "container_no": null,
+    "order_items": [
+      {
+        "id": 18888,
+        "status": "created",
+        "item": {
+          "id": 18101,
+          "length": null,
+          "description": "Rubber Tyres",
+          "width": null,
+          "height": null,
+          "global_tracking_number": "Y-HKBVPIKO07MH",
+          "volume": "0.0",
+          "volumetric_weight": "0.0",
+          "weight": null,
+          "quantity": 1,
+          "is_using_container": false,
+          "payload_type": "Package"
+        },
+        "price": null,
+        "inserted_at": "2023-10-10T08:12:26.649592Z",
+        "service_type": "express",
+        "tracking_number": "YOJ-OOI0TRSIOLPX",
+        "external_customer_id": null,
+        "external_customer_id2": null,
+        "external_customer_id3": null,
+        "transfer_info": null
+      }
+    ],
+    "cancelled_at": null,
+    "service_type_id": 35,
+    "display_price": "SGD 0"
+  },
+  "id": "cf7d9306-94b9-48b1-8f00-d9eb4a456362",
+  "version": "2",
+  "company_slug": "yojee",
+  "event_type": "order.accepted",
+  "created_at": 1696925714,
+  "webhook_id": 7,
+  "yojee_instance": "https://umbrella-staging.yojee.com"
 }
 ```
 
@@ -1227,7 +1320,69 @@ This is the format of the HTTP Post request body your system will receive in the
   "id": "72574e3c-77e1-445f-805a-5c246d4dda55",
   "version": "2",
   "webhook_id": 96,
-  "yojee_instance": "https://umbrella-dev.yojee.com"
+  "yojee_instance": "https://umbrella-staging.yojee.com"
+}
+```
+
+#### Event: order.completed
+
+```json
+{
+  "data": {
+    "id": 3071738,
+    "status": "completed",
+    "number": "O-0RMWU92U8MOR",
+    "sender": {
+      "id": 15399,
+      "name": null,
+      "type": "organisation",
+      "organisation_name": "Local Dev"
+    },
+    "external_id": "external id",
+    "inserted_at": "2024-01-24T04:41:06.236449Z",
+    "container_no": null,
+    "price": null,
+    "order_items": [
+      {
+        "id": 4112575,
+        "status": "completed",
+        "item": {
+          "id": 3833084,
+          "length": null,
+          "description": null,
+          "width": null,
+          "payload_type": "Package",
+          "weight": null,
+          "height": null,
+          "volume": "0.0",
+          "quantity": 1,
+          "volumetric_weight": "0.0",
+          "global_tracking_number": "Y-WA962YKS8PB7",
+          "is_using_container": true
+        },
+        "inserted_at": "2024-01-24T04:41:06.421751Z",
+        "external_customer_id": null,
+        "external_customer_id2": null,
+        "external_customer_id3": null,
+        "tracking_number": "YOJ-DUMLDLUR4Z1V",
+        "price": null,
+        "service_type": "domestic",
+        "transfer_info": null
+      }
+    ],
+    "completion_time": "2024-01-24T04:41:30.058867Z",
+    "cancelled_at": null,
+    "display_price": null,
+    "service_type_id": 6956,
+    "pod_url": "https://umbrella-staging.yojee.com/api/v3/public/pods/order/O-0RMWU92U8MOR"
+  },
+  "id": "83dfb8da-6dca-43f9-830d-71deec561a45",
+  "version": "2",
+  "event_type": "order.completed",
+  "company_slug": "yojee",
+  "created_at": 1706071290,
+  "webhook_id": 84,
+  "yojee_instance": "https://umbrella-staging.yojee.com"
 }
 ```
 
@@ -1253,7 +1408,7 @@ This is the format of the HTTP Post request body your system will receive in the
       "state": "processing",
       "tracking_number": "YOJ-VBBS9LFIOBG9"
     },
-    "sender": {"id": 15399},
+    "sender": { "id": 15399 },
     "step_sequence": 1,
     "task_type": "pickup"
   },
@@ -1261,7 +1416,7 @@ This is the format of the HTTP Post request body your system will receive in the
   "id": "4f8d2be4-1306-465e-8651-1e0d5b86c8e6",
   "version": "2",
   "webhook_id": 96,
-  "yojee_instance": "https://umbrella-dev.yojee.com"
+  "yojee_instance": "https://umbrella-staging.yojee.com"
 }
 ```
 
@@ -1287,7 +1442,7 @@ This is the format of the HTTP Post request body your system will receive in the
       "state": "processing",
       "tracking_number": "YOJ-VBBS9LFIOBG9"
     },
-    "sender": {"id": 15399},
+    "sender": { "id": 15399 },
     "step_sequence": 1,
     "task_type": "dropoff"
   },
@@ -1295,7 +1450,7 @@ This is the format of the HTTP Post request body your system will receive in the
   "id": "16f40019-424e-4a29-baa2-a7886c661921",
   "version": "2",
   "webhook_id": 96,
-  "yojee_instance": "https://umbrella-dev.yojee.com"
+  "yojee_instance": "https://umbrella-staging.yojee.com"
 }
 ```
 
@@ -1313,7 +1468,7 @@ This is the format of the HTTP Post request body your system will receive in the
     "event_time": "2019-11-13T04:22:18.000000Z",
     "id": 35851,
     "inserted_at": "2019-11-13T04:02:50.850823Z",
-    "order": {"external_id": null, "number": "O-ELIDYWA9X0ED"},
+    "order": { "external_id": null, "number": "O-ELIDYWA9X0ED" },
     "order_item": {
       "external_customer_id": null,
       "external_customer_id2": null,
@@ -1321,16 +1476,16 @@ This is the format of the HTTP Post request body your system will receive in the
       "state": "completed",
       "tracking_number": "YOJ-VBBS9LFIOBG9"
     },
-    "sender": {"id": 15399},
+    "sender": { "id": 15399 },
     "step_sequence": 1,
-    "pod_url": "https://umbrella-dev.yojee.com/api/v3/public/pods/order_item/YOJ-VBBS9LFIOBG9",
+    "pod_url": "https://umbrella-staging.yojee.com/api/v3/public/pods/order_item/YOJ-VBBS9LFIOBG9",
     "task_type": "dropoff"
   },
   "event_type": "task.completed",
   "id": "4b067931-b83b-45f4-92ff-85c908a6f417",
   "version": "2",
   "webhook_id": 96,
-  "yojee_instance": "https://umbrella-dev.yojee.com"
+  "yojee_instance": "https://umbrella-staging.yojee.com"
 }
 ```
 
@@ -1353,7 +1508,7 @@ This is the format of the HTTP Post request body your system will receive in the
       "external_customer_id2": null,
       "external_customer_id3": null,
       "state": "processing",
-      "sender": {"id": 15399},
+      "sender": { "id": 15399 },
       "step_sequence": 0,
       "tracking_number": "YOJ-MDMSLHECUDWP"
     },
@@ -1364,7 +1519,7 @@ This is the format of the HTTP Post request body your system will receive in the
   "id": "730d3078-7c55-4afe-a90d-890f64545a9b",
   "version": "2",
   "webhook_id": 96,
-  "yojee_instance": "https://umbrella-dev.yojee.com"
+  "yojee_instance": "https://umbrella-staging.yojee.com"
 }
 ```
 
@@ -1438,7 +1593,7 @@ This is the format of the HTTP Post request body your system will receive in the
   "id": "9601c6c8-9b17-442a-be6f-307399f7533a",
   "version": "2",
   "webhook_id": 103,
-  "yojee_instance": "https://umbrella-dev.yojee.com"
+  "yojee_instance": "https://umbrella-staging.yojee.com"
 }
 ```
 
@@ -1469,7 +1624,7 @@ This is the format of the HTTP Post request body your system will receive in the
   "id": "1c0d2750-b75b-4831-b7d2-2c79a1ef36ce",
   "version": "2",
   "webhook_id": 96,
-  "yojee_instance": "https://umbrella-dev.yojee.com"
+  "yojee_instance": "https://umbrella-staging.yojee.com"
 }
 ```
 
@@ -1499,7 +1654,7 @@ This is the format of the HTTP Post request body your system will receive in the
   "id": "6e450fe1-973c-4056-b588-11b433095718",
   "version": "2",
   "webhook_id": 96,
-  "yojee_instance": "https://umbrella-dev.yojee.com"
+  "yojee_instance": "https://umbrella-staging.yojee.com"
 }
 ```
 
@@ -1529,7 +1684,7 @@ This is the format of the HTTP Post request body your system will receive in the
   "id": "f17246f9-35ab-44c6-96c8-0061cb1dcf08",
   "version": "2",
   "webhook_id": 96,
-  "yojee_instance": "https://umbrella-dev.yojee.com"
+  "yojee_instance": "https://umbrella-staging.yojee.com"
 }
 ```
 
@@ -1537,7 +1692,7 @@ This is the format of the HTTP Post request body your system will receive in the
 
 ```json
 {
-  "company_slug": "theary-test",
+  "company_slug": "yojee",
   "created_at": 1646126351,
   "data": {
     "company_id": 872,
@@ -1771,6 +1926,72 @@ This is the format of the HTTP Post request body your system will receive in the
   "id": "f1b5da54-f75d-40b9-9647-2a4fdf7dc835",
   "version": "2",
   "webhook_id": 75,
+  "yojee_instance": "https://umbrella-staging.yojee.com"
+}
+```
+
+#### Event: document.created
+
+```json
+{
+  "data": {
+    "id": 4627,
+    "name": "sample_file.pdf",
+    "file_name": "sample_file.pdf",
+    "file_size": 93643,
+    "order": {
+      "id": 3073327,
+      "status": "accepted",
+      "number": "O-KFZI07EQNSJ3",
+      "external_id": null
+    },
+    "mime_type": "application/pdf",
+    "updated_at": "2024-02-05T07:21:41.973570Z",
+    "classification_code": "LABEL",
+    "document_url": "[DOCUMENT_URL]",
+    "privacy": "public",
+    "attached_to": { "items": [], "order_level": true },
+    "uploaded_by_partner": true
+  },
+  "id": "21cc7516-59f8-4447-867d-5b876ec48969",
+  "version": "1",
+  "event_type": "document.created",
+  "company_slug": "yojee",
+  "created_at": 1707117702,
+  "webhook_id": 57,
+  "yojee_instance": "https://umbrella-staging.yojee.com"
+}
+```
+
+#### Event: document.updated
+
+```json
+{
+  "data": {
+    "id": 4323,
+    "name": "Proof of delivery",
+    "file_name": "sample_pod.pdf",
+    "file_size": 2830,
+    "order": {
+      "id": 3071774,
+      "status": "accepted",
+      "number": "O-LZONJSOECJJP",
+      "external_id": "external id"
+    },
+    "mime_type": "application/pdf",
+    "updated_at": "2024-01-24T07:30:30.823456Z",
+    "classification_code": "POD",
+    "document_url": "[DOCUMENT_URL]",
+    "privacy": "private",
+    "attached_to": { "items": [], "order_level": true },
+    "uploaded_by_partner": false
+  },
+  "id": "ae498265-7e41-48fb-8b9d-39699bdb5b61",
+  "version": "2",
+  "event_type": "document.updated",
+  "company_slug": "yojee",
+  "created_at": 1706081904,
+  "webhook_id": 73,
   "yojee_instance": "https://umbrella-staging.yojee.com"
 }
 ```
