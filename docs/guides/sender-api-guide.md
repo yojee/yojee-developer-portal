@@ -25,13 +25,18 @@
         <td>27 Jun 2023</td>
         <td> Add new section on POD
     </tr>
+    <tr>
+        <td>Apr 2024</td>
+        <td>24 Apr 2024</td>
+        <td> Update sample payload under POD section
+    </tr>
 </table>
 
 # Overview
 
 The **three primary** RESTful API calls related to this guide are:
 
-1. [Sender Order Creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-sender-api-v4.yaml/paths/~1api~1v4~1sender~1orders~1create/post)
+1. [Sender Order Creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-sender-api.yaml/paths/~1api~1v4~1sender~1orders~1create/post)
 2. [Sender Order Cancellation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-sender-api.yaml/paths/~1api~1v3~1sender~1orders~1cancel/post)
 3. [Sender Webhook Registration](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-webhook-api.yaml/paths/~1api~1v3~1dispatcher~1webhooks/post) (for order status update)
    - For more information on [POD](#pod), please refer to last section of this guide.
@@ -81,7 +86,7 @@ In this document we will use `[SLUG]` and `[TOKEN]` to represent the `company_sl
 
 This API call will create an order in Yojee using Sender credentials. We identify the Sender by the Access Token provided in the Request Header parameters.
 
-For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-sender-api-v4.yaml/paths/~1api~1v4~1sender~1orders~1create/post).
+For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-sender-api.yaml/paths/~1api~1v4~1sender~1orders~1create/post).
 
 <table style="text-align: left;">
   <tr>
@@ -173,7 +178,7 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
     <tr>
         <td>order_step_groups</td>
         <td>array</td>
-        <td>Y</td>
+        <td>N</td>
         <td>Contains grouping information of an order.</td>
     </tr>
     <tr>
@@ -807,57 +812,69 @@ In this section, we will focus more on:
 
 ### How to identify if order is completed?
 
-When an order is marked as **completed**, a webhook event = `task.completed` will be triggered and Yojee platform will send a post request to the registered url.
+When an order is marked as **completed**, a webhook event = `order.completed` will be triggered and Yojee platform will send a post request to the registered url.
 
-Below shows a sample of webhook event = `task.completed` when order is completed.
+Below shows a sample of webhook event = `order.completed` when order is completed.
 
 ```json
 {
-  "company_slug": "yojee",
-  "created_at": 1679017779,
   "data": {
-    "driver": {
-      "id": 20496,
-      "name": "Driver 1"
-    },
-    "eta": "2023-03-17T20:39:13.543787",
-    "event_time": "2023-03-17T01:49:39.009000Z",
-    "id": 17683868,
-    "inserted_at": "2023-03-17T01:29:13.001319Z",
-    "order": {
-      "external_id": "YOJ01234567",
-      "number": "O-CQDSIW0ETB1O"
-    },
-    "order_item": {
-      "external_customer_id": "108E23",
-      "external_customer_id2": "108E23C",
-      "external_customer_id3": null,
-      "state": "completed",
-      "tracking_number": "YOJ-7LK7R3EF2GCA"
-    },
-    "order_item_step": {
-      "metadata": { "sequence": "2" }
-    },
-    "pod_url": "https://umbrella-staging.yojee.com/api/v3/public/pods/order_item/YOJ-7LK7R3EF2GCA",
-    "reasons": [],
+    "id": 3071738,
+    "status": "completed",
+    "number": "O-0RMWU92U8MOR",
     "sender": {
-      "id": 20794
+      "id": 15399,
+      "name": null,
+      "type": "organisation",
+      "organisation_name": "Local Dev"
     },
-    "step_sequence": 1,
-    "task_type": "dropoff"
+    "external_id": "external id",
+    "inserted_at": "2024-01-24T04:41:06.236449Z",
+    "container_no": null,
+    "price": null,
+    "order_items": [
+      {
+        "id": 4112575,
+        "status": "completed",
+        "item": {
+          "id": 3833084,
+          "length": null,
+          "description": null,
+          "width": null,
+          "payload_type": "Package",
+          "weight": null,
+          "height": null,
+          "volume": "0.0",
+          "quantity": 1,
+          "volumetric_weight": "0.0",
+          "global_tracking_number": "Y-WA962YKS8PB7",
+          "is_using_container": true
+        },
+        "inserted_at": "2024-01-24T04:41:06.421751Z",
+        "external_customer_id": null,
+        "external_customer_id2": null,
+        "external_customer_id3": null,
+        "tracking_number": "YOJ-DUMLDLUR4Z1V",
+        "price": null,
+        "service_type": "domestic",
+        "transfer_info": null
+      }
+    ],
+    "completion_time": "2024-01-24T04:41:30.058867Z",
+    "cancelled_at": null,
+    "display_price": null,
+    "service_type_id": 6956,
+    "pod_url": "https://umbrella-staging.yojee.com/api/v3/public/pods/order/O-0RMWU92U8MOR"
   },
-  "event_type": "task.completed",
-  "id": "b1485b39-f598-4dca-8f56-a766a741454d",
-  "webhook_id": 37,
+  "id": "83dfb8da-6dca-43f9-830d-71deec561a45",
+  "version": "2",
+  "event_type": "order.completed",
+  "company_slug": "yojee",
+  "created_at": 1706071290,
+  "webhook_id": 84,
   "yojee_instance": "https://umbrella-staging.yojee.com"
 }
 ```
-
-To identify a completed order, there are three points to notice:
-
-1. event_type = `'task.completed'`
-2. data.task_type = `'dropoff'`
-3. data.order_item.state = `'completed'`
 
 ### How to retrieve POD?
 

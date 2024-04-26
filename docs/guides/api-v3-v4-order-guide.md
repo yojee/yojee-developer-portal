@@ -14,7 +14,7 @@ On top of that, with `template_id` or `template_type_id`, user can now customize
 >
 > Refer to "Sample payload conversion" section to see how to convert to v4 payload and "Booking Template" section to find out more additional information on booking template.
 
-Therefore, in this document, we will focus on the mapping of order payload from [V3 single-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders/post) and [V3 multi-leg order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v3.yaml/paths/~1api~1v3~1dispatcher~1orders_multi_leg/post) to [V4 order creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders~1create/post).
+Therefore, in this document, we will focus on the mapping of order payload from V3 single-leg order creation and V3 multi-leg order creation to V4 order creation.
 
 <table style="text-align: left;">
     <tr>
@@ -186,7 +186,7 @@ The table below shows the main components in both versions.
     <tr>
         <td>order_step_groups</td>
         <td>array</td>
-        <td>Y</td>
+        <td>N</td>
         <td>Contains grouping information of an order.</td>
     </tr>
 </table>
@@ -743,7 +743,7 @@ For example:
 }
 ```
 
-There are more available parameters for container related information. Please refer to [V4 - Order Creation Doc](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders~1create/post).
+There are more available parameters for container related information. Please refer to [V4 - Order Creation Doc](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v4~1company~1orders~1create/post).
 
 </td>
     </tr>
@@ -785,7 +785,7 @@ For example:
     <li>In V4, we introduced new fields to store UOM of each variables, for example length_unit, weight_unit etc. </li>
     <li>If those fields are not found in the payload, system will use the default setup value.</li>
 
-Please refer to [V4 - Order Creation Doc](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders~1create/post) for more information.
+Please refer to [V4 - Order Creation Doc](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v4~1company~1orders~1create/post) for more information.
 
 </ul>
 
@@ -1150,7 +1150,7 @@ Let’s take a look at the small portion of structure below:
 > #### Note
 >
 > Refer to table below for list of available options for new parameters.
-> Sample options are also available at [V4 - Order Creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders~1create/post)
+> Sample options are also available at [V4 - Order Creation](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v4~1company~1orders~1create/post)
 
 <table>
     <tr style="text-align: left;">
@@ -1240,7 +1240,7 @@ Let’s take a look at the small portion of structure below:
     </tr>
     <tr>
         <td>service_type_name</td>
-        <td>To get service type name, refer to this endpoint <a href="https://yojee.stoplight.io/docs/yojee-api/publish/yojee-configuration-api.yaml/paths/~1api~1v3~1dispatcher~1service_types/get">Get Service Types</a>.
+        <td>service type name
         </td>
     </tr>
 </table>

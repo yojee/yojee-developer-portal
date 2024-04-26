@@ -13,11 +13,11 @@ The Yojee API uses API Keys to authenticate requests in most cases. Most of thes
 
 ### API Keys
 
-To authenticae using API Keys, include the following parameters in the HTTP header.
+To authenticate using API Keys, include the following parameters in the HTTP header.
 
 ```json json_schema
 {
-  "type": "API Keys",
+  "type": "object",
   "properties": {
     "company_slug": {
       "type": "string",
@@ -54,7 +54,7 @@ Pass `Company Slug` and `Access Token` in the HTTP header of your API call, at t
 
 ## Create an Order
 
-We will be making the call to [**Create Order**](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders/post) to create an order.
+We will be making the call to [**Create Order**](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v4~1company~1orders~1create/post) to create an order.
 
 ### Sample Payload
 
@@ -62,65 +62,144 @@ Use the following sample payload for your first `Create Order` call:
 
 ```json
 {
-  "external_sender_id": "Sender 1",
-  "item_steps": [
+  "data": [
     {
-      "item_id": 0,
-      "order_step_id": 0,
-      "type": "pickup"
-    },
-    {
-      "item_id": 0,
-      "order_step_id": 1,
-      "type": "dropoff"
-    }
-  ],
-  "steps": [
-    {
-      "address": "20 Pasir Pajang Road",
-      "address2": "",
-      "country": "SG",
-      "state": "",
-      "postal_code": "117439",
-      "contact_company": "Sender Company Pte Ltd",
-      "contact_name": "John Lim",
-      "contact_phone": 62010000,
-      "contact_email": "john@company1.example.com",
-      "from_time": "2021-08-01T08:59:22.813Z",
-      "to_time": "2021-08-02T07:59:59.813Z"
-    },
-    {
-      "address": "1 Changi Business Park",
-      "address2": "Avenue 1",
-      "country": "SG",
-      "state": "",
-      "postal_code": "486058",
-      "contact_company": "Customer Company Pte Ltd",
-      "contact_name": "Peter Tan",
-      "contact_phone": 62010001,
-      "contact_email": "peter@company2.example.com",
-      "from_time": "2021-08-03T08:59:22.813Z",
-      "to_time": "2021-08-04T07:59:59.813Z"
-    }
-  ],
-  "items": [
-    {
-      "description": "Laptop Computer",
-      "width": 0.11,
-      "length": 0.12,
-      "height": 0.044,
-      "weight": 334,
-      "quantity": 4,
-      "info": "Item information",
-      "external_customer_id": "TN-001",
-      "external_customer_id2": "CUSTOMER-001",
-      "external_customer_id3": "",
-      "payload_type": "package",
-      "price_info": "",
-      "service_type": "express",
-      "volume": 1000,
-      "volumetric_weight": 1,
-      "price_amount": 100
+      "order_info": {
+        "external_id": "EON-12345678",
+        "packing_mode": "FCL",
+        "sender": {
+          "external_id": "SID-1136"
+        },
+        "service_type_name": "Same day",
+        "template_type_id": 1
+      },
+      "order_items": [
+        {
+          "description": "Item 1",
+          "payload_type": "Package",
+          "quantity": 1,
+          "external_customer_id": "ecid-1",
+          "external_customer_id2": "ecid-2",
+          "external_customer_id3": "ecid-3",
+          "info": "Please call before delivery",
+          "height": 8,
+          "height_unit": "foot",
+          "length": 20,
+          "length_unit": "foot",
+          "width": 8,
+          "width_unit": "foot",
+          "weight": 5.2,
+          "weight_unit": "metric_ton",
+          "volume": 36.24556,
+          "volume_unit": "cubic_meter",
+          "volumetric_weight": 37.6272,
+          "volumetric_weight_unit": "metric_ton"
+        },
+        {
+          "description": "Item 2",
+          "payload_type": "Container",
+          "quantity": 1,
+          "external_customer_id": "ecid-1",
+          "external_customer_id2": "ecid-2",
+          "external_customer_id3": "ecid-3",
+          "info": "Please call before delivery",
+          "height": 67,
+          "height_unit": "centimeter",
+          "length": 52,
+          "length_unit": "centimeter",
+          "width": 54,
+          "width_unit": "centimeter",
+          "weight": 100,
+          "weight_unit": "kilogram",
+          "volume": 188136,
+          "volume_unit": "cubic_centimeter",
+          "volumetric_weight": 188.136,
+          "volumetric_weight_unit": "kilogram",
+          "item_container": {
+            "container_no": "759933",
+            "description": "my container",
+            "iso_type": "45G1",
+            "seal_no": "123456",
+            "slot_date": "2021-01-01T13:12:17.325Z",
+            "slot_reference": "1",
+            "weight": 3870,
+            "vgm": 3870,
+            "vgm_unit": "kilogram",
+            "vgm_date": "2021-01-01T13:12:17.325Z",
+            "vgm_party": "shipper"
+          }
+        }
+      ],
+      "order_steps": [
+        {
+          "address": "Topaz Building Kamias Road, Malaya Quezon City",
+          "address2": "Suite 200",
+          "city": "Malaya Quezon City",
+          "contact_company": "Gadgets Co",
+          "contact_email": "johndoe@example.com",
+          "contact_name": "John Doe",
+          "contact_phone": "12345678",
+          "country": "Philippines",
+          "from_time": "2022-04-19T09:38:25.566831",
+          "location": {
+            "lat": 14.6332747,
+            "lng": 121.052446
+          },
+          "postal_code": "1101",
+          "state": "Luzon",
+          "timezone": "Asia/Manila",
+          "to_time": "2022-04-19T10:08:25.566831"
+        },
+        {
+          "address": "Taguig, 1630 Metro Manila, Philippines",
+          "address2": "Entrance A",
+          "city": "Manila",
+          "contact_company": "LZ Warehouse",
+          "contact_email": "lzwarehouse@example.com",
+          "contact_name": "LZ Warehouse",
+          "contact_phone": "12345678",
+          "country": "Philippines",
+          "from_time": "2022-04-19T10:08:25.566831",
+          "location": {
+            "lat": 14.5126048,
+            "lng": 120.9778036
+          },
+          "postal_code": "1630",
+          "state": "Luzon",
+          "timezone": "Asia/Manila",
+          "to_time": "2022-04-19T10:38:25.566831"
+        }
+      ],
+      "order_item_steps": [
+        {
+          "order_item_index": 0,
+          "order_step_group_index": 0,
+          "order_step_index": 0,
+          "step_sequence": 0,
+          "type": "pickup"
+        },
+        {
+          "order_item_index": 0,
+          "order_step_group_index": 0,
+          "order_step_index": 1,
+          "step_sequence": 1,
+          "type": "dropoff"
+        },
+        {
+          "order_item_index": 1,
+          "order_step_group_index": 0,
+          "order_step_index": 0,
+          "step_sequence": 0,
+          "type": "pickup"
+        },
+        {
+          "order_item_index": 1,
+          "order_step_group_index": 0,
+          "order_step_index": 1,
+          "step_sequence": 1,
+          "type": "dropoff"
+        }
+      ]
     }
   ]
 }
@@ -128,9 +207,9 @@ Use the following sample payload for your first `Create Order` call:
 
 <!-- theme: info -->
 
-> ### external_sender_id
+> ### sender.external_id, template_type_id
 >
-> Note that the `external_sender_id` needs to be a valid ID in your Yojee instance
+> Note that both `sender.external_id` and `template_type_id` need to be a valid ID in your Yojee instance
 
 ### Making the call
 
@@ -138,7 +217,7 @@ There are a few ways you can make the call:
 
 #### On the API Reference
 
-- Locate the `Try-it Console` on the right of the [**Create Order**](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v3~1dispatcher~1orders/post).
+- Locate the `Try-it Console` on the right of the [**Create Order**](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v4~1company~1orders~1create/post).
 - Fill in your `company_slug` and `access_token`.
 - Copy and paste the above sample payload in the **Body** section of the `Try-it Console`.
 - Click `Send Request`.
@@ -148,76 +227,157 @@ There are a few ways you can make the call:
 - Copy this command:
 
 ```shell
-curl --request POST \
-  --url https://umbrella-dev.yojee.com/api/v3/dispatcher/orders \
-  --header 'Content-Type: application/json' \
-  --header 'access_token: [ACCESS_TOKEN]' \
-  --header 'company_slug: [COMPANY_SLUG]' \
-  --data '{
-  "item_steps": [
-    {
-      "item_id": 0,
-      "order_step_id": 0,
-      "type": "pickup"
-    },
-    {
-      "item_id": 0,
-      "order_step_id": 1,
-      "type": "dropoff"
-    }
-  ],
-  "steps": [
-    {
-      "address": "20 Pasir Pajang Road",
-      "address2": "",
-      "country": "SG",
-      "state": "",
-      "postal_code": "117439",
-      "contact_company": "S Company",
-      "contact_name": "John Lim",
-      "contact_phone": 62010000,
-      "contact_email": "john@company1.example.com",
-      "from_time": "2021-08-01T08:59:22.813Z",
-      "to_time": "2021-08-02T07:59:59.813Z"
-    },
-    {
-      "address": "1 Changi Business Park",
-      "address2": "Avenue 1",
-      "country": "SG",
-      "state": "",
-      "postal_code": "486058",
-      "contact_company": "C Company",
-      "contact_name": "Peter Tan",
-      "contact_phone": 62010001,
-      "contact_email": "peter@company2.example.com",
-      "from_time": "2021-08-03T08:59:22.813Z",
-      "to_time": "2021-08-04T07:59:59.813Z"
-    }
-  ],
-  "items": [
-    {
-      "description": "Laptop Computer",
-      "width": 0.11,
-      "length": 0.12,
-      "height": 0.044,
-      "weight": 334,
-      "quantity": 4,
-      "info": "Item Infor",
-      "external_customer_id": "TN-001",
-      "external_customer_id2": "CUSTOMER-INFO-001",
-      "external_customer_id3": "",
-      "payload_type": "package",
-      "price_info": "",
-      "service_type": "express",
-      "volume": 1000,
-      "volumetric_weight": 1,
-      "price_amount": 0
-    }
-  ]
+curl --location 'https://umbrella-staging.yojee.com/api/v4/company/orders/create' \
+--header 'company_slug: [COMPANY_SLUG]' \
+--header 'access_token: [ACCESS_TOKEN]' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "data": [
+        {
+            "order_info": {
+                "external_id": "EON-12345678",
+                "packing_mode": "FCL",
+                "sender": {
+                    "external_id": "SID-1136"
+                },
+                "service_type_name": "Same day",
+                "template_type_id": 1
+            },
+            "order_items": [
+                {
+                    "description": "Item 1",
+                    "payload_type": "Package",
+                    "quantity": 1,
+                    "external_customer_id": "ecid-1",
+                    "external_customer_id2": "ecid-2",
+                    "external_customer_id3": "ecid-3",
+                    "info": "Please call before delivery",
+                    "height": 8,
+                    "height_unit": "foot",
+                    "length": 20,
+                    "length_unit": "foot",
+                    "width": 8,
+                    "width_unit": "foot",
+                    "weight": 5.2,
+                    "weight_unit": "metric_ton",
+                    "volume": 36.24556,
+                    "volume_unit": "cubic_meter",
+                    "volumetric_weight": 37.6272,
+                    "volumetric_weight_unit": "metric_ton"
+                },
+                {
+                    "description": "Item 2",
+                    "payload_type": "Container",
+                    "quantity": 1,
+                    "external_customer_id": "ecid-1",
+                    "external_customer_id2": "ecid-2",
+                    "external_customer_id3": "ecid-3",
+                    "info": "Please call before delivery",
+                    "height": 67,
+                    "height_unit": "centimeter",
+                    "length": 52,
+                    "length_unit": "centimeter",
+                    "width": 54,
+                    "width_unit": "centimeter",
+                    "weight": 100,
+                    "weight_unit": "kilogram",
+                    "volume": 188136,
+                    "volume_unit": "cubic_centimeter",
+                    "volumetric_weight": 188.136,
+                    "volumetric_weight_unit": "kilogram",
+                    "item_container": {
+                        "container_no": "759933",
+                        "description": "my container",
+                        "iso_type": "45G1",
+                        "seal_no": "123456",
+                        "slot_date": "2021-01-01T13:12:17.325Z",
+                        "slot_reference": "1",
+                        "weight": 3870,
+                        "vgm": 3870,
+                        "vgm_unit": "kilogram",
+                        "vgm_date": "2021-01-01T13:12:17.325Z",
+                        "vgm_party": "shipper"
+                    }
+                }
+            ],
+            "order_steps": [
+                {
+                    "address": "Topaz Building Kamias Road, Malaya Quezon City",
+                    "address2": "Suite 200",
+                    "city": "Malaya Quezon City",
+                    "contact_company": "Gadgets Co",
+                    "contact_email": "johndoe@example.com",
+                    "contact_name": "John Doe",
+                    "contact_phone": "12345678",
+                    "country": "Philippines",
+                    "from_time": "2022-04-19T09:38:25.566831",
+                    "location": {
+                        "lat": 14.6332747,
+                        "lng": 121.052446
+                    },
+                    "postal_code": "1101",
+                    "state": "Luzon",
+                    "timezone": "Asia/Manila",
+                    "to_time": "2022-04-19T10:08:25.566831"
+                },
+                {
+                    "address": "Taguig, 1630 Metro Manila, Philippines",
+                    "address2": "Entrance A",
+                    "city": "Manila",
+                    "contact_company": "LZ Warehouse",
+                    "contact_email": "lzwarehouse@example.com",
+                    "contact_name": "LZ Warehouse",
+                    "contact_phone": "12345678",
+                    "country": "Philippines",
+                    "from_time": "2022-04-19T10:08:25.566831",
+                    "location": {
+                        "lat": 14.5126048,
+                        "lng": 120.9778036
+                    },
+                    "postal_code": "1630",
+                    "state": "Luzon",
+                    "timezone": "Asia/Manila",
+                    "to_time": "2022-04-19T10:38:25.566831"
+                }
+            ],
+            "order_item_steps": [
+                {
+                    "order_item_index": 0,
+                    "order_step_group_index": 0,
+                    "order_step_index": 0,
+                    "step_sequence": 0,
+                    "type": "pickup"
+                },
+                {
+                    "order_item_index": 0,
+                    "order_step_group_index": 0,
+                    "order_step_index": 1,
+                    "step_sequence": 1,
+                    "type": "dropoff"
+                },
+                {
+                    "order_item_index": 1,
+                    "order_step_group_index": 0,
+                    "order_step_index": 0,
+                    "step_sequence": 0,
+                    "type": "pickup"
+                },
+                {
+                    "order_item_index": 1,
+                    "order_step_group_index": 0,
+                    "order_step_index": 1,
+                    "step_sequence": 1,
+                    "type": "dropoff"
+                }
+            ]
+        }
+    ]
 }'
 ```
 
-- Remember to replace **[COMPANY_SLUG]** and **[ACCESS TOKEN]** with your `Company_Slug` and `Access_Token`
+<!-- theme: info -->
+
+> Remember to replace **[COMPANY_SLUG]** and **[ACCESS_TOKEN]** with your `company_slug` and `access_token`
 
 ## Troubleshooting
 
@@ -231,22 +391,7 @@ You may encounter the following messages when you make your first requests.
 }
 ```
 
-This means either your `Company_Slug` or your `Access_Token` is wrong. Check them and resend again. If the problem persists, check with the Yojee team that is working with you.
-
-<!--
-### External Sender Id
-json
-{
-    "data": {
-        "AC0014": [
-            "No corporate and sender exists. please create a sender account before create a order."
-        ]
-    }
-}
-
-The `external_sender_id` shown in the sample payload is just a sample. You will need to set up at least one sender in the Yojee `Dispatcher Portal` and create the `external_sender_id` for this sender.
-Alternatively, you may also use the numeric `sender_id` listed beside your sender in the `Dispatcher Portal` and pass the Id value in the `sender_id` field in your payload.
--->
+This means either your `company_slug` or your `access_token` is invalid. Check them and resend the request. If the problem persists, kindly check with the Yojee team that is working with you.
 
 ## Verify Order is created
 
@@ -256,35 +401,31 @@ If the API call is successful, you should receive a HTTP 200 response with a pay
 
 ```json
 {
-  "data": {
-    "cancelled_at": null,
-    "container_no": null,
-    "display_price": "SGD 0",
-    "external_id": "TEST-ORDER-001",
-    "id": 410013,
-    "inserted_at": "2021-07-25T11:13:01.524025Z",
-    "number": "O-QTROJOUMTNM8",
-    "order_items": [
-      {
-        "cod_price": null,
-        "id": 434791,
-        "tracking_number": "YOJ-4UABMDSOJ2VD"
-      }
-    ],
-    "paid": false,
-    "placed_by_user_profile_id": 5929,
-    "price": {
-      "amount": "0",
-      "currency": "SGD"
-    },
-    "sender_id": 1750,
-    "status": "created"
-  },
-  "message": "Created the order.",
-  "warning": false
+  "data": [
+    {
+      "id": 3289092,
+      "number": "O-ZKZ3AJNAFFXU",
+      "external_id": "EON-12345678",
+      "order_items": [
+        {
+          "id": 4414173,
+          "tracking_number": "YOJ-IB2NJPEOVGLF",
+          "external_tracking_number": null
+        },
+        {
+          "id": 4414174,
+          "tracking_number": "YOJ-IB2NJPFSEWRW",
+          "external_tracking_number": null
+        }
+      ],
+      "service_type_id": 5384,
+      "invoice_ref": "IV-57SS4MRVCI26"
+    }
+  ],
+  "message": "1 Orders created!"
 }
 ```
 
 ### Checking in Portal
 
-You can also log in to the Yojee `Dispatcher Portal` with your `Dispatcher` credentials to check that the order has been created.
+You can also login to the Yojee `Dispatcher Portal` with your `Dispatcher` credentials to check that the order has been created.

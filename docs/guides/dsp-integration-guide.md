@@ -199,7 +199,7 @@ Incoming transfer orders will be in Co. B’s slug as orders with **created** st
 - Dispatcher Get Orders with status **created**.
 - Dispatcher Get Single Order Detail by retrieving the **order_number** from the call above.
 
-### [Dispatcher Get List of Orders](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1orders/get)
+### [Dispatcher Get List of Orders](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v4~1company~1orders/get)
 
 This API call will retrieve orders matching the criteria provided in the parameters.
 
@@ -213,7 +213,7 @@ curl --location -g --request GET '[BASEURL]/api/v4/company/orders?page_size=50&p
 --header 'ACCESS_TOKEN: [TOKEN]'
 ```
 
-### [Dispatcher Get Order](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api-v4.yaml/paths/~1api~1v4~1company~1order/get)
+### [Dispatcher Get Order](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-order-api.yaml/paths/~1api~1v4~1company~1order/get)
 
 This API call will retrieve order information based on either order number or order external id.
 
