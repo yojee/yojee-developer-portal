@@ -49,9 +49,7 @@ After the order has been transferred to Co. B, it is the responsibility of Co. B
 For Driver Management, the Co. B Dispatcher can go to Co. B’s slug to:
 
 1. Create/Edit/Delete Drivers. Once drivers have been created in Co. B’s slug, the orders can be assigned. External TMS might have
-their own drivers. It is not necessary to create all these drivers in TCMS. All slugs come with a driver named as `Unknown`.
-The concept is TCMS does not know which driver completed the tasks. If the external TMS does not want to populate the driver details
-as part of order compeltion, driver name / reference can be used as `Unknown`.
+their own drivers. It is not necessary to create all these drivers in TCMS. If the external TMS does not want to populate the actual driver details as part of order assignment, in the api driver name can be used as `Unknown`.
 
 But if we want to save the actual driver details as part of order, dispatcher need to create the drivers in the Co. B's slug.
 
@@ -183,6 +181,26 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/partner_transfer/dis
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]'
 ```
+
+For full request/response details, please click on the title.
+
+### [Creating/Updating charges](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_upsert_charges.yaml/paths/~1api~1v4~1company~1integration~1order~1{number}/charges/put)
+
+Call this API to **create / update** charges linked to an order
+
+For full request/response details, please click on the title.
+
+###### Sample Curl Command
+
+```shell
+curl --location --request PUT '[BASEURL]/api/v4/company/integration/order/{number}/charges' \
+--header 'COMPANY_SLUG: [SLUG]' \
+--header 'ACCESS_TOKEN: [TOKEN]'
+```
+
+### [Get Rate Charge Types](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v3_dispatcher_get_rate_charge_types.yaml/paths/~1api~1v3~1dispatcher~1rates~1rate_charge_types/get)
+
+Call this API to **get** rate charge types
 
 For full request/response details, please click on the title.
 
