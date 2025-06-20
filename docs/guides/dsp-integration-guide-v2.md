@@ -291,7 +291,7 @@ curl --location --request GET '[BASEURL]/api/v4/company/delivery_execution/bg_st
 ```
 #### Sample response
 
-``` json
+```json
 {
     "data": {
         "id": "6bbaf969ab3041eeb1e70ddab60a4e90",
@@ -319,6 +319,7 @@ curl --location --request GET '[BASEURL]/api/v4/company/delivery_execution/bg_st
         "failed_at": null
     }
 }
+```
 
 For full request/response details, please click on the title.
 
