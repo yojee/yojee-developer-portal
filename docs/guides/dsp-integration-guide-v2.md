@@ -8,8 +8,6 @@ In certain cases, the DSPs have their own Transport Management Systems, and woul
 
 This document outline the integration flow, and describe the individual API calls needed. 
 
-## Overview
-
 ![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-05.png)
 
 The solution to integrate Yojee with DSP’s TMS is designed as follows:
@@ -30,10 +28,6 @@ The Integration Solution can also be broken down into the following components.
   - where the external TMS will mark the various stages of pickup/dropoff task completions, and upload signatures or pictures of the delivery as PODs
   - in some cases the external TMS will send some documents to the upstream
 
-
-## Order Transfer
-
-![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-06.png)
 
 For the API calls, the Integration Layer needs to authenticate using Co. B’s Dispatcher credentials. This is typically done by including the COMPANY_SLUG and the Dispatcher’s ACCESS_TOKEN in the HTTP header.
 
@@ -80,8 +74,6 @@ curl --location -g --request GET '[BASEURL]/api/v4/company/order?number=O-K02IHA
 
 ### [Accept the transfer order](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_order_bulk_accept.yaml/paths/~1api~1v4~1company~1order~1bulk_accept/put)
 
-#### **Dispatcher Accept Partner Transfer Order**
-
 Call this API to **accept** the transfer order from upstream partner.
 
 ###### Sample Curl Command
@@ -104,12 +96,11 @@ curl --location --request POST '[BASEURL]/api/v4/company/order/bulk_accept' \
 
 For full request/response details, please click on the title.
 
-### [Decline the transfer order](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v3_dispatcher_partner_transfer_dispatcher_bulk_reject_order.yaml/paths/~1api~1v3~1dispatcher~1partner_transfer~1dispatcher~1bulk_reject_order/post)
-
 
 ##### **Get Reason codes**
+<To Do: add this>
 
-##### **Dispatcher Reject Partner Transfer Order**
+### [Decline the transfer order](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v3_dispatcher_partner_transfer_dispatcher_bulk_reject_order.yaml/paths/~1api~1v3~1dispatcher~1partner_transfer~1dispatcher~1bulk_reject_order/post)
 
 Call this API to **reject** the transfer order from upstream partner.
 
@@ -135,7 +126,36 @@ For full request/response details, please click on the title.
 ```shell
 curl --location --request PUT '[BASEURL]/api/v4/company/integration/order/{number}/charges' \
 --header 'COMPANY_SLUG: [SLUG]' \
---header 'ACCESS_TOKEN: [TOKEN]'
+--header 'ACCESS_TOKEN: [TOKEN]' \
+--data-raw '{
+  "number": "O-123",
+  "charges": [
+    {
+      "charge_code": "BFC",
+      "currency": "AUD",
+      "description": "Route Price",
+      "sell": 3
+    },
+    {
+      "charge_code": "SURCHARGES",
+      "currency": "AUD",
+      "description": "Carrier Surcharges",
+      "sell": 20
+    },
+    {
+      "charge_code": "FCC",
+      "currency": "AUD",
+      "description": "Fuel Levy",
+      "sell": 0.6
+    },
+    {
+      "charge_code": "TAX",
+      "currency": "AUD",
+      "description": "GST",
+      "sell": 2.36
+    }
+  ]
+}'
 ```
 
 ### [Get Rate Charge Types](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v3_dispatcher_get_rate_charge_types.yaml/paths/~1api~1v3~1dispatcher~1rates~1rate_charge_types/get)
@@ -152,11 +172,6 @@ curl --location --request GET '[BASEURL]/api/v3/dispatcher/rates/rate_charge_typ
 
 For full request/response details, please click on the title.
 
-### Driver Assignment
-
-![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-07.png)
-
-#### Dispatcher Assign Driver to tasks
 ### [Dispatcher Assign Driver to tasks](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_delivery_execution_assign.yaml/paths/~1api~1v4~1company~1delivery_execution~1assign/post)
 
 
@@ -208,7 +223,93 @@ For full request/response details, please click on the title.
 }
 ```
 
-## Task Status updates
+### [Dispatcher mark the task / order as completed](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_delivery_execution_complete.yaml/paths/~1api~1v4~1company~1delivery_execution~1complete/post)
+
+Call this api to complete the order / task.
+
+###### Sample Curl Command
+
+```shell
+curl --location --request POST '[BASEURL]/api/v4/company/delivery_execution/complete' \
+--header 'COMPANY_SLUG: [SLUG]' \
+--header 'ACCESS_TOKEN: [TOKEN]' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "data": [
+        {
+            "orders": [
+                
+                 {
+                    "number": "O-3LBETYLWASX1",
+                    "step_sequence": 0
+                }
+            ],
+            "driver": {
+                "name": "My new Drv"
+            },
+            "event_data": {
+                "event_type": "complete",
+                "event_time": "2024-03-09T14:25:33.55",
+                "departure_time": "2024-03-10T13:00:00"
+            }
+        }
+    ]
+}'
+```
+
+For full request/response details, please click on the title.
+
+### [Get documents](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api@v3@dispatcher@documents.yaml/paths/~1api~1v3~1dispatcher~1documents/get)
+
+Call this api to get the documents attached to the order;
+
+###### Sample Curl Command
+
+```shell
+curl --location --request GET '[BASEURL]/api/v4/company/delivery_execution/complete' \
+--header 'COMPANY_SLUG: [SLUG]' \
+--header 'ACCESS_TOKEN: [TOKEN]' \
+--header 'Content-Type: application/json' 
+```
+
+For full request/response details, please click on the title.
+
+### Attach documents to the order
+
+1. Upload the document to TCMS and get a pre-signed url
+2. Send the presigned url and the order details to attach the document to the order
+
+### [Upload document to TCMS and get presigned url](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api@v3@dispatcher@documents@presigned_url.yaml/paths/~1api~1v3~1dispatcher~1presigned_url/get)
+
+Call this api to attach documents to the order;
+
+###### Sample Curl Command
+
+```shell
+curl --location --request GET '[BASEURL]/api/v3/dispatcher/documents/presigned_url' \
+--header 'COMPANY_SLUG: [SLUG]' \
+--header 'ACCESS_TOKEN: [TOKEN]' \
+--header 'Content-Type: application/json' 
+```
+
+For full request/response details, please click on the title.
+
+### [Attach documents to the order](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api@v3@dispatcher@documents.yaml/paths/~1api~1v3~1dispatcher~1documents/presigned_url/post)
+
+Call this api to attach documents to the order;
+
+### [Get list of document classification codes](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_dispatcher_document_classifications.yaml/paths/~1api~1v4~1dispatcher~1document_classifications/get)
+
+###### Sample Curl Command
+
+```shell
+curl --location --request POST '[BASEURL]/api/v4/dispatcher/document_classifications' \
+--header 'COMPANY_SLUG: [SLUG]' \
+--header 'ACCESS_TOKEN: [TOKEN]' \
+--header 'Content-Type: application/json' 
+```
+
+For full request/response details, please click on the title.
 
 ### Authentication
 
@@ -240,3 +341,8 @@ A long-lived Access Token is generated for the `Dispatcher` account. This token 
 Obtain this information from the Yojee team working with you.
 
 In this document we will use `[SLUG]` and `[TOKEN]` to represent the `company_slug` and `access_token` respectively.
+
+USP - Upstream Partner
+DSP - Downstream Partner
+US - Upstream
+DS - Downstream
