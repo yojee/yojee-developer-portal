@@ -628,13 +628,45 @@ If your webhook script performs complex logic, or makes network calls, it's poss
 >
 > See the section on **Basic Information on APIs - Authentication** at the end of this document for more information on authentication.
 
-### Retrieve incoming order details
-
 ### [Dispatcher Get Order](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_order.yaml/paths/~1api~1v4~1company~1order/get)
 
 This API call will retrieve order information based on either order number or order external id.
 
-For full request/response details, please click on the title.
+<table style="text-align: left;">
+  <tr>
+    <td><strong>Method</strong></td>
+    <td><strong>Endpoint</strong></td>
+  </tr>
+  <tr>
+    <td>POST</td>
+    <td>[BASEURL]/api/v4/company/orders/create</td>
+  </tr>
+</table>
+
+### Request Headers
+
+<table style="text-align: left;">
+  <tr>
+    <td><strong>Parameter</strong></td>
+    <td><strong>Required?</strong></td>
+    <td><strong>Description</strong></td>
+  </tr>
+  <tr>
+    <td>company_slug</td>
+    <td>Y</td>
+    <td>Dispatcher company slug</td>
+  </tr>
+  <tr>
+    <td>access_token</td>
+    <td>Y</td>
+    <td>Access token</td>
+  </tr>
+  <tr>
+    <td>Content-Type</td>
+    <td>Y</td>
+    <td>Use ‘application/json’</td>
+  </tr>
+</table>
 
 ###### Sample Curl Command
 
@@ -643,6 +675,8 @@ curl --location -g --request GET '[BASEURL]/api/v4/company/order?number=O-K02IHA
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]'
 ```
+
+For full request/response details, please click on the title.
 
 ### [Accept the transfer order](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_order_bulk_accept.yaml/paths/~1api~1v4~1company~1order~1bulk_accept/put)
 
