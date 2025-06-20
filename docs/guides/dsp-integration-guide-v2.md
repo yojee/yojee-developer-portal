@@ -389,6 +389,87 @@ This is the format of the HTTP Post request body your system will receive in the
 }
 ```
 
+#### Event: order.cancelled
+
+```json
+{
+  "data": {
+    "attributes": {},
+    "id": 4234066,
+    "status": "cancelled",
+    "number": "O-1YV56RV3BKOM",
+    "sender": {
+      "id": 20086,
+      "name": null,
+      "type": "organisation",
+      "organisation_name": "Yojee "
+    },
+    "external_id": null,
+    "inserted_at": "2025-06-20T07:01:52.204462Z",
+    "cancelled_at": "2025-06-20T08:32:37.544634Z",
+    "price": {
+      "currency": "SGD",
+      "amount": "21.62000000"
+    },
+    "container_no": null,
+    "order_items": [
+      {
+        "id": 5286199,
+        "status": "cancelled",
+        "item": {
+          "id": 3911862,
+          "length": "11",
+          "description": "BICYCLE PARTS & ACCESSORIES",
+          "width": "10",
+          "payload_type": "Pallet",
+          "weight": "2.000",
+          "height": "12",
+          "volume": "3.700",
+          "volumetric_weight": "0.264",
+          "quantity": 1,
+          "global_tracking_number": "Y-EDKKTMIHGL2B",
+          "is_using_container": true
+        },
+        "inserted_at": "2025-06-20T07:01:52.215455Z",
+        "price": null,
+        "external_customer_id": "TB01816402-GJ1",
+        "external_customer_id2": null,
+        "external_customer_id3": null,
+        "tracking_number": "YOJ-2LAMWXM0ZFVB",
+        "service_type": "express",
+        "transfer_info": null
+      }
+    ],
+    "completion_time": null,
+    "display_price": "SGD 21.62",
+    "service_type_id": 7402,
+    "organisational_unit_id": null,
+    "delivery_status": "cancelled",
+    "delivery_status_updated_at": "2025-06-20T08:32:37.858485Z",
+    "custom_field_1": null,
+    "custom_field_2": "Sea",
+    "custom_field_3": null,
+    "custom_field_4": null,
+    "external_carrier_references": [
+      {
+        "value": "TBAZ00025056",
+        "order_id": 4234066,
+        "name": "carrierConsignmentId"
+      }
+    ],
+    "planning_status": "cancelled",
+    "planning_status_updated_at": "2025-06-20T08:32:37.803836Z"
+  },
+  "id": "7859c6d9-0ba4-468c-9f73-6cde33e0b3d6",
+  "version": "1",
+  "event_type": "order.cancelled",
+  "company_slug": "yojee",
+  "created_at": 1750408357,
+  "webhook_id": 56,
+  "yojee_instance": "https://umbrella-staging.yojee.com"
+}
+```
+
 #### Event: document.created
 
 ```json
@@ -481,6 +562,7 @@ HTTP POST payloads that are delivered to your webhook's configured URL endpoint 
     <td>Timestamp used as input for verifying signature</td>
   </tr>
 </table>
+
 #### Verifying Signatures
 
 Yojee signs the webhook events it sends to your endpoints. We do so by including a signature using a hash-based message authentication code (HMAC) with SHA-256 in each event’s **yojee-signature** header. This allows you to validate that the events were sent by Yojee, not by a third party.
