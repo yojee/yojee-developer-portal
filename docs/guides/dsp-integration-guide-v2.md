@@ -141,18 +141,6 @@ curl --location --request PUT '[BASEURL]/api/v4/company/integration/order/{numbe
       "currency": "AUD",
       "description": "Carrier Surcharges",
       "sell": 20
-    },
-    {
-      "charge_code": "FCC",
-      "currency": "AUD",
-      "description": "Fuel Levy",
-      "sell": 0.6
-    },
-    {
-      "charge_code": "TAX",
-      "currency": "AUD",
-      "description": "GST",
-      "sell": 2.36
     }
   ]
 }'
@@ -263,11 +251,7 @@ curl --location --request POST '[BASEURL]/api/v4/company/delivery_execution/comp
     "data": {
         "id": "6bbaf969ab3041eeb1e70ddab60a4e90",
         "type": "complete_or_report",
-        "inserted_at": "2025-06-19T03:58:05.090793",
-        "completed_at": null,
-        "cancelled_at": null,
-        "processed": null,
-        "failed_at": null
+        "inserted_at": "2025-06-19T03:58:05.090793"
     }
 }
 ```
@@ -406,7 +390,7 @@ Obtain this information from the Yojee team working with you.
 
 In this document we will use `[SLUG]` and `[TOKEN]` to represent the `company_slug` and `access_token` respectively.
 
-USP - Upstream Partner
-DSP - Downstream Partner
-US - Upstream
-DS - Downstream
+USP - Upstream Partner <br />
+DSP - Downstream Partner <br />
+US - Upstream </br>
+DS - Downstream <br />
