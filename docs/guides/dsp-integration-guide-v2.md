@@ -97,8 +97,20 @@ curl --location --request POST '[BASEURL]/api/v4/company/order/bulk_accept' \
 For full request/response details, please click on the title.
 
 
-##### **Get Reason codes**
-<To Do: add this>
+### [Get Reason codes](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_reason_codes.yamlpaths/api~1v4~1company~1reason_codes/get)
+
+Call this api to get the list of reason codes, that can be used in order cancellation / rejection apis.
+
+###### Sample Curl Command
+
+```shell
+curl --location -g --request GET '[BASEURL]/api/v4/company/reason_codes' \
+--header 'COMPANY_SLUG: [SLUG]' \
+--header 'ACCESS_TOKEN: [TOKEN]'
+```
+
+For full request/response details, please click on the title.
+
 
 ### [Decline the transfer order](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v3_dispatcher_partner_transfer_dispatcher_bulk_reject_order.yaml/paths/~1api~1v3~1dispatcher~1partner_transfer~1dispatcher~1bulk_reject_order/post)
 
