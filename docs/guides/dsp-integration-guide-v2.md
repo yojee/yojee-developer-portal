@@ -38,7 +38,7 @@ Events currently being supported are:
     <td>When an Order is created</td>
   </tr>
   <tr>
-    <td><a href="#event-order_cancelled">order_cancelled</a></td>
+    <td><a href="#event-ordercancelled">order_cancelled</a></td>
     <td>When an Order Item is cancelled</td>
     <td style="text-align: center;">Y</td>
     <td style="text-align: center;">Y</td>
