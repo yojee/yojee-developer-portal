@@ -4,54 +4,11 @@
 
 Yojee’s customers use our platform to track their transport orders. In some use cases, they transfer orders to their downstream partners (DSPs for abbreviation) for further order execution. This is achieved through creating a separate instance in Yojee (we refer to this as a ‘slug’) and providing the DSP to access this slug. The DSP will proceed to assign drivers to the transferred orders and their drivers will do status updates. The status updates will be visible in both the DSP and the upstream partner (USP), Yojee customer’s slugs.
 
-**Section 1** in this document will outline the current operations for the above flow in further detail.
-
 In certain cases, the DSPs have their own Transport Management Systems, and would like to integrate with Yojee. To achieve this, there is a need to call specific Yojee APIs.
 
-**Section 2** in this document will first outline the integration flow, and describe the individual API calls needed. It is also important to understand the flow in Section 1 to be able to understand how the integration flow will work.
+This document outline the integration flow, and describe the individual API calls needed. 
 
 ## Current Operations
-
-The diagram below outlines the main components of current transfer order operations.
-
-The components are:
-
-- Order Transfer
-  - where the order transfer is initiated by the USP to the DSP and DSP decides whether to accept the transfer
-- Task Status Tracking + POD updates
-  - where the external TMS will mark the various stages of pickup/dropoff task completions, and upload signatures or pictures of the delivery as PODs
-
-In the diagram above:
-
-- **Company A** has access to the Dispatcher Portal for its own slug (green background with thick borders).
-- **Company B** (downstream partner) has access to the Dispatcher for its own slug (green background).
-- **External TMS** will call TCMS api to do several actions.
-
-## Order Transfer
-
-![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-02.png)
-
-### Process Description
-
-1. When Company A has an order it wishes to transfer to its DSP Company B, the Company A Dispatcher will go to Company A’s Yojee Dispatcher portal (in short, in **Co. A’s slug**) to select the order and initiate the transfer. The order will be in the status **Transferred - Pending** in Co. A’s slug.
-
-   Company B Dispatcher will see an incoming order with options to **Accept** or **Decline** in Company B’s Yojee Dispatcher portal (in short, in **Co. B’s slug**).
-
-2. If Company B **declines** the transfer, the order will return as **unassigned** in Co’s A slug, and show as **Cancelled** in Co. B’s slug
-3. If Company B **accepts** the transfer, the order will show as **Transferred - Unassigned** in Co. A’s slug and **Accepted** in Co. B’s slug. The order would now be transferred from Company A to Company B.
-
-
-### Process Description
-
-After the order has been transferred to Co. B, it is the responsibility of Co. B to assign the order to a Driver for the execution of the order.
-
-
-For each order, there is a concept of tasks. In the most common use cases, an order will have a **pickup** task and a **dropoff** task. After the order has been transferred to Co. B, the tasks will also be visible in Co. B’s slug as **Unassigned**.
-<To Do: add driver assignment api here>
-
-
-## Task Status Tracking + POD updates 
-
 
 
 ## Overview
@@ -69,11 +26,13 @@ The Integration Solution can also be broken down into the following components.
 - Order Transfer
   - to retrieve incoming order details
   - to accept / decline the incoming orders
-- Driver Management and Assignment
-  - to assign tasks to drivers
+- Update charges of the order, so it will be visible in US slug
+- Get Documents
+  - USP might have some documents attached to the order, which are essential to plan / execute the delivery.
 - Task Status Tracking + POD updates
-  - to send status updates to Yojee backend
-  - to notify Yojee backend of uploaded photo and/or signature images.
+  - where the external TMS will mark the various stages of pickup/dropoff task completions, and upload signatures or pictures of the delivery as PODs
+  - in some cases the external TMS will send some documents to the upstream
+
 
 ## Order Transfer
 
