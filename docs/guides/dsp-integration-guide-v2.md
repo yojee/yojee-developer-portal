@@ -40,55 +40,25 @@ In the diagram above:
 2. If Company B **declines** the transfer, the order will return as **unassigned** in Co’s A slug, and show as **Cancelled** in Co. B’s slug
 3. If Company B **accepts** the transfer, the order will show as **Transferred - Unassigned** in Co. A’s slug and **Accepted** in Co. B’s slug. The order would now be transferred from Company A to Company B.
 
-## Driver Management and Assignment
 
 ### Process Description
 
 After the order has been transferred to Co. B, it is the responsibility of Co. B to assign the order to a Driver for the execution of the order.
 
-For Driver Management, the Co. B Dispatcher can go to Co. B’s slug to:
-
-1. Create/Edit/Delete Drivers. Once drivers have been created in Co. B’s slug, the orders can be assigned. External TMS might have
-their own drivers. It is not necessary to create all these drivers in TCMS. If the external TMS does not want to populate the actual driver details as part of order assignment, in the api driver name can be used as `Unknown`.
-
-But if we want to save the actual driver details as part of order, dispatcher need to create the drivers in the Co. B's slug.
 
 For each order, there is a concept of tasks. In the most common use cases, an order will have a **pickup** task and a **dropoff** task. After the order has been transferred to Co. B, the tasks will also be visible in Co. B’s slug as **Unassigned**.
+<To Do: add driver assignment api here>
 
-To assign the task(s) to a driver, in Co. B’s slug (If Co. B's drivers are using Yojee mobile app):
 
-2. Assign the task(s) to a driver. The driver will see new tasks in **Incoming Assignments** on the mobile app. He can choose to Accept or Reject.
-3. If the driver **rejects** the incoming assignment, the task will show as **Unassigned** again in Co. B’s slug
-4. If the driver **accepts** the incoming assignment, the task will show as **Assigned** in Co. B’s slug. At the same time, the order will show as Transferred-Assigned in Co. A’s slug.
+## Task Status Tracking + POD updates 
 
-Another way to assign tasks is by calling the assign api.
 
-## Task Status Tracking + POD updates (If using TCMS mobile app)
-
-![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-04.png)
-
-### Process Description
-
-1. When the driver arrives at the location, he has to first use the mobile app to **Mark as Arrived**. A message will be sent to mark the driver’s arrival and the driver’s arrival time can be viewed in the order’s item audit log in Co. B’s slug.
-
-After that, depending on whether there is any task exception, meaning that whether it is possible to complete the task, it will either be **Completed** or **Reported**.
-
-2. If the task can be completed, the driver will proceed to scan the QR Code in the waybill.
-3. The driver will take a photo or obtain the required signature. The rules for whether photo and/or signature are required is configurable. After the photo and/or signature are obtained, the mobile app will upload the images to the cloud.
-4. Driver will confirm completion of the task, and
-5. Mark departure from the location. At this point, messages will be sent to the Yojee backend to update the task as completed. In Co. B’s slug the task will show as **Completed** along with the POD link. In Co. A’s slug the task will show as **Transferred-Completed** along with the POD link.
-6. If the task cannot be completed, the driver will click on the ‘report’ link and choose a Task Exception Reason Code, or enter a customer reason code.
-7. The driver will take a photo or obtain the required signature. The rules for whether photo and/or signature are required is configurable. After the photo and/or signature are obtained, the mobile app will upload the images to the cloud.
-8. Driver will confirm reporting of the task, and
-9. Mark departure from the location. The task would then be marked as Reported. At this point, messages will be sent to the Yojee backend to update the task as reported. In Co. B’s slug the task will show as **Reported** along with the POD link. In Co. A’s slug the task will show as **Transferred-Reported** along with the POD link.
-
-## Integration Solution
 
 ## Overview
 
 ![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-05.png)
 
-With the understanding in Section 1 of how the Current Operations work, the solution to integrate Yojee with DSP’s TMS is designed as follows:
+The solution to integrate Yojee with DSP’s TMS is designed as follows:
 
 - Co. A will continue to use its slug in Yojee for its operations
 - A slug will be created for Co. B (DSP) in Yojee. Co. A will continue to transfer orders to Co. B through Co. A’s slug.
@@ -204,19 +174,17 @@ Call this API to **get** rate charge types
 
 For full request/response details, please click on the title.
 
-### Driver Management and Assignment
+### Driver Assignment
 
 ![main components](../../assets/images/dsp-int-guide/dsp-int-guide-image-07.png)
 
-For the API calls in this section **Driver Management and Assignment**, the Integration Layer needs to authenticate as Dispatcher to Yojee. This is typically done by including the COMPANY_SLUG and the Dispatcher’s ACCESS_TOKEN in the HTTP header.
+For the API calls in this section **Driver Assignment**, the Integration Layer needs to authenticate as Dispatcher to Yojee. This is typically done by including the COMPANY_SLUG and the Dispatcher’s ACCESS_TOKEN in the HTTP header.
 
 <!-- theme: info -->
 
 > ### Note
 >
 > See the section on **Basic Information on APIs - Authentication** at the end of this document for more information on authentication.
-
-Tasks can be assigned to the `Unknown` driver.
 
 ### Assign Driver
 
@@ -241,7 +209,6 @@ curl --location --request POST '[BASEURL]/api/v4/company/delivery_execution/assi
                 }
             ],
             "driver": {
-                "name": "Unknown",
                 "assigned_time": "2025-06-19T06:35:12.78"
             }
             }
