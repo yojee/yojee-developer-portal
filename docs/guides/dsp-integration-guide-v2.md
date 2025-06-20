@@ -638,7 +638,7 @@ This API call will retrieve order information based on either order number or or
     <td><strong>Endpoint</strong></td>
   </tr>
   <tr>
-    <td>POST</td>
+    <td>GET</td>
     <td>[BASEURL]/api/v4/company/order</td>
   </tr>
 </table>
@@ -682,6 +682,55 @@ For full request/response details, please click on the title.
 
 Call this API to **accept** the transfer order from upstream partner.
 
+<table style="text-align: left;">
+  <tr>
+    <td><strong>Method</strong></td>
+    <td><strong>Endpoint</strong></td>
+  </tr>
+  <tr>
+    <td>POST</td>
+    <td>[BASEURL]/api/v4/company/order/bulk_accept</td>
+  </tr>
+</table>
+
+### Request Headers
+
+<table style="text-align: left;">
+  <tr>
+    <td><strong>Parameter</strong></td>
+    <td><strong>Required?</strong></td>
+    <td><strong>Description</strong></td>
+  </tr>
+  <tr>
+    <td>company_slug</td>
+    <td>Y</td>
+    <td>Dispatcher company slug</td>
+  </tr>
+  <tr>
+    <td>access_token</td>
+    <td>Y</td>
+    <td>Access token</td>
+  </tr>
+  <tr>
+    <td>Content-Type</td>
+    <td>Y</td>
+    <td>Use ‘application/json’</td>
+  </tr>
+</table>
+
+### Request Body
+
+
+```json
+{
+  "data": {
+      "order_number": "O-7CKFRWUIXFTU",
+      "carrier_references": [{"name": "BookingID", "value": "A123"}]
+    }
+  
+}
+```
+
 ###### Sample Curl Command
 
 ```shell
@@ -720,6 +769,56 @@ For full request/response details, please click on the title.
 ### [Decline the transfer order](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v3_dispatcher_partner_transfer_dispatcher_bulk_reject_order.yaml/paths/~1api~1v3~1dispatcher~1partner_transfer~1dispatcher~1bulk_reject_order/post)
 
 Call this API to **reject** the transfer order from upstream partner.
+
+<table style="text-align: left;">
+  <tr>
+    <td><strong>Method</strong></td>
+    <td><strong>Endpoint</strong></td>
+  </tr>
+  <tr>
+    <td>POST</td>
+    <td>[BASEURL]/api/v3/dispatcher/partner_transfer/dispatcher/bulk_reject_order</td>
+  </tr>
+</table>
+
+### Request Headers
+
+<table style="text-align: left;">
+  <tr>
+    <td><strong>Parameter</strong></td>
+    <td><strong>Required?</strong></td>
+    <td><strong>Description</strong></td>
+  </tr>
+  <tr>
+    <td>company_slug</td>
+    <td>Y</td>
+    <td>Dispatcher company slug</td>
+  </tr>
+  <tr>
+    <td>access_token</td>
+    <td>Y</td>
+    <td>Access token</td>
+  </tr>
+  <tr>
+    <td>Content-Type</td>
+    <td>Y</td>
+    <td>Use ‘application/json’</td>
+  </tr>
+</table>
+
+### Request Body
+
+```json
+{
+  "data": {
+      {
+        "order_numbers":["O-JYUTHCO2EVO8","O-AGIO5BYIZKBQ"],
+        "cancelled_notes":"",
+        "reason_code":""
+      }
+    }
+}
+```
 
 ###### Sample Curl Command
 
