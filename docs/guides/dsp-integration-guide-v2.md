@@ -9,7 +9,7 @@ APIs
 2. Accept / Reject orders
 3. Update charges of the order
 4. Get documents linked to the order
-5. Assign order to driver
+5. Assign driver to order
 6. Update status (complete / report)
 7. Send documents (POD)
 
@@ -639,7 +639,7 @@ This API call will retrieve order information based on either order number or or
   </tr>
   <tr>
     <td>POST</td>
-    <td>[BASEURL]/api/v4/company/orders/create</td>
+    <td>[BASEURL]/api/v4/company/order</td>
   </tr>
 </table>
 
