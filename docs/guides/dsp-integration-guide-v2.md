@@ -2,8 +2,6 @@
 
 ## Overview
 
-The main components are.
-
 [Webhook Registration](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-webhook-api.yaml/paths/~1api~1v3~1dispatcher~1webhooks/post)
 
 APIs
@@ -632,25 +630,6 @@ If your webhook script performs complex logic, or makes network calls, it's poss
 
 ### Retrieve incoming order details
 
-Incoming transfer orders will be in Co. B’s slug as orders with **created** status. To retrieve the order information and the order item information for these orders, we will need to make 2 calls:
-
-- Dispatcher Get Orders with status **created**.
-- Dispatcher Get Single Order Detail by retrieving the **order_number** from the call above.
-
-### [Dispatcher Get List of Orders](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_orders.yaml/paths/~1api~1v4~1company~1orders/get)
-
-This API call will retrieve orders matching the criteria provided in the parameters.
-
-For full request/response details, please click on the title.
-
-###### Sample Curl Command
-
-```shell
-curl --location -g --request GET '[BASEURL]/api/v4/company/orders?page_size=50&page=1&status[]=created&from=2022-11-14T16:00:00.000Z&to=2022-11-14T16:00:00.000Z' \
---header 'COMPANY_SLUG: [SLUG]' \
---header 'ACCESS_TOKEN: [TOKEN]'
-```
-
 ### [Dispatcher Get Order](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_order.yaml/paths/~1api~1v4~1company~1order/get)
 
 This API call will retrieve order information based on either order number or order external id.
@@ -688,7 +667,6 @@ curl --location --request POST '[BASEURL]/api/v4/company/order/bulk_accept' \
 ```
 
 For full request/response details, please click on the title.
-
 
 ### [Get Reason codes](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_reason_codes.yamlpaths/api~1v4~1company~1reason_codes/get)
 
