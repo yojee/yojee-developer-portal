@@ -223,9 +223,11 @@ For full request/response details, please click on the title.
 }
 ```
 
-### [Dispatcher mark the task / order as completed](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_delivery_execution_complete.yaml/paths/~1api~1v4~1company~1delivery_execution~1complete/post)
+## Order completion
 
-Call this api to complete the order / task.
+Order completion is done by a background job. The first call is to send the parameters to the background job for execution, and the second call is to get the status of the background job to see the outcome.
+
+### [Dispatcher mark the task / order as completed](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_delivery_execution_complete.yaml/paths/~1api~1v4~1company~1delivery_execution~1complete/post)
 
 ###### Sample Curl Command
 
@@ -244,9 +246,6 @@ curl --location --request POST '[BASEURL]/api/v4/company/delivery_execution/comp
                     "step_sequence": 0
                 }
             ],
-            "driver": {
-                "name": "My new Drv"
-            },
             "event_data": {
                 "event_type": "complete",
                 "event_time": "2024-03-09T14:25:33.55",
@@ -257,6 +256,70 @@ curl --location --request POST '[BASEURL]/api/v4/company/delivery_execution/comp
 }'
 ```
 
+###### Sample Response
+
+```json
+{
+    "data": {
+        "id": "6bbaf969ab3041eeb1e70ddab60a4e90",
+        "type": "complete_or_report",
+        "inserted_at": "2025-06-19T03:58:05.090793",
+        "completed_at": null,
+        "cancelled_at": null,
+        "processed": null,
+        "failed_at": null
+    }
+}
+```
+
+For full request/response details, please click on the title.
+
+#### [Dispatcher check order completion status](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_delivery_execution_bg_status.yaml/paths/~1api~1v4~1company~1delivery_exection~1bg_status)
+
+Call this api to check if the completion status update is successful.
+
+###### Sample Curl Command
+
+```shell
+curl --location --request GET '[BASEURL]/api/v4/company/delivery_execution/bg_status' \
+--header 'COMPANY_SLUG: [SLUG]' \
+--header 'ACCESS_TOKEN: [TOKEN]' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "id": "6bbaf969ab3041eeb1e70ddab60a4e90"
+}'
+```
+#### Sample response
+
+``` json
+{
+    "data": {
+        "id": "6bbaf969ab3041eeb1e70ddab60a4e90",
+        "total": null,
+        "type": "complete_or_report",
+        "progress": null,
+        "result": [
+            {
+                "data": {
+                    "selectors": [
+                        {
+                            "number": "O-3LBETYLWASX1",
+                            "step_sequence": 0
+                        }
+                    ]
+                },
+                "status": "success"
+            }
+        ],
+        "inserted_at": "2025-06-19T03:58:05.090793",
+        "updated_at": "2025-06-19T03:58:07.207055",
+        "completed_at": "2025-06-19T03:58:07.207055",
+        "cancelled_at": null,
+        "processed": null,
+        "failed_at": null
+    }
+}
+
 For full request/response details, please click on the title.
 
 ### [Get documents](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api@v3@dispatcher@documents.yaml/paths/~1api~1v3~1dispatcher~1documents/get)
@@ -266,7 +329,7 @@ Call this api to get the documents attached to the order;
 ###### Sample Curl Command
 
 ```shell
-curl --location --request GET '[BASEURL]/api/v4/company/delivery_execution/complete' \
+curl --location --request GET '[BASEURL]/api/v3/dispatcher/documents' \
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]' \
 --header 'Content-Type: application/json' 
