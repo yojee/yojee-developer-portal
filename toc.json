@@ -40,6 +40,11 @@
     },
     {
       "type": "item",
+      "title": "Downstream Partner Integration Guide V2",
+      "uri": "docs/guides/dsp-integration-guide-v2.md"
+    },
+    {
+      "type": "item",
       "title": "V3 to V4 Order Creation Mapping Guide",
       "uri": "docs/guides/api-v3-v4-order-guide.md"
     },
