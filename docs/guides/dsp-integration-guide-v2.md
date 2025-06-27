@@ -1,6 +1,5 @@
 ## Downstream System Integrator Guide
 
-## Overview
 This Downstream System Integrator Guide provides a comprehensive introduction and reference for integrating with our TCMS platform. It is designed for developers, system integrators, and technical partners who need to receive, process, and update information related to incoming orders and associated documents from our upstream system.
 
 **Key Capabilities Covered**  
