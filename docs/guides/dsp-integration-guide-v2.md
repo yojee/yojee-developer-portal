@@ -1,22 +1,93 @@
-**Downstream Partner Integration Solution Guide**
+## Downstream System Integrator Guide
 
 ## Overview
+This Downstream System Integrator Guide provides a comprehensive introduction and reference for integrating with our TCMS platform. It is designed for developers, system integrators, and technical partners who need to receive, process, and update information related to incoming orders and associated documents from our upstream system.
 
-[Webhook Registration](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-webhook-api.yaml/paths/~1api~1v3~1dispatcher~1webhooks/post)
+**Key Capabilities Covered**  
+1. Registering for order and document notifications  
+2. Receiving incoming orders  
+3. Managing incoming orders - Accept, Reject or Cancel
+4. Updating order charges
+5. Retrieving order documents
+6. Assigning delivery vehicles/drivers
+7. Reporting delivery status changes  
+8. Attaching new documents (e.g. Proof of Delivery)
 
-APIs
-1. Get incoming orders 
-2. Accept / Reject orders
-3. Update charges of the order
-4. Get documents linked to the order
-5. Assign driver to order
-6. Update status (complete / report)
-7. Send documents (POD)
+**Integration Workflow Summary**  
+The typical integration workflow includes:
+
+- **Authentication**: Obtain an API key and use it to authenticate your requests.
+- **Webhook Registration**: Subscribe to order and document notifications.
+- **Order Handling**: Receive, accept/reject, and update orders.
+- **Document Management**: Retrieve, receive, and attach documents.
+- **Delivery Updates**: Assign vehicles/drivers and report delivery status changes.
+
+## Typical lifecycle of a downstream order
+
+- Receive an order transfer request from an upstream company
+- Accept the transfer
+- (optional) Retrieve documents for the order if necessary (eg. Waybill)
+- Order execution/delivery
+- (optional) Attach/upload POD
+
+As a downstream partner, orders flow from an upstream company into your company on TCMS. This will result in a pending order in your (downstream) company slug and trigger a `order.created` webhook event. At this point, you may query for the order's details but cannot execute on the order until you accept the transfer from the upstream company.
+
+Accepted orders can be updated with additional details (eg. container number, reference numbers from your system etc), assigned to a driver, and the delivery can be executed. Delivery status changes such as pick up completion, delivery completion or reporting of delivery failure can be done through TCMS APIs. Supplementary documents such as proof of pickup or proof of delivery can be uploaded through TCMS APIs and will be made available to the upstream partners.
+
+Upstream systems may also send down certain documents that are used for delivery, such as waybills, bills of lading, customs documents etc. When such a document is added by an upstream partner, you will receive a `document.created` event with the details to retrieve the document.
+
+As a walkthrough to the above flow, we will show you how to:
+1. [Register a webhook on your downstream company slug to receive events](#webhooks)
+2. [Retrieve order details](#dispatcher-get-order)
+3. [Accept](#accept-the-transfer-order) or [reject](#decline-the-transfer-order) a transfer
+4. [Send delivery status changes into TCMS](#order-completion)
+5. [Send documents to TCMS](#documents)
+
+## Basic information on APIs
+
+### Base URL
+
+In this document we will use `[BASEURL]` to represent the base URL for the calls.
+
+For **development and testing purposes**, please use https://umbrella-staging.yojee.com.
+
+The base URL for the **Production API** is https://umbrella.yojee.com.
+
+### Authentication
+
+Most of the API calls will require the following parameters in the HTTP header:
+
+<table style="text-align: left;">
+    <tr>
+        <td><strong>Parameter</strong></td>
+        <td><strong>Type</strong></td>
+    </tr>
+    <tr>
+        <td>company_slug</td>
+        <td>string</td>
+    </tr>
+    <tr>
+        <td>access_token</td>
+        <td>string</td>
+    </tr>
+</table>
+
+#### Company Slug
+
+The Company Slug is a string to uniquely identify each instance of a customer's company in Yojee. Each customer is assigned a slug which they will use as part of the authentication information.
+
+#### Access Token
+
+A long-lived Access Token is generated for the `Dispatcher` account. This token will only change upon a change in the password of the Dispatcher account.
+
+**Obtain this information from the Yojee team working with you.**
+
+In this document we will use `[SLUG]` and `[TOKEN]` to represent the `company_slug` and `access_token` respectively.
 
 ## Webhooks
 
 Webhook URLs can be registered with Yojee and the Yojee system will make HTTP calls to the URL with the relevant payload when a status update of the Order is triggered.
-For the API calls, the Integration Layer needs to authenticate using Co. B’s Dispatcher credentials. This is typically done by including the COMPANY_SLUG and the Dispatcher’s ACCESS_TOKEN in the HTTP header.
+For the API calls, the Integration Layer needs to authenticate using Co. B's Dispatcher credentials. This is typically done by including the COMPANY_SLUG and the Dispatcher's ACCESS_TOKEN in the HTTP header.
 
 ### Events Supported
 
@@ -55,9 +126,8 @@ Events currently being supported are:
   </tr>
 </table>
 
+### Webhook registration
 To register a webhook, use the following API endpoint:
-
-For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-webhook-api.yaml/paths/~1api~1v3~1dispatcher~1webhooks/post).
 
 <table style="text-align: left;">
   <tr>
@@ -69,6 +139,8 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
     <td>[BASEURL]/api/v3/dispatcher/webhooks</td>
   </tr>
 </table>
+
+For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-webhook-api.yaml/paths/~1api~1v3~1dispatcher~1webhooks/post).
 
 ### Request Headers
 
@@ -91,7 +163,7 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
   <tr>
     <td>Content-Type</td>
     <td>Y</td>
-    <td>Use ‘application/json’</td>
+    <td>Use 'application/json'</td>
   </tr>
 </table>
 
@@ -124,20 +196,6 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
 
 To illustrate the params needed please take the following cURL command as reference, remember to replace the **[BASEURL]**, **[SLUG]** and **[TOKEN]**. **[WEBHOOK_URL]** will be the URL where you will receive the webhook HTTP POST calls.
 **Note:** you can choose the events you want to register for and it is _not mandatory to register for all events_.
-
-#### Sample curl command with form data
-
-```shell
-curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
---header 'COMPANY_SLUG: [SLUG]' \
---header 'ACCESS_TOKEN: [TOKEN]' \
---form 'url="[WEBHOOK_URL]"' \
---form 'events[]="order.created"' \
---form 'events[]="order.updated"' \
---form 'events[]="order.cancelled"' \
---form 'events[]="document.created"' \
---form 'events[]="document.updated"' \
-```
 
 #### Sample curl command with JSON data
 
@@ -563,7 +621,7 @@ HTTP POST payloads that are delivered to your webhook's configured URL endpoint 
 
 #### Verifying Signatures
 
-Yojee signs the webhook events it sends to your endpoints. We do so by including a signature using a hash-based message authentication code (HMAC) with SHA-256 in each event’s **yojee-signature** header. This allows you to validate that the events were sent by Yojee, not by a third party.
+Yojee signs the webhook events it sends to your endpoints. We do so by including a signature using a hash-based message authentication code (HMAC) with SHA-256 in each event's **yojee-signature** header. This allows you to validate that the events were sent by Yojee, not by a third party.
 
 <!-- theme: info -->
 
@@ -582,7 +640,7 @@ The following are the steps to verify the signature:
 3. Determine Expected Signature
 
    - Compute a HMAC with the SHA256 hash function.
-     Use the endpoint’s signing **secret** as the key, and use the prepared signed payload string as the message.
+     Use the endpoint's signing **secret** as the key, and use the prepared signed payload string as the message.
 
 4. Compare signatures
    - Compare the signature in the HTTP Header to the Expected Signature. If the signatures match, compute the difference between the current timestamp and the received timestamp to decide if the difference is within the tolerance of your system.
@@ -628,6 +686,7 @@ If your webhook script performs complex logic, or makes network calls, it's poss
 >
 > See the section on **Basic Information on APIs - Authentication** at the end of this document for more information on authentication.
 
+## Order details
 ### [Dispatcher Get Order](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_order.yaml/paths/~1api~1v4~1company~1order/get)
 
 This API call will retrieve order information based on either order number or order external id.
@@ -664,7 +723,7 @@ This API call will retrieve order information based on either order number or or
   <tr>
     <td>Content-Type</td>
     <td>Y</td>
-    <td>Use ‘application/json’</td>
+    <td>Use 'application/json'</td>
   </tr>
 </table>
 
@@ -678,6 +737,7 @@ curl --location -g --request GET '[BASEURL]/api/v4/company/order?number=O-K02IHA
 
 For full request/response details, please click on the title.
 
+## Accepting/rejecting transfers
 ### [Accept the transfer order](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_order_bulk_accept.yaml/paths/~1api~1v4~1company~1order~1bulk_accept/put)
 
 Call this API to **accept** the transfer order from upstream partner.
@@ -714,7 +774,7 @@ Call this API to **accept** the transfer order from upstream partner.
   <tr>
     <td>Content-Type</td>
     <td>Y</td>
-    <td>Use ‘application/json’</td>
+    <td>Use 'application/json'</td>
   </tr>
 </table>
 
@@ -802,7 +862,7 @@ Call this API to **reject** the transfer order from upstream partner.
   <tr>
     <td>Content-Type</td>
     <td>Y</td>
-    <td>Use ‘application/json’</td>
+    <td>Use 'application/json'</td>
   </tr>
 </table>
 
@@ -831,6 +891,7 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/partner_transfer/dis
 
 For full request/response details, please click on the title.
 
+## Charges
 ### [Creating/Updating charges](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_upsert_charges.yaml/paths/~1api~1v4~1company~1integration~1order~1{number}/charges/put)
 
 Call this API to **create / update** charges linked to an order
@@ -876,6 +937,7 @@ curl --location --request GET '[BASEURL]/api/v3/dispatcher/rates/rate_charge_typ
 
 For full request/response details, please click on the title.
 
+## Driver Assignment
 ### [Dispatcher Assign Driver to tasks](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_delivery_execution_assign.yaml/paths/~1api~1v4~1company~1delivery_execution~1assign/post)
 
 
@@ -889,22 +951,30 @@ curl --location --request POST '[BASEURL]/api/v4/company/delivery_execution/assi
 --header 'ACCESS_TOKEN: [TOKEN]' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "data": 
-        [
-            {"orders": [
-                {
-                    "number": "O-MXNCVU9PEFC2",
-                    "step_sequences": [0]
-                }
-            ],
-            "driver": {
-                "assigned_time": "2025-06-19T06:35:12.78"
-            }
-            }
-        ]
+  "data": 
+    [
+      {
+        "orders": [
+          {
+            "number": "O-MXNCVU9PEFC2",
+            "step_sequences": [0]
+          }
+        ],
+        "driver": {
+          "name": "Marron Barker"
+          "assigned_time": "2025-06-19T06:35:12.78"
+        }
+      }
+    ]
     
 }'
 ```
+
+**A `name` or `external_id` can be provided to identify an existing driver in your company. If both are missing, it will be assigned to a default system driver, "Unknown"**
+
+**Step sequence refers to a specific task in the delivery journey, starting from 0. For example, for a single leg delivery, the pick up would be step_sequence 0 while the drop off would be step_sequence 1.**
+
+**Tasks in the same leg will be assigned together. In the above example, since the pick up task is assigned to a driver, the associated drop off task will be assigned to the driver as well since they are part of the same leg**
 
 For full request/response details, please click on the title.
 
@@ -944,8 +1014,7 @@ curl --location --request POST '[BASEURL]/api/v4/company/delivery_execution/comp
     "data": [
         {
             "orders": [
-                
-                 {
+                {
                     "number": "O-3LBETYLWASX1",
                     "step_sequence": 0
                 }
@@ -959,6 +1028,8 @@ curl --location --request POST '[BASEURL]/api/v4/company/delivery_execution/comp
     ]
 }'
 ```
+
+**Step sequence refers to a specific task in the delivery journey, starting from 0. For example, for a single leg delivery, the pick up would be step_sequence 0 while the drop off would be step_sequence 1**
 
 ###### Sample Response
 
@@ -974,7 +1045,7 @@ curl --location --request POST '[BASEURL]/api/v4/company/delivery_execution/comp
 
 For full request/response details, please click on the title.
 
-#### [Dispatcher check order completion status](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_delivery_execution_bg_status.yaml/paths/~1api~1v4~1company~1delivery_exection~1bg_status)
+### [Dispatcher check order completion status](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_delivery_execution_bg_status.yaml/paths/~1api~1v4~1company~1delivery_exection~1bg_status)
 
 Call this api to check if the completion status update is successful.
 
@@ -1023,6 +1094,7 @@ curl --location --request GET '[BASEURL]/api/v4/company/delivery_execution/bg_st
 
 For full request/response details, please click on the title.
 
+## Documents
 ### [Get documents](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api@v3@dispatcher@documents.yaml/paths/~1api~1v3~1dispatcher~1documents/get)
 
 Call this api to get the documents attached to the order;
@@ -1074,39 +1146,3 @@ curl --location --request POST '[BASEURL]/api/v4/dispatcher/document_classificat
 ```
 
 For full request/response details, please click on the title.
-
-### Authentication
-
-Most of the API calls will require the following parameters in the header:
-
-<table style="text-align: left;">
-    <tr>
-        <td><strong>Parameter</strong></td>
-        <td><strong>Type</strong></td>
-    </tr>
-    <tr>
-        <td>company_slug</td>
-        <td>string</td>
-    </tr>
-    <tr>
-        <td>access_token</td>
-        <td>string</td>
-    </tr>
-</table>
-
-##### Company Slug
-
-The Company Slug is a string to uniquely identify each instance of a customer’s company in Yojee. Each customer is assigned a slug which they will use as part of the authentication information.
-
-##### Access Token
-
-A long-lived Access Token is generated for the `Dispatcher` account. This token will only change upon a change in the password of the Dispatcher account.
-
-Obtain this information from the Yojee team working with you.
-
-In this document we will use `[SLUG]` and `[TOKEN]` to represent the `company_slug` and `access_token` respectively.
-
-USP - Upstream Partner <br />
-DSP - Downstream Partner <br />
-US - Upstream </br>
-DS - Downstream <br />
