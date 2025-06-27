@@ -13,8 +13,8 @@ This Downstream System Integrator Guide provides a comprehensive introduction an
 8. Attaching new documents (e.g. Proof of Delivery)
 
 **Integration Workflow Summary**  
-The typical integration workflow includes:
 
+The typical integration workflow includes:
 - **Authentication**: Obtain an API key and use it to authenticate your requests.
 - **Webhook Registration**: Subscribe to order and document notifications.
 - **Order Handling**: Receive, accept/reject, and update orders.
@@ -23,11 +23,11 @@ The typical integration workflow includes:
 
 ## Typical lifecycle of a downstream order
 
-- Receive an order transfer request from an upstream company
-- Accept the transfer
-- (optional) Retrieve documents for the order if necessary (eg. Waybill)
-- Order execution/delivery
-- (optional) Attach/upload POD
+1. Receive an order transfer request from an upstream company
+2. Accept the transfer
+3. (Optional) Retrieve documents for the order if necessary (eg. Waybill)
+4. Order execution/delivery
+5. (Optional) Attach/upload POD
 
 As a downstream partner, orders flow from an upstream company into your company on TCMS. This will result in a pending order in your (downstream) company slug and trigger a `order.created` webhook event. At this point, you may query for the order's details but cannot execute on the order until you accept the transfer from the upstream company.
 
