@@ -142,7 +142,7 @@ To register a webhook, use the following API endpoint:
 
 For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-webhook-api.yaml/paths/~1api~1v3~1dispatcher~1webhooks/post).
 
-### Request Headers
+#### Request Headers
 
 <table style="text-align: left;">
   <tr>
@@ -167,7 +167,7 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
   </tr>
 </table>
 
-### Request Body
+#### Request Body
 
 #### Send as JSON data
 
@@ -271,7 +271,7 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
 
 When the respective event is triggered, a HTTP POST will be called to the registered Webhook URL with the following sample payloads.
 
-### Request Body
+#### Request Body
 
 This is the format of the HTTP Post request body your system will receive in the webhook call
 
@@ -702,7 +702,7 @@ This API call will retrieve order information based on either order number or or
   </tr>
 </table>
 
-### Request Headers
+#### Request Headers
 
 <table style="text-align: left;">
   <tr>
@@ -753,7 +753,7 @@ Call this API to **accept** the transfer order from upstream partner.
   </tr>
 </table>
 
-### Request Headers
+#### Request Headers
 
 <table style="text-align: left;">
   <tr>
@@ -778,7 +778,7 @@ Call this API to **accept** the transfer order from upstream partner.
   </tr>
 </table>
 
-### Request Body
+#### Request Body
 
 
 ```json
@@ -841,7 +841,7 @@ Call this API to **reject** the transfer order from upstream partner.
   </tr>
 </table>
 
-### Request Headers
+#### Request Headers
 
 <table style="text-align: left;">
   <tr>
@@ -866,7 +866,7 @@ Call this API to **reject** the transfer order from upstream partner.
   </tr>
 </table>
 
-### Request Body
+#### Request Body
 
 ```json
 {
