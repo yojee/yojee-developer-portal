@@ -35,6 +35,55 @@ Accepted orders can be updated with additional details (eg. container number, re
 
 Upstream systems may also send down certain documents that are used for delivery, such as waybills, bills of lading, customs documents etc. When such a document is added by an upstream partner, you will receive a `document.created` event with the details to retrieve the document.
 
+```mermaid
+flowchart TD
+    A[Upstream Company] -->|Transfer Order| C[Downstream Company]
+    C -->|Pending Order Created<br/>Triggers order.created webhook| D[Order Status: Created]
+    
+    A -->|Attach Documents<br/>Triggers document.created webhook| H
+    D -->|Accept Transfer| F[Accept Order API]
+    D -->|Query Order Details| E[Get Order Information]
+    D -->|Reject Transfer| G[Reject Order API]
+    
+    F -->|Success| H[Order Status: Accepted]
+    G -->|Success| I[Order Status: Rejected]
+    
+    H -->|Optional| J[Get Documents API<br/>Retrieve Documents]
+    
+    H -->|Update Order Details| L[Update Order API]
+    H -->|Assign Driver| M[Assign Driver API]
+    
+    M -->|Success| N[Order Status: Assigned]
+    
+    N -->|Start Delivery| O[Delivery Execution]
+    O -->|Pickup Complete| P[Complete Task API<br/>Step Sequence: 0]
+    P -->|Success| Q[Order Status: Pickup Complete]
+    
+    Q -->|Delivery Complete| R[Complete Task API<br/>Step Sequence: 1]
+    R -->|Success| S[Order Status: Delivery Complete]
+    
+    P -->|Optional| V[Upload Document API<br/>Upload Proof of Pickup]
+    R -->|Optional| W[Upload Document API<br/>Upload Proof of Delivery]
+    
+    V -->|Success| Z[Document Available to Upstream]
+    W -->|Success| AA[Document Available to Upstream]
+    
+    H -->|Update Charges| BB[Upsert Charges API]
+    BB -->|Success| CC[Charges Updated]
+    
+    style A fill:#e1f5fe
+    style C fill:#f3e5f5
+    style D fill:#ffebee
+    style H fill:#e8f5e8
+    style I fill:#ffebee
+    style N fill:#e3f2fd
+    style Q fill:#e8f5e8
+    style S fill:#e8f5e8
+    style Z fill:#f1f8e9
+    style AA fill:#f1f8e9
+    style CC fill:#fff8e1
+```
+
 As a walkthrough to the above flow, we will show you how to:
 1. [Register a webhook on your downstream company slug to receive events](#webhooks)
 2. [Retrieve order details](#dispatcher-get-order)
