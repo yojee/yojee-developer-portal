@@ -25,7 +25,7 @@ The typical integration workflow includes:
 
 1. Receive an order transfer request from an upstream company
 2. Accept the transfer
-3. (Optional) Retrieve documents for the order if necessary (eg. Waybill)
+3. (Optional) Retrieve documents for the order if necessary (eg. Consignment note)
 4. Order execution/delivery
 5. (Optional) Attach/upload POD
 
@@ -33,7 +33,7 @@ As a downstream partner, orders flow from an upstream company into your company 
 
 Accepted orders can be updated with additional details (eg. container number, reference numbers from your system etc), assigned to a driver, and the delivery can be executed. Delivery status changes such as pick up completion, delivery completion or reporting of delivery failure can be done through TCMS APIs. Supplementary documents such as proof of pickup or proof of delivery can be uploaded through TCMS APIs and will be made available to the upstream partners.
 
-Upstream systems may also send down certain documents that are used for delivery, such as waybills, bills of lading, customs documents etc. When such a document is added by an upstream partner, you will receive a `document.created` event with the details to retrieve the document.
+Upstream systems may also send down certain documents that are used for delivery, such as consignment notes, bills of lading, customs documents etc. When such a document is added by an upstream partner, you will receive a `document.created` event with the details to retrieve the document.
 
 ```mermaid
 flowchart TD
@@ -134,8 +134,8 @@ In this document we will use `[SLUG]` and `[TOKEN]` to represent the `company_sl
 
 ## Webhooks
 
-Webhook URLs can be registered with Yojee and the Yojee system will make HTTP calls to the URL with the relevant payload when a status update of the Order is triggered.
-For the API calls, the Integration Layer needs to authenticate using Co. B's Dispatcher credentials. This is typically done by including the COMPANY_SLUG and the Dispatcher's ACCESS_TOKEN in the HTTP header.
+Webhook URLs can be registered with TCMS and the TCMS system will make HTTP calls to the URL with the relevant payload when a status update of the Order is triggered.
+For the API calls, the Integration Layer needs to authenticate using the company's Dispatcher credentials. This is typically done by including the COMPANY_SLUG and the Dispatcher's ACCESS_TOKEN in the HTTP header.
 
 ### Events Supported
 
@@ -354,7 +354,7 @@ This is the format of the HTTP Post request body your system will receive in the
   </tr>
   <tr>
     <td>yojee_instance</td>
-    <td>Yojee API environment</td>
+    <td>TCMS API environment</td>
   </tr>
 
 </table>
@@ -372,7 +372,7 @@ This is the format of the HTTP Post request body your system will receive in the
       "id": 20086,
       "name": null,
       "type": "organisation",
-      "organisation_name": "Yojee"
+      "organisation_name": "ACME Co."
     },
     "external_id": null,
     "inserted_at": "2025-06-20T07:01:52.204462Z",
@@ -428,7 +428,7 @@ This is the format of the HTTP Post request body your system will receive in the
   "id": "f041dcc2-07df-4c81-be97-2a614ff4741a",
   "version": "1",
   "event_type": "order.created",
-  "company_slug": "partner-slug",
+  "company_slug": "your-company-slug",
   "created_at": 1750402912,
   "webhook_id": 56,
   "yojee_instance": "https://umbrella-staging.yojee.com"
@@ -439,8 +439,8 @@ This is the format of the HTTP Post request body your system will receive in the
 
 ```json
 {
-  "company_slug": "yojee",
-  "created_at": 1573616200,
+  "company_slug": "your-company-slug",
+  "created_at": 1750403136,
   "data": {
     "cancelled_at": null,
     "completion_time": null,
@@ -448,7 +448,7 @@ This is the format of the HTTP Post request body your system will receive in the
     "display_price": null,
     "external_id": null,
     "id": 3465,
-    "inserted_at": "2019-11-13T03:36:19.446090Z",
+    "inserted_at": "2025-06-20T07:01:52.215455Z",
     "number": "O-IWWYG6ADYLLW",
     "order_items": [
       {
@@ -456,7 +456,7 @@ This is the format of the HTTP Post request body your system will receive in the
         "external_customer_id2": null,
         "external_customer_id3": null,
         "id": 14411,
-        "inserted_at": "2019-11-13T03:36:19.473411Z",
+        "inserted_at": "2025-06-20T07:01:52.215455Z",
         "item": {
           "description": null,
           "global_tracking_number": "Y-V6QYRPCGCU9B",
@@ -480,7 +480,7 @@ This is the format of the HTTP Post request body your system will receive in the
     "sender": {
       "id": 745,
       "name": null,
-      "organisation_name": "Nikola Test Company",
+      "organisation_name": "ACME Co.",
       "type": "organisation"
     },
     "status": "accepted"
@@ -506,7 +506,7 @@ This is the format of the HTTP Post request body your system will receive in the
       "id": 20086,
       "name": null,
       "type": "organisation",
-      "organisation_name": "Yojee "
+      "organisation_name": "ACME Co."
     },
     "external_id": null,
     "inserted_at": "2025-06-20T07:01:52.204462Z",
@@ -567,7 +567,7 @@ This is the format of the HTTP Post request body your system will receive in the
   "id": "7859c6d9-0ba4-468c-9f73-6cde33e0b3d6",
   "version": "1",
   "event_type": "order.cancelled",
-  "company_slug": "yojee",
+  "company_slug": "your-company-slug",
   "created_at": 1750408357,
   "webhook_id": 56,
   "yojee_instance": "https://umbrella-staging.yojee.com"
@@ -583,7 +583,7 @@ This is the format of the HTTP Post request body your system will receive in the
     "name": "DangerousGoodsDocument_20250619T043622.pdf",
     "file_name": "DangerousGoodsDocument_20250619T043622.pdf",
     "file_size": 48859,
-    "source": "machship",
+    "source": "cargowise",
     "order": {
       "attributes": {},
       "id": 4233980,
@@ -595,7 +595,7 @@ This is the format of the HTTP Post request body your system will receive in the
     "mime_type": "application/pdf",
     "updated_at": "2025-06-19T04:36:23.514093Z",
     "classification_code": "DGD",
-    "document_url": "https://yojee-v2-uploads-qa.s3.ap-southeast-1.amazonaws.com/uploads/documents/21353/0/DangerousGoodsDocument_20250619T043622.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256",
+    "document_url": "[DOCUMENT_URL]",
     "privacy": "public",
     "file_saved_at": "2025-06-19T04:36:23.564097Z",
     "attached_to": {
@@ -607,7 +607,7 @@ This is the format of the HTTP Post request body your system will receive in the
   "id": "67386c79-477a-42ee-bc8f-02840c5cb3f3",
   "version": "2",
   "event_type": "document.created",
-  "company_slug": "qa_ms_startrack",
+  "company_slug": "your-company-slug",
   "created_at": 1750307783,
   "webhook_id": 66,
   "yojee_instance": "https://umbrella-staging.yojee.com"
@@ -621,7 +621,7 @@ This is the format of the HTTP Post request body your system will receive in the
   "data": {
     "id": 4323,
     "name": "Proof of delivery",
-    "file_name": "sample_pod.pdf",
+    "file_name": "proof_of_delivery.pdf",
     "file_size": 2830,
     "order": {
       "id": 3071774,
@@ -630,7 +630,7 @@ This is the format of the HTTP Post request body your system will receive in the
       "external_id": "external id"
     },
     "mime_type": "application/pdf",
-    "updated_at": "2024-01-24T07:30:30.823456Z",
+    "updated_at": "2025-06-19T04:38:12.223034Z",
     "classification_code": "POD",
     "document_url": "[DOCUMENT_URL]",
     "privacy": "private",
@@ -640,7 +640,7 @@ This is the format of the HTTP Post request body your system will receive in the
   "id": "ae498265-7e41-48fb-8b9d-39699bdb5b61",
   "version": "2",
   "event_type": "document.updated",
-  "company_slug": "yojee",
+  "company_slug": "your-company-slug",
   "created_at": 1706081904,
   "webhook_id": 73,
   "yojee_instance": "https://umbrella-staging.yojee.com"
@@ -669,7 +669,7 @@ HTTP POST payloads that are delivered to your webhook's configured URL endpoint 
 
 #### Verifying Signatures
 
-Yojee signs the webhook events it sends to your endpoints. We do so by including a signature using a hash-based message authentication code (HMAC) with SHA-256 in each event's **yojee-signature** header. This allows you to validate that the events were sent by Yojee, not by a third party.
+TCMS signs the webhook events it sends to your endpoints. We do so by including a signature using a hash-based message authentication code (HMAC) with SHA-256 in each event's **yojee-signature** header. This allows you to validate that the events were sent by TCMS, not by a third party.
 
 <!-- theme: info -->
 
@@ -695,7 +695,7 @@ The following are the steps to verify the signature:
 
 ### Responding to a Webhook
 
-To acknowledge receipt of a webhook, your endpoint should return a **_2xx HTTP status code_**. All response codes outside this range, including **_3xx codes_**, will indicate to Yojee that you did not receive the webhook.
+To acknowledge receipt of a webhook, your endpoint should return a **_2xx HTTP status code_**. All response codes outside this range, including **_3xx codes_**, will indicate to TCMS that you did not receive the webhook.
 
 We will attempt to deliver your webhooks for up to five times with an exponential back off, according to the following table:
 
@@ -728,7 +728,7 @@ We will attempt to deliver your webhooks for up to five times with an exponentia
 
 #### Best Practice
 
-If your webhook script performs complex logic, or makes network calls, it's possible that the script would time out before Yojee sees its complete execution. For that reason, you might want to have your webhook endpoint immediately acknowledge receipt by returning a **_2xx HTTP status code_**, and then perform the rest of its duties.
+If your webhook script performs complex logic, or makes network calls, it's possible that the script would time out before TCMS sees its complete execution. For that reason, you might want to have your webhook endpoint immediately acknowledge receipt by returning a **_2xx HTTP status code_**, and then perform the rest of its duties.
 
 > ### Note
 >
@@ -1100,7 +1100,7 @@ Call this api to check if the completion status update is successful.
 ###### Sample Curl Command
 
 ```shell
-curl --location --request GET '[BASEURL]/api/v4/company/delivery_execution/bg_status' \
+curl --location --request POST '[BASEURL]/api/v4/company/delivery_execution/bg_status' \
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]' \
 --header 'Content-Type: application/json' \
@@ -1150,7 +1150,7 @@ Call this api to get the documents attached to the order;
 ###### Sample Curl Command
 
 ```shell
-curl --location --request GET '[BASEURL]/api/v3/dispatcher/documents' \
+curl --location --request GET '[BASEURL]/api/v3/dispatcher/documents?order_number=O-K02IHA1XHHWU' \
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]' \
 --header 'Content-Type: application/json' 
@@ -1165,29 +1165,43 @@ For full request/response details, please click on the title.
 
 ### [Upload document to TCMS and get presigned url](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api@v3@dispatcher@documents@presigned_url.yaml/paths/~1api~1v3~1dispatcher~1presigned_url/get)
 
+Call this api to obtain a pre-signed url to upload your document to S3;
+
+###### Sample Curl Command
+
+```shell
+curl --location --request GET '[BASEURL]/api/v3/dispatcher/documents/presigned_url?filename={filename}' \
+--header 'COMPANY_SLUG: [SLUG]' \
+--header 'ACCESS_TOKEN: [TOKEN]' \
+--header 'Content-Type: application/json'
+```
+
+### [Attach documents to the order](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api@v3@dispatcher@documents.yaml/paths/~1api~1v3~1dispatcher~1documents/presigned_url/post)
+
 Call this api to attach documents to the order;
 
 ###### Sample Curl Command
 
 ```shell
-curl --location --request GET '[BASEURL]/api/v3/dispatcher/documents/presigned_url' \
+curl --location --request POST '[BASEURL]/api/v3/dispatcher/documents' \
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]' \
---header 'Content-Type: application/json' 
+--header 'Content-Type: application/json'
+--data-raw '{
+    "order_number": "O-3LBETYLWASX1",
+    "name": "POD.pdf",
+    "document_url": <Your document URL>,
+    "classification_code": "POD",
+    "privacy": "public"
+}'
 ```
-
-For full request/response details, please click on the title.
-
-### [Attach documents to the order](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api@v3@dispatcher@documents.yaml/paths/~1api~1v3~1dispatcher~1documents/presigned_url/post)
-
-Call this api to attach documents to the order;
 
 ### [Get list of document classification codes](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_dispatcher_document_classifications.yaml/paths/~1api~1v4~1dispatcher~1document_classifications/get)
 
 ###### Sample Curl Command
 
 ```shell
-curl --location --request POST '[BASEURL]/api/v4/dispatcher/document_classifications' \
+curl --location --request GET '[BASEURL]/api/v4/dispatcher/document_classifications' \
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]' \
 --header 'Content-Type: application/json' 
