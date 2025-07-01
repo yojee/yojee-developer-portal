@@ -23,71 +23,90 @@ The typical integration workflow includes:
 
 ## Typical lifecycle of a downstream order
 
-1. Receive an order transfer request from an upstream company
-2. Accept the transfer
+1. Receive an order request from an upstream company
+2. Accept the order
 3. (Optional) Retrieve documents for the order if necessary (eg. Consignment note)
 4. Order execution/delivery
 5. (Optional) Attach/upload POD
 
-As a downstream partner, orders flow from an upstream company into your company on TCMS. This will result in a pending order in your (downstream) company slug and trigger a `order.created` webhook event. At this point, you may query for the order's details but cannot execute on the order until you accept the transfer from the upstream company.
+As a downstream partner, orders flow from an upstream company into your company on TCMS. This will result in a pending order in your (downstream) company slug and trigger a `order.created` webhook event. At this point, you may query for the order's details but cannot execute on the order until you accept the order from the upstream company.
 
 Accepted orders can be updated with additional details (eg. container number, reference numbers from your system etc), assigned to a driver, and the delivery can be executed. Delivery status changes such as pick up completion, delivery completion or reporting of delivery failure can be done through TCMS APIs. Supplementary documents such as proof of pickup or proof of delivery can be uploaded through TCMS APIs and will be made available to the upstream partners.
 
 Upstream systems may also send down certain documents that are used for delivery, such as consignment notes, bills of lading, customs documents etc. When such a document is added by an upstream partner, you will receive a `document.created` event with the details to retrieve the document.
 
+#### Order Creation
 ```mermaid
 flowchart TD
-    A[Upstream Company] -->|Transfer Order| C[Downstream Company]
-    C -->|Pending Order Created<br/>Triggers order.created webhook| D[Order Status: Created]
-    
-    A -->|Attach Documents<br/>Triggers document.created webhook| H
-    D -->|Accept Transfer| F[Accept Order API]
-    D -->|Query Order Details| E[Get Order Information]
-    D -->|Reject Transfer| G[Reject Order API]
-    
-    F -->|Success| H[Order Status: Accepted]
-    G -->|Success| I[Order Status: Rejected]
-    
-    H -->|Optional| J[Get Documents API<br/>Retrieve Documents]
-    
-    H -->|Update Order Details| L[Update Order API]
-    H -->|Assign Driver| M[Assign Driver API]
-    
-    M -->|Success| N[Order Status: Assigned]
-    
-    N -->|Start Delivery| O[Delivery Execution]
-    O -->|Pickup Complete| P[Complete Task API<br/>Step Sequence: 0]
-    P -->|Success| Q[Order Status: Pickup Complete]
-    
-    Q -->|Delivery Complete| R[Complete Task API<br/>Step Sequence: 1]
-    R -->|Success| S[Order Status: Delivery Complete]
-    
-    P -->|Optional| V[Upload Document API<br/>Upload Proof of Pickup]
-    R -->|Optional| W[Upload Document API<br/>Upload Proof of Delivery]
-    
-    V -->|Success| Z[Document Available to Upstream]
-    W -->|Success| AA[Document Available to Upstream]
-    
-    H -->|Update Charges| BB[Upsert Charges API]
-    BB -->|Success| CC[Charges Updated]
-    
-    style A fill:#e1f5fe
-    style C fill:#f3e5f5
-    style D fill:#ffebee
-    style H fill:#e8f5e8
-    style I fill:#ffebee
-    style N fill:#e3f2fd
-    style Q fill:#e8f5e8
-    style S fill:#e8f5e8
-    style Z fill:#f1f8e9
-    style AA fill:#f1f8e9
-    style CC fill:#fff8e1
+  A[Upstream Company] -->|Create Order| B[Downstream Company]
+  B -->|Pending Order Created<br/>Triggers order.created webhook| C[Order Status: Created]
 ```
+
+#### Accept/Reject incoming order
+```mermaid
+flowchart TD
+  C[Order Status: Created]
+
+  C -->|Query Order Details| E[Get Order Information]
+  C --> D[Accept Order API]
+  C --> F[Reject Order API]
+  
+  D -->|Success| H[Order Status: Accepted]
+  F -->|Success| G[Order Status: Rejected]
+```
+
+#### Update order
+```mermaid
+flowchart TD
+  H[Order Status: Accepted]
+
+  H -->|Update Order Details| L[Update Order API]
+  H -->|Assign Driver| M[Assign Driver API]
+    
+  M -->|Success| N[Order Status: Assigned]
+```
+
+#### Download documents
+```mermaid
+flowchart TD
+    UC[Upstream Company<br/>in TCMS]
+    TCMS[TCMS System]
+    DSS[Downstream System<br/>DSS]
+    
+    UC -->|1.Attach Document| TCMS
+    TCMS -->|2.Triggers<br/>document.created webhook| DSS
+    DSS -->|"3.(Optional) Call<br/>Get Documents API"| TCMS
+    TCMS -->|4.Return document data| DSS
+```
+
+#### Delivery execution
+```mermaid
+flowchart TD
+  N[Order Status: Assigned]
+
+  N -->|Start Delivery| O[Delivery Execution]
+  O -->|Pickup Complete| P[Complete Task API<br/>Step Sequence: 0]
+  P -->|Success| Q[Order Status: Pickup Complete]
+  
+  Q -->|Delivery Complete| R[Complete Task API<br/>Step Sequence: 1]
+  R -->|Success| S[Order Status: Delivery Complete]
+```
+
+#### Upload documents
+```mermaid
+flowchart TD
+  Q[Order Status: Pickup/Delivery Complete]
+
+  Q -->|Optional| V[Upload Document API]
+  
+  V -->|Success| Z[Document Available to Upstream]
+```
+
 
 As a walkthrough to the above flow, we will show you how to:
 1. [Register a webhook on your downstream company slug to receive events](#webhooks)
 2. [Retrieve order details](#dispatcher-get-order)
-3. [Accept](#accept-the-transfer-order) or [reject](#decline-the-transfer-order) a transfer
+3. [Accept](#accept-the-transfer-order) or [reject](#decline-the-transfer-order) an order
 4. [Send delivery status changes into TCMS](#order-completion)
 5. [Send documents to TCMS](#documents)
 
@@ -188,7 +207,7 @@ To register a webhook, use the following API endpoint:
   </tr>
 </table>
 
-For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/publish/yojee-webhook-api.yaml/paths/~1api~1v3~1dispatcher~1webhooks/post).
+For full details, please click [here](https://yojee.stoplight.io/docs/developer-doc/92216c2435405-revision#webhooks).
 
 #### Request Headers
 
@@ -735,7 +754,7 @@ If your webhook script performs complex logic, or makes network calls, it's poss
 > See the section on **Basic Information on APIs - Authentication** at the end of this document for more information on authentication.
 
 ## Order details
-### [Dispatcher Get Order](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_order.yaml/paths/~1api~1v4~1company~1order/get)
+### Dispatcher Get Order
 
 This API call will retrieve order information based on either order number or order external id.
 
@@ -783,12 +802,10 @@ curl --location -g --request GET '[BASEURL]/api/v4/company/order?number=O-K02IHA
 --header 'ACCESS_TOKEN: [TOKEN]'
 ```
 
-For full request/response details, please click on the title.
+## Accepting/rejecting orders
+### Accept the order
 
-## Accepting/rejecting transfers
-### [Accept the transfer order](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_order_bulk_accept.yaml/paths/~1api~1v4~1company~1order~1bulk_accept/put)
-
-Call this API to **accept** the transfer order from upstream partner.
+Call this API to **accept** the order from upstream partner.
 
 <table style="text-align: left;">
   <tr>
@@ -857,9 +874,7 @@ curl --location --request POST '[BASEURL]/api/v4/company/order/bulk_accept' \
 }'
 ```
 
-For full request/response details, please click on the title.
-
-### [Get Reason codes](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_reason_codes.yamlpaths/api~1v4~1company~1reason_codes/get)
+### Get Reason codes
 
 Call this api to get the list of reason codes, that can be used in order cancellation / rejection apis.
 
@@ -871,12 +886,10 @@ curl --location -g --request GET '[BASEURL]/api/v4/company/reason_codes' \
 --header 'ACCESS_TOKEN: [TOKEN]'
 ```
 
-For full request/response details, please click on the title.
 
+### Decline the order
 
-### [Decline the transfer order](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v3_dispatcher_partner_transfer_dispatcher_bulk_reject_order.yaml/paths/~1api~1v3~1dispatcher~1partner_transfer~1dispatcher~1bulk_reject_order/post)
-
-Call this API to **reject** the transfer order from upstream partner.
+Call this API to **reject** the order from upstream partner.
 
 <table style="text-align: left;">
   <tr>
@@ -937,14 +950,10 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/partner_transfer/dis
 --data-raw '{"order_numbers":["O-JYUTHCO2EVO8","O-AGIO5BYIZKBQ"],"cancelled_notes":"Insuffiecient capacity","reason_code":"INCP"}'
 ```
 
-For full request/response details, please click on the title.
-
 ## Charges
-### [Creating/Updating charges](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_upsert_charges.yaml/paths/~1api~1v4~1company~1integration~1order~1{number}/charges/put)
+### Creating/Updating charges
 
 Call this API to **create / update** charges linked to an order
-
-For full request/response details, please click on the title.
 
 ###### Sample Curl Command
 
@@ -971,7 +980,7 @@ curl --location --request PUT '[BASEURL]/api/v4/company/integration/order/{numbe
 }'
 ```
 
-### [Get Rate Charge Types](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v3_dispatcher_get_rate_charge_types.yaml/paths/~1api~1v3~1dispatcher~1rates~1rate_charge_types/get)
+### Get Rate Charge Types
 
 Call this API to **get** rate charge types
 
@@ -983,10 +992,8 @@ curl --location --request GET '[BASEURL]/api/v3/dispatcher/rates/rate_charge_typ
 --header 'ACCESS_TOKEN: [TOKEN]' \
 ```
 
-For full request/response details, please click on the title.
-
 ## Driver Assignment
-### [Dispatcher Assign Driver to tasks](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_delivery_execution_assign.yaml/paths/~1api~1v4~1company~1delivery_execution~1assign/post)
+### Dispatcher Assign Driver to tasks
 
 
 Call this API to assign a Driver to tasks.
@@ -1009,7 +1016,6 @@ curl --location --request POST '[BASEURL]/api/v4/company/delivery_execution/assi
           }
         ],
         "driver": {
-          "name": "Marron Barker"
           "assigned_time": "2025-06-19T06:35:12.78"
         }
       }
@@ -1018,13 +1024,9 @@ curl --location --request POST '[BASEURL]/api/v4/company/delivery_execution/assi
 }'
 ```
 
-**A `name` or `external_id` can be provided to identify an existing driver in your company. If both are missing, it will be assigned to a default system driver, "Unknown"**
-
 **Step sequence refers to a specific task in the delivery journey, starting from 0. For example, for a single leg delivery, the pick up would be step_sequence 0 while the drop off would be step_sequence 1.**
 
 **Tasks in the same leg will be assigned together. In the above example, since the pick up task is assigned to a driver, the associated drop off task will be assigned to the driver as well since they are part of the same leg**
-
-For full request/response details, please click on the title.
 
 ###### Sample Response
 
@@ -1049,7 +1051,7 @@ For full request/response details, please click on the title.
 
 Order completion is done by a background job. The first call is to send the parameters to the background job for execution, and the second call is to get the status of the background job to see the outcome.
 
-### [Dispatcher mark the task / order as completed](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_delivery_execution_complete.yaml/paths/~1api~1v4~1company~1delivery_execution~1complete/post)
+### Dispatcher mark the task / order as completed
 
 ###### Sample Curl Command
 
@@ -1091,9 +1093,7 @@ curl --location --request POST '[BASEURL]/api/v4/company/delivery_execution/comp
 }
 ```
 
-For full request/response details, please click on the title.
-
-### [Dispatcher check order completion status](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_company_delivery_execution_bg_status.yaml/paths/~1api~1v4~1company~1delivery_exection~1bg_status)
+### Dispatcher check order completion status
 
 Call this api to check if the completion status update is successful.
 
@@ -1140,10 +1140,8 @@ curl --location --request POST '[BASEURL]/api/v4/company/delivery_execution/bg_s
 }
 ```
 
-For full request/response details, please click on the title.
-
 ## Documents
-### [Get documents](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api@v3@dispatcher@documents.yaml/paths/~1api~1v3~1dispatcher~1documents/get)
+### Get documents
 
 Call this api to get the documents attached to the order;
 
@@ -1156,14 +1154,12 @@ curl --location --request GET '[BASEURL]/api/v3/dispatcher/documents?order_numbe
 --header 'Content-Type: application/json' 
 ```
 
-For full request/response details, please click on the title.
-
 ### Attach documents to the order
 
 1. Upload the document to TCMS and get a pre-signed url
 2. Send the presigned url and the order details to attach the document to the order
 
-### [Upload document to TCMS and get presigned url](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api@v3@dispatcher@documents@presigned_url.yaml/paths/~1api~1v3~1dispatcher~1presigned_url/get)
+### Upload document to TCMS and get presigned url
 
 Call this api to obtain a pre-signed url to upload your document to S3;
 
@@ -1176,7 +1172,7 @@ curl --location --request GET '[BASEURL]/api/v3/dispatcher/documents/presigned_u
 --header 'Content-Type: application/json'
 ```
 
-### [Attach documents to the order](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api@v3@dispatcher@documents.yaml/paths/~1api~1v3~1dispatcher~1documents/presigned_url/post)
+### Attach documents to the order
 
 Call this api to attach documents to the order;
 
@@ -1196,7 +1192,7 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/documents' \
 }'
 ```
 
-### [Get list of document classification codes](https://yojee.stoplight.io/docs/yojee-downstream-api/publish/api_v4_dispatcher_document_classifications.yaml/paths/~1api~1v4~1dispatcher~1document_classifications/get)
+### Get list of document classification codes
 
 ###### Sample Curl Command
 
@@ -1206,5 +1202,3 @@ curl --location --request GET '[BASEURL]/api/v4/dispatcher/document_classificati
 --header 'ACCESS_TOKEN: [TOKEN]' \
 --header 'Content-Type: application/json' 
 ```
-
-For full request/response details, please click on the title.
