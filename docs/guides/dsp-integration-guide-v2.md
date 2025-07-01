@@ -35,74 +35,6 @@ Accepted orders can be updated with additional details (eg. container number, re
 
 Upstream systems may also send down certain documents that are used for delivery, such as consignment notes, bills of lading, customs documents etc. When such a document is added by an upstream partner, you will receive a `document.created` event with the details to retrieve the document.
 
-#### Order Creation
-```mermaid
-flowchart TD
-  A[Upstream Company] -->|Create Order| B[Downstream Company]
-  B -->|Pending Order Created<br/>Triggers order.created webhook| C[Order Status: Created]
-```
-
-#### Accept/Reject incoming order
-```mermaid
-flowchart TD
-  C[Order Status: Created]
-
-  C -->|Query Order Details| E[Get Order Information]
-  C --> D[Accept Order API]
-  C --> F[Reject Order API]
-  
-  D -->|Success| H[Order Status: Accepted]
-  F -->|Success| G[Order Status: Rejected]
-```
-
-#### Update order
-```mermaid
-flowchart TD
-  H[Order Status: Accepted]
-
-  H -->|Update Order Details| L[Update Order API]
-  H -->|Assign Driver| M[Assign Driver API]
-    
-  M -->|Success| N[Order Status: Assigned]
-```
-
-#### Download documents
-```mermaid
-flowchart TD
-    UC[Upstream Company<br/>in TCMS]
-    TCMS[TCMS System]
-    DSS[Downstream System<br/>DSS]
-    
-    UC -->|1.Attach Document| TCMS
-    TCMS -->|2.Triggers<br/>document.created webhook| DSS
-    DSS -->|"3.(Optional) Call<br/>Get Documents API"| TCMS
-    TCMS -->|4.Return document data| DSS
-```
-
-#### Delivery execution
-```mermaid
-flowchart TD
-  N[Order Status: Assigned]
-
-  N -->|Start Delivery| O[Delivery Execution]
-  O -->|Pickup Complete| P[Complete Task API<br/>Step Sequence: 0]
-  P -->|Success| Q[Order Status: Pickup Complete]
-  
-  Q -->|Delivery Complete| R[Complete Task API<br/>Step Sequence: 1]
-  R -->|Success| S[Order Status: Delivery Complete]
-```
-
-#### Upload documents
-```mermaid
-flowchart TD
-  Q[Order Status: Pickup/Delivery Complete]
-
-  Q -->|Optional| V[Upload Document API]
-  
-  V -->|Success| Z[Document Available to Upstream]
-```
-
-
 As a walkthrough to the above flow, we will show you how to:
 1. [Register a webhook on your downstream company slug to receive events](#webhooks)
 2. [Retrieve order details](#dispatcher-get-order)
@@ -754,6 +686,11 @@ If your webhook script performs complex logic, or makes network calls, it's poss
 > See the section on **Basic Information on APIs - Authentication** at the end of this document for more information on authentication.
 
 ## Order details
+```mermaid
+flowchart TD
+  A[Upstream Company] -->|Create Order| B[Downstream Company]
+  B -->|Pending Order Created<br/>Triggers order.created webhook| C[Order Status: Created]
+```
 ### Dispatcher Get Order
 
 This API call will retrieve order information based on either order number or order external id.
@@ -803,6 +740,17 @@ curl --location -g --request GET '[BASEURL]/api/v4/company/order?number=O-K02IHA
 ```
 
 ## Accepting/rejecting orders
+```mermaid
+flowchart TD
+  C[Order Status: Created]
+
+  C -->|Query Order Details| E[Get Order Information]
+  C --> D[Accept Order API]
+  C --> F[Reject Order API]
+  
+  D -->|Success| H[Order Status: Accepted]
+  F -->|Success| G[Order Status: Rejected]
+```
 ### Accept the order
 
 Call this API to **accept** the order from upstream partner.
@@ -844,8 +792,6 @@ Call this API to **accept** the order from upstream partner.
 </table>
 
 #### Request Body
-
-
 ```json
 {
   "data": {
@@ -947,7 +893,7 @@ Call this API to **reject** the order from upstream partner.
 curl --location --request POST '[BASEURL]/api/v3/dispatcher/partner_transfer/dispatcher/bulk_reject_order' \
 --header 'COMPANY_SLUG: [SLUG]' \
 --header 'ACCESS_TOKEN: [TOKEN]' \
---data-raw '{"order_numbers":["O-JYUTHCO2EVO8","O-AGIO5BYIZKBQ"],"cancelled_notes":"Insuffiecient capacity","reason_code":"INCP"}'
+--data-raw '{"order_numbers":["O-JYUTHCO2EVO8","O-AGIO5BYIZKBQ"],"cancelled_notes":"Insufficient capacity","reason_code":"INCP"}'
 ```
 
 ## Charges
@@ -993,6 +939,15 @@ curl --location --request GET '[BASEURL]/api/v3/dispatcher/rates/rate_charge_typ
 ```
 
 ## Driver Assignment
+```mermaid
+flowchart TD
+  H[Order Status: Accepted]
+
+  H -->|Update Order Details| L[Update Order API]
+  H -->|Assign Driver| M[Assign Driver API]
+    
+  M -->|Success| N[Order Status: Assigned]
+```
 ### Dispatcher Assign Driver to tasks
 
 
@@ -1048,6 +1003,18 @@ curl --location --request POST '[BASEURL]/api/v4/company/delivery_execution/assi
 ```
 
 ## Order completion
+
+```mermaid
+flowchart TD
+  N[Order Status: Assigned]
+
+  N -->|Start Delivery| O[Delivery Execution]
+  O -->|Pickup Complete| P[Complete Task API<br/>Step Sequence: 0]
+  P -->|Success| Q[Order Status: Pickup Complete]
+  
+  Q -->|Delivery Complete| R[Complete Task API<br/>Step Sequence: 1]
+  R -->|Success| S[Order Status: Delivery Complete]
+```
 
 Order completion is done by a background job. The first call is to send the parameters to the background job for execution, and the second call is to get the status of the background job to see the outcome.
 
@@ -1141,6 +1108,17 @@ curl --location --request POST '[BASEURL]/api/v4/company/delivery_execution/bg_s
 ```
 
 ## Documents
+```mermaid
+flowchart TD
+    UC[Upstream Company<br/>in TCMS]
+    TCMS[TCMS System]
+    DSS[Downstream System<br/>DSS]
+    
+    UC -->|1.Attach Document| TCMS
+    TCMS -->|2.Triggers<br/>document.created webhook| DSS
+    DSS -->|"3.(Optional) Call<br/>Get Documents API"| TCMS
+    TCMS -->|4.Return document data| DSS
+```
 ### Get documents
 
 Call this api to get the documents attached to the order;
@@ -1173,6 +1151,14 @@ curl --location --request GET '[BASEURL]/api/v3/dispatcher/documents/presigned_u
 ```
 
 ### Attach documents to the order
+```mermaid
+flowchart TD
+  Q[Order Status: Pickup/Delivery Complete]
+
+  Q -->|Optional| V[Upload Document API]
+  
+  V -->|Success| Z[Document Available to Upstream]
+```
 
 Call this api to attach documents to the order;
 
