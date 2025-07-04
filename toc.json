@@ -36,11 +36,6 @@
     {
       "type": "item",
       "title": "Downstream Partner Integration Guide",
-      "uri": "docs/guides/dsp-integration-guide.md"
-    },
-    {
-      "type": "item",
-      "title": "Downstream Partner Integration Guide V2",
       "uri": "docs/guides/dsp-integration-guide-v2.md"
     },
     {
