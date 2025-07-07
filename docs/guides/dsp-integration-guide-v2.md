@@ -38,7 +38,7 @@ Upstream systems may also send down certain documents that are used for delivery
 As a walkthrough to the above flow, we will show you how to:
 1. [Register a webhook on your downstream company slug to receive events](#webhooks)
 2. [Retrieve order details](#dispatcher-get-order)
-3. [Accept](#accept-the-transfer-order) or [reject](#decline-the-transfer-order) an order
+3. [Accept](#accept-the-order) or [reject](#decline-the-order) an order
 4. [Send delivery status changes into TCMS](#order-completion)
 5. [Send documents to TCMS](#documents)
 
