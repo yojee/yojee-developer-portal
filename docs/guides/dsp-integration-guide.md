@@ -1142,14 +1142,15 @@ flowchart TD
   
   V -->|Success| Z[Document Available to Upstream]
 ```
+To attach a document to an order, follow these steps:
 
-1. Get pre-signed url
-2. Upoad document to the presigned url
-2. Send the presigned url and the order details to attach the document to the order
+1. Get the presigned storage url for upload
+2. Upoad document to the storage url
+2. Attach the uploaded document to the order
 
-### Get presigned url for file upload
+### Get presigned storage url for file upload
 
-Call this api to obtain a pre-signed url to upload your document to S3;
+Call this api to obtain a pre-signed url to upload your document to storage;
 
 ###### Sample Curl Command
 
@@ -1160,31 +1161,25 @@ curl --location --request GET '[BASEURL]/api/v3/dispatcher/documents/presigned_u
 --header 'Content-Type: application/json'
 ```
 
-### Upload the document to the presigned url
+### Upload the document to the presigned storage url
 
-Use the pre-signed URL from Step 1 to upload your document file. This is a direct upload to S3 storage.
+Use the pre-signed storage URL from Step 1 to upload your document file. 
+
 Sample Curl Command
 
 ```
-curl -X PUT -T "path/to/your/local/file.pdf" "https://s3.amazonaws.com/.../file.pdf?AWSAccessKeyId=...&Signature=...&Expires=..."
+curl -X PUT -T "file.pdf" <presigned-storage-url>
 
 ```
-#### Parameters:
-
-- -X PUT: HTTP PUT method required for S3 upload
-- -T: Specifies the file path to upload
-- Replace "path/to/your/local/file.pdf" with the actual path to your document
-- Replace the URL with the presigned_url received in Step 1
 
 #### Important Notes:
 
-- The pre-signed URL is time-limited and will expire after a certain period 
+- The presigned URL will expire after some time 
 - Do not include any additional headers (COMPANY_SLUG, ACCESS_TOKEN) for this upload 
-- The file will be uploaded directly to S3 storage
 
-### Link document to the order
+### Attach document to the order
 
-After successfully uploading the file to S3, call this API to link the document to your order in TCMS.
+After successfully uploading the file to storage, call this API to attach the uploaded document to your order in TCMS.
 
 ###### Sample Curl Command
 
@@ -1194,9 +1189,9 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/documents' \
 --header 'ACCESS_TOKEN: [TOKEN]' \
 --header 'Content-Type: application/json'
 --data-raw '{
-    "order_number": "O-3LBETYLWASX1",
+    "order_number": "O-K02IHA1XHHWU",
     "name": "POD.pdf",
-    "document_url": "https://s3.amazonaws.com/bucket/path/to/file",
+    "document_url": <base-storage-url>,
     "classification_code": "POD",
     "privacy": "public"
 }'
@@ -1206,16 +1201,16 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/documents' \
 
 - order_number: The order number to attach the document to
 - name: Display name for the document
-- document_url: The base S3 URL without query parameters (remove ?AWSAccessKeyId=...&Signature=...&Expires=... from the pre-signed URL)
+- document_url: The base storage URL without query parameters (remove `?...` from the storage URL)
 - classification_code: Document type code (see "Get list of document classification codes" below)
 - privacy: Either "public" (visible to upstream partners) or "private" (internal only)
 
-Important: The document_url should only contain the base S3 path. Strip all query parameters (everything after and including the ?) from the pre-signed URL before using it in this API call.
 
 #### Note the difference:
 
-Step 2 uses: `https://s3.amazonaws.com/.../file.pdf?AWSAccessKeyId=...&Signature=...&Expires=...` (full pre-signed URL with query parameters)
-Step 3 uses: `https://s3.amazonaws.com/.../file.pdf` (base URL only, query parameters removed)
+Step 2 uses: `https://s3.amazonaws.com/.../file.pdf?AWSAccessKeyId=...&Signature=...&Expires=...` (full presigned storage URL with query parameters)
+
+Step 3 uses: `https://s3.amazonaws.com/.../file.pdf` (base storage URL only, query parameters removed)
 
 ### Get list of document classification codes
 
