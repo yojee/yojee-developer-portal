@@ -1146,7 +1146,7 @@ To attach a document to an order, follow these steps:
 
 1. [Get the presigned storage url for upload](#get-presigned-storage-url-for-file-upload)
 2. [Upoad document to the presigned storage url](#upload-the-document-to-the-presigned-storage-url)
-3. [Attach the uploaded document to the order](#attach-document-to-the-order)
+3. [Attach the uploaded document to the order](#attach-the-uploaded-document-to-the-order)
 
 ### Get presigned storage url for file upload
 
