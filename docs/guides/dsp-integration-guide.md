@@ -1144,9 +1144,9 @@ flowchart TD
 ```
 To attach a document to an order, follow these steps:
 
-1. Get the presigned storage url for upload
-2. Upoad document to the storage url
-2. Attach the uploaded document to the order
+1. [Get the presigned storage url for upload](#get-presigned-storage-url-for-file-upload)
+2. [Upoad document to the presigned storage url](#upload-the-document-to-the-presigned-storage-url)
+3. [Attach the uploaded document to the order](#attach-document-to-the-order)
 
 ### Get presigned storage url for file upload
 
@@ -1177,7 +1177,7 @@ curl -X PUT -T "file.pdf" <presigned-storage-url>
 - The presigned URL will expire after some time 
 - Do not include any additional headers (COMPANY_SLUG, ACCESS_TOKEN) for this upload 
 
-### Attach document to the order
+### Attach the uploaded document to the order
 
 After successfully uploading the file to storage, call this API to attach the uploaded document to your order in TCMS.
 
