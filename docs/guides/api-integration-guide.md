@@ -966,6 +966,16 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
 
 To illustrate the params needed please take the following cURL command as reference, remember to replace the **[BASEURL]**, **[SLUG]** and **[TOKEN]**. **[WEBHOOK_URL]** will be the URL where you will receive the webhook HTTP POST calls.
 **Note:** you can choose the events you want to register for and it is _not mandatory to register for all events_.
+ 
+ #### Filters Usage
+
+The `filters` parameter allows you to specify conditions that must be met for the webhook to be triggered.
+
+**Example:** 
+
+If you set `filters.packing_mode` to `"CNT"`, the webhook endpoint will only be called when the order's packing mode is "CNT". Orders with different packing modes will not trigger this webhook.
+
+This helps reduce unnecessary webhook calls and allows to configure different endpoints for different order types.
 
 #### Sample curl command with form data
 
