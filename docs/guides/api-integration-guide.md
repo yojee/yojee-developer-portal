@@ -836,12 +836,6 @@ Events currently being supported are:
     <td style="text-align: center;">Y</td>
     <td style="text-align: center;">N</td>
   </tr>
-  <tr>
-    <td><a href="#event-paymentcompleted">payment.completed</a></td>
-    <td>When a Payment is completed</td>
-    <td style="text-align: center;">Y</td>
-    <td style="text-align: center;">N</td>
-  </tr>
    <tr>
     <td><a href="#event-documentcreated">document.created</a></td>
     <td>When a document is created and attached to an order/order item</td>
@@ -1158,7 +1152,6 @@ This is the format of the HTTP Post request body your system will receive in the
       "reg_address": "International financial center",
       "sender_organisation_slug": "testing-booking-ORG-1233"
     },
-    "payment_option": "monthly_billing",
     "phone": "+6281238372",
     "sender_organisation_slug": "testing-booking-ORG-1233",
     "sender_type": "organisation",
@@ -1776,184 +1769,6 @@ This is the format of the HTTP Post request body your system will receive in the
   "id": "3814906a-9c62-4937-83d9-f337add13e5e",
   "version": "2",
   "webhook_id": 130,
-  "yojee_instance": "https://umbrella-staging.yojee.com"
-}
-```
-
-#### Event: payment.completed
-
-```json
-{
-  "company_slug": "yojee",
-  "created_at": 1642652192,
-  "data": {
-    "order": {
-      "cancelled_at": null,
-      "completion_time": null,
-      "container_no": null,
-      "display_price": "SGD 19",
-      "external_id": null,
-      "id": 662942,
-      "inserted_at": "2022-01-20T04:16:30.949838Z",
-      "number": "O-L3BIUN0W3W28",
-      "order_items": [
-        {
-          "external_customer_id": null,
-          "external_customer_id2": null,
-          "external_customer_id3": null,
-          "id": 919999,
-          "inserted_at": "2022-01-20T04:16:30.972115Z",
-          "item": {
-            "description": null,
-            "global_tracking_number": "Y-7TJ2HGTVGTWZ",
-            "height": "2",
-            "id": 919746,
-            "length": "2",
-            "payload_type": "Document",
-            "quantity": 1,
-            "volume": "8",
-            "volumetric_weight": "1",
-            "weight": "1",
-            "width": "2"
-          },
-          "price": { "amount": "19.00000000", "currency": "SGD" },
-          "service_type": "same_day",
-          "status": "created",
-          "tracking_number": "YOJ-P1RYF8RMLNXC",
-          "transfer_info": null
-        }
-      ],
-      "price": { "amount": "19.00000000", "currency": "SGD" },
-      "sender": {
-        "id": 3389,
-        "name": null,
-        "organisation_name": null,
-        "type": "individual"
-      },
-      "status": "accepted"
-    },
-    "payment_data": {
-      "shipping": null,
-      "id": "ch_3KJs4ZJaYXslwhTn0hBYCTWQ",
-      "transfer_data": null,
-      "statement_descriptor_suffix": null,
-      "application_fee_amount": null,
-      "disputed": false,
-      "transfer_group": null,
-      "status": "succeeded",
-      "source_transfer": null,
-      "destination": null,
-      "dispute": null,
-      "created": 1642652191,
-      "currency": "sgd",
-      "refunded": false,
-      "amount_refunded": 0,
-      "captured": true,
-      "source": {
-        "address_city": "",
-        "address_country": "",
-        "address_line1": "44",
-        "address_line1_check": "pass",
-        "address_line2": "",
-        "address_state": null,
-        "address_zip": "109704",
-        "address_zip_check": "pass",
-        "brand": "Visa",
-        "country": "US",
-        "customer": null,
-        "cvc_check": "pass",
-        "dynamic_last4": null,
-        "exp_month": 4,
-        "exp_year": 2022,
-        "fingerprint": "fcirVwe4pLmPVMRF",
-        "funding": "credit",
-        "id": "card_1KJs4YJaYXslwhTnfKeIio2q",
-        "last4": "4242",
-        "metadata": {},
-        "name": "Name",
-        "object": "card",
-        "tokenization_method": null
-      },
-      "billing_details": {
-        "address": {
-          "city": "",
-          "country": "",
-          "line1": "44",
-          "line2": "",
-          "postal_code": "109704",
-          "state": null
-        },
-        "email": null,
-        "name": "Name",
-        "phone": null
-      },
-      "order": null,
-      "amount_captured": 1900,
-      "object": "charge",
-      "failure_code": null,
-      "receipt_number": null,
-      "receipt_email": null,
-      "application": null,
-      "balance_transaction": "txn_3KJs4ZJaYXslwhTn0BwvAD8N",
-      "statement_descriptor": null,
-      "payment_method_details": {
-        "card": {
-          "brand": "visa",
-          "checks": {
-            "address_line1_check": "pass",
-            "address_postal_code_check": "pass",
-            "cvc_check": "pass"
-          },
-          "country": "US",
-          "exp_month": 4,
-          "exp_year": 2022,
-          "fingerprint": "fcirVwe4pLmPVMRF",
-          "funding": "credit",
-          "installments": null,
-          "last4": "4242",
-          "network": "visa",
-          "three_d_secure": null,
-          "wallet": null
-        },
-        "type": "card"
-      },
-      "invoice": null,
-      "outcome": {
-        "network_status": "approved_by_network",
-        "reason": null,
-        "risk_level": "normal",
-        "risk_score": 49,
-        "seller_message": "Payment complete.",
-        "type": "authorized"
-      },
-      "amount": 1900,
-      "fraud_details": {},
-      "customer": null,
-      "on_behalf_of": null,
-      "refunds": {
-        "data": [],
-        "has_more": false,
-        "object": "list",
-        "total_count": 0,
-        "url": "/v1/charges/ch_3KJs4ZJaYXslwhTn0hBYCTWQ/refunds"
-      },
-      "payment_intent": null,
-      "review": null,
-      "failure_message": null,
-      "application_fee": null,
-      "paid": true,
-      "description": "Payment for O-L3BIUN0W3W28",
-      "metadata": {},
-      "calculated_statement_descriptor": "Stripe",
-      "livemode": false,
-      "payment_method": "card_1KJs4YJaYXslwhTnfKeIio2q",
-      "receipt_url": "https://test.com"
-    }
-  },
-  "event_type": "payment.completed",
-  "id": "f1b5da54-f75d-40b9-9647-2a4fdf7dc835",
-  "version": "2",
-  "webhook_id": 75,
   "yojee_instance": "https://umbrella-staging.yojee.com"
 }
 ```
