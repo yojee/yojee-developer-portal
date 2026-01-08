@@ -927,6 +927,11 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
     <td>N</td>
     <td>Specify the Sender with the sender_id to register this webhook for</td>
   </tr>
+  <tr>
+    <td>filters</td>
+    <td>N</td>
+    <td>Specify the filtering option. currently only packing_mode is supported</td>
+  </tr>
 </table>
 
 #### Send as JSON data
@@ -952,10 +957,25 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
     <td>N</td>
     <td>Specify the Sender with the sender_id to register this webhook for</td>
   </tr>
+  <tr>
+    <td>filters</td>
+    <td>N</td>
+    <td>Specify the filtering option, currently only packing mode is supported</td>
+  </tr>
 </table>
 
 To illustrate the params needed please take the following cURL command as reference, remember to replace the **[BASEURL]**, **[SLUG]** and **[TOKEN]**. **[WEBHOOK_URL]** will be the URL where you will receive the webhook HTTP POST calls.
 **Note:** you can choose the events you want to register for and it is _not mandatory to register for all events_.
+ 
+ #### Filters Usage
+
+The `filters` parameter allows you to specify conditions that must be met for the webhook to be triggered.
+
+**Example:** 
+
+If you set `filters.packing_mode` to `"CNT"`, the webhook endpoint will only be called when the order's packing mode is "CNT". Orders with different packing modes will not trigger this webhook.
+
+This helps reduce unnecessary webhook calls and allows to configure different endpoints for different order types.
 
 #### Sample curl command with form data
 
@@ -974,7 +994,11 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
 --form 'events[]="driver.departed"' \
 --form 'events[]="order.created"' \
 --form 'events[]="order.updated"' \
---form 'events[]="order_item.cancelled"'
+--form 'events[]="order_item.cancelled"' \
+--form 'filters={
+    "packing_mode": "CNT"
+  }'
+
 ```
 
 #### Sample curl command with JSON data
@@ -998,7 +1022,10 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
     "order.created",
     "order.updated",
     "order_item.cancelled"
-    ]
+    ],
+  "filters": {
+    "packing_mode": "CNT"
+    }
   }'
 ```
 
@@ -1044,7 +1071,8 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
     "secret_token": "OQGAM5JKCXYRYPIQ6MLI5KRTQJ6OUZL6",
     "status": "active",
     "updated_at": "2021-01-13T07:59:08.542587",
-    "url": "https://kcyyojee.free.beeceptor.com"
+    "url": "https://kcyyojee.free.beeceptor.com",
+    "filters": {"packing_mode": "CNT"}
   },
   "message": "Webhook was created."
 }
