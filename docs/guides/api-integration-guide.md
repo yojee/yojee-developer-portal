@@ -191,6 +191,7 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
     {
       "order_info": {
         "external_id": "EON-12345678",
+        "waybill": "W-AB123",
         "packing_mode": "FCL",
         "sender": {
           "external_id": "SID-1136",
@@ -345,6 +346,7 @@ For full details, please click [here](https://yojee.stoplight.io/docs/yojee-api/
     {
       "order_info": {
         "external_id": "EON-12345678",
+        "waybill": "W-AB123",
         "packing_mode": "FCL",
         "sender": {
           "external_id": "SID-1136",
@@ -819,6 +821,12 @@ Events currently being supported are:
     <td style="text-align: center;">Y</td>
   </tr>
   <tr>
+    <td><a href="#event-ordercancelled">order.cancelled</a></td>
+    <td>When an Order is cancelled</td>
+    <td style="text-align: center;">Y</td>
+    <td style="text-align: center;">Y</td>
+  </tr>
+  <tr>
     <td><a href="#event-driverarrived">driver.arrived</a></td>
     <td>When a driver has arrived at the pickup / drop-off destination point</td>
     <td style="text-align: center;">Y</td>
@@ -989,6 +997,7 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
 --form 'events[]="order.created"' \
 --form 'events[]="order.updated"' \
 --form 'events[]="order_item.cancelled"' \
+--form 'events[]="order.cancelled"' \
 --form 'filters={
     "packing_mode": "CNT"
   }'
@@ -1015,7 +1024,8 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
     "driver.departed",
     "order.created",
     "order.updated",
-    "order_item.cancelled"
+    "order_item.cancelled",
+    "order.cancelled"
     ],
   "filters": {
     "packing_mode": "CNT"
@@ -1058,7 +1068,8 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
       "order.created",
       "order.updated",
       "order_item.cancelled",
-      "order.transfer.rejected"
+      "order.transfer.rejected",
+      "order.cancelled"
     ],
     "id": 125,
     "inserted_at": "2021-01-13T07:59:08.542587",
@@ -1645,6 +1656,80 @@ This is the format of the HTTP Post request body your system will receive in the
   "id": "1c0d2750-b75b-4831-b7d2-2c79a1ef36ce",
   "version": "2",
   "webhook_id": 96,
+  "yojee_instance": "https://umbrella-staging.yojee.com"
+}
+```
+
+#### Event: order.cancelled
+
+```json
+{
+  "attributes": {
+      "shipment_type": "import"
+  },
+  "id": 75519,
+  "status": "cancelled",
+  "number": "O-CERUA9WV1JTQ",
+  "price": {
+      "currency": "SGD",
+      "amount": "20.00000000"
+  },
+  "sender": {
+      "id": 52,
+      "name": null,
+      "type": "organisation",
+      "organisation_name": "Bijus"
+  },
+  "completion_time": null,
+  "order_items": [
+      {
+          "id": 112383,
+          "status": "cancelled",
+          "item": {
+              "id": 29302,
+              "length": "12",
+              "description": "DIESEL GENERATOR SET",
+              "width": "10",
+              "payload_type": "Package",
+              "is_using_container": false,
+              "global_tracking_number": "Y-4AHNABRAAYRC",
+              "height": "13",
+              "quantity": 1,
+              "volume": "1560.0",
+              "volumetric_weight": "312000",
+              "weight": "6"
+          },
+          "price": null,
+          "inserted_at": "2026-01-27T07:20:16.182843Z",
+          "external_customer_id": "TB01817310",
+          "service_type": "same_day",
+          "external_customer_id3": null,
+          "external_customer_id2": null,
+          "tracking_number": "YOJ-EDGSMT6RKOWO",
+          "transfer_info": null
+      }
+    ],
+  "inserted_at": "2026-01-27T07:20:16.098795Z",
+  "external_id": null,
+  "cancelled_at": "2026-01-29T02:01:03.620602Z",
+  "custom_field_1": "TB01817310",
+  "custom_field_2": null,
+  "custom_field_3": null,
+  "custom_field_4": null,
+  "delivery_status": "cancelled",
+  "delivery_status_updated_at": "2026-01-29T02:01:03.761864Z",
+  "external_carrier_references": [],
+  "organisational_unit_id": 2,
+  "planning_status": "cancelled",
+  "planning_status_updated_at": "2026-01-29T02:01:03.736867Z",
+  "service_type_id": 9,
+  "display_price": "SGD 20",
+  "id": "edde845d-f3f9-4b29-b46d-d219aef75898",
+  "version": "2",
+  "company_slug": "yojee",
+  "webhook_id": 35,
+  "event_type": "order.cancelled",
+  "created_at": 1769652063,
   "yojee_instance": "https://umbrella-staging.yojee.com"
 }
 ```

@@ -106,8 +106,14 @@ Events currently being supported are:
     <td>When an Order is created</td>
   </tr>
   <tr>
-    <td><a href="#event-ordercancelled">order_cancelled</a></td>
-    <td>When an Order Item is cancelled</td>
+    <td><a href="#event-ordercancelled">order.cancelled</a></td>
+    <td>When an Order is cancelled</td>
+    <td style="text-align: center;">Y</td>
+    <td style="text-align: center;">Y</td>
+  </tr>
+  <tr>
+    <td><a href="#event-orderitemcancelled">order_item.cancelled</a></td>
+    <td>When an Order item is cancelled</td>
     <td style="text-align: center;">Y</td>
     <td style="text-align: center;">Y</td>
   </tr>
@@ -226,7 +232,8 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
     "order.updated",
     "order.cancelled",
     "document.created",
-    "document.updated"
+    "document.updated",
+    "order.cancelled"
     ],
   "filters": {
     "packing_mode": "CNT"
@@ -262,7 +269,8 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/webhooks' \
       "order.updated",
       "order.cancelled",
       "document.created",
-      "document.updated"
+      "document.updated",
+      "order.cancelled
     ],
     "id": 125,
     "inserted_at": "2021-01-13T07:59:08.542587",
@@ -341,6 +349,7 @@ This is the format of the HTTP Post request body your system will receive in the
     "id": 4234066,
     "status": "created",
     "number": "O-1YV56RV3BKOM",
+    "waybill": "W-AB123",
     "sender": {
       "id": 20086,
       "name": null,
@@ -420,6 +429,7 @@ This is the format of the HTTP Post request body your system will receive in the
     "container_no": null,
     "display_price": null,
     "external_id": null,
+    "waybill": "W-AB123",
     "id": 3465,
     "inserted_at": "2025-06-20T07:01:52.215455Z",
     "number": "O-IWWYG6ADYLLW",
@@ -475,6 +485,7 @@ This is the format of the HTTP Post request body your system will receive in the
     "id": 4234066,
     "status": "cancelled",
     "number": "O-1YV56RV3BKOM",
+    "waybill": "W-AB123",
     "sender": {
       "id": 20086,
       "name": null,
@@ -563,7 +574,8 @@ This is the format of the HTTP Post request body your system will receive in the
       "status": "accepted",
       "number": "O-YW5KWP5RBPWF",
       "external_id": "DG19062025-II",
-      "service_type_name": "Express"
+      "service_type_name": "Express",
+      "waybill": "W-AB123",
     },
     "mime_type": "application/pdf",
     "updated_at": "2025-06-19T04:36:23.514093Z",
@@ -600,7 +612,8 @@ This is the format of the HTTP Post request body your system will receive in the
       "id": 3071774,
       "status": "accepted",
       "number": "O-LZONJSOECJJP",
-      "external_id": "external id"
+      "external_id": "external id",
+      "waybill": "W-AB123",
     },
     "mime_type": "application/pdf",
     "updated_at": "2025-06-19T04:38:12.223034Z",
