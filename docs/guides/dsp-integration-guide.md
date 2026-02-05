@@ -1232,9 +1232,23 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/documents' \
 }'
 ```
 
+```shell
+curl --location --request POST '[BASEURL]/api/v3/dispatcher/documents' \
+--header 'COMPANY_SLUG: [SLUG]' \
+--header 'ACCESS_TOKEN: [TOKEN]' \
+--header 'Content-Type: application/json'
+--data-raw '{
+    "waybill": "125-48392017",
+    "name": "POD.pdf",
+    "document_url": <base-storage-url>,
+    "classification_code": "POD",
+    "privacy": "public"
+}'
+```
 #### Parameters:
 
 - order_number: The order number to attach the document to
+- waybill: The waybill linked to the order
 - name: Display name for the document
 - document_url: The base storage URL without query parameters (remove `?...` from the storage URL)
 - classification_code: Document type code (see "Get list of document classification codes" below)
@@ -1246,6 +1260,8 @@ curl --location --request POST '[BASEURL]/api/v3/dispatcher/documents' \
 Step 2 uses: `https://s3.amazonaws.com/.../file.pdf?AWSAccessKeyId=...&Signature=...&Expires=...` (full presigned storage URL with query parameters)
 
 Step 3 uses: `https://s3.amazonaws.com/.../file.pdf` (base storage URL only, query parameters removed)
+
+Either order_number or waybill should be sent. If both order_number and waybill are sent, order_number takes precedence, and waybill is ignored.
 
 ### Get list of document classification codes
 
