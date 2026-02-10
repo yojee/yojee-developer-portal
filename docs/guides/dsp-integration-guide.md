@@ -829,10 +829,10 @@ Call this API to **accept** the order from upstream partner.
 #### Request Body
 ```json
 {
-  "data": {
+  "data": [{
       "order_number": "O-7CKFRWUIXFTU",
       "carrier_references": [{"name": "BookingID", "value": "A123"}]
-    }
+    }]
   
 }
 ```
